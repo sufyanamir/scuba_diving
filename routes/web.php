@@ -20,6 +20,26 @@ Route::get('/register',function(){
     return view('register');
 });
 
-Route::get('/header', function () {
-    return view('layouts/header');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
+
+Route::get('/company', function () {
+    return view('company');
+});
+
+Route::get('/product', function () {
+    return view('products');
+});
+
+Route::get('/staff', function () {
+    return view('staff');
+});
+
+Route::get('/services', function () {
+    return view('services');
+});
+
+Route::get('/customers', function () {
+    return view('customers');
 });

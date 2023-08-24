@@ -4,13 +4,15 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class modal extends Component
+class submit-button extends Component
 {
-    public $modalId;
-    
-    public function __construct($modalId)
+    public $name;
+    public $value;
+
+    public function __construct($name, $value)
     {
-        $this->modalId = $modalId;
+        $this->name = $name;
+        $this->value = $value;
     }
 
     /**
@@ -20,6 +22,6 @@ class modal extends Component
      */
     public function render()
     {
-        return view('components.modal');
+        return view('components.submit-button');
     }
 }

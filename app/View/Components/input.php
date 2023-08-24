@@ -4,13 +4,17 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class modal extends Component
+class input extends Component
 {
-    public $modalId;
-    
-    public function __construct($modalId)
+    public $name;
+    public $value;
+    public $label;
+
+    public function __construct($name, $value, $label)
     {
-        $this->modalId = $modalId;
+        $this->name = $name;
+        $this->value = $value;
+        $this->label = $label;
     }
 
     /**
@@ -20,6 +24,6 @@ class modal extends Component
      */
     public function render()
     {
-        return view('components.modal');
+        return view('components.input');
     }
 }

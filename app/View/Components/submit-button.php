@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class submit-button extends Component
+class submit_button extends Component
 {
     public $name;
     public $value;

@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class dashboard-card extends Component
+class dashboard_card extends Component
 {
     public $value;
     public $label;

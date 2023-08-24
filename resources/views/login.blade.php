@@ -228,8 +228,8 @@
                                     If you don’t have an account
                                 </p>
                                 <p>
-                                    You can <span style="color: #023D5F">Register here!</span>
-                                    {{-- <a href="/register" class="text-warning ml-2">@lang('lang.register_here')!</a> --}}
+                                    You can
+                                    <a href="/register" style="color: #023D5F">Register here!</a>
                                 </p>
                             </div>
                                 <label style="color:#999999; 
@@ -336,13 +336,15 @@
                             @endif
                             <!-- Submit Button -->
                             <div class="form-group col-lg-12 mx-auto mt-5 ">
-                                <button type="submit" id="btn_user_login"
+                                <a href="/dashboard">
+                                <button type="button" id="btn_user_login"
                                     class="font-weight-bold sign_up btn btn-block py-2 text-white"
                                     style=" border:none; background-image: linear-gradient(#00A3FF, #023D5F); " name="submit">
                                     <div class="spinner-border spinner-border-sm text-white d-none" id="spinner">
                                     </div>
                                     <span id="text">Sign In</span>
                                 </button>
+                                </a>
                             </div>
                         </div>
                     </form>

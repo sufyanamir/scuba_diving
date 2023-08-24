@@ -4,90 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
-    <style>
-        body {
-            font-family: "Lato", sans-serif;
-            margin: 0 0 0 8px;
-            background: #023d5f;
-        }
-
-        .sidebar {
-            padding-top: 10px !important;
-            height: 100%;
-            width: 200PX;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background: rgb(0, 163, 255);
-            background: linear-gradient(90deg, rgba(0, 163, 255, 1) 10%, rgba(2, 61, 95, 1) 100%);
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-        }
-
-        .sidebar a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 20px;
-            color: #FFFF;
-            display: block;
-            transition: 0.3s;
-            margin: 20px;
-            border-radius: 10px;
-        }
-
-        .sidebar a:hover {
-            background-color: #FFFF;
-            color: black;
-        }
-
-        .sidebar .closebtn {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-        }
-
-        .openbtn {
-            font-size: 20px;
-            cursor: pointer;
-            background-color: #111;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-        }
-
-        .openbtn:hover {
-            background-color: #444;
-        }
-
-        #main {
-            transition: margin-left .5s;
-            padding: 16px;
-            /* margin-left: 250px; */
-        }
-
-        /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-        @media screen and (max-height: 450px) {
-            .sidebar {
-                padding-top: 15px;
-            }
-
-            .sidebar a {
-                font-size: 18px;
-            }
-        }
-
-        .main-panel {
-            margin-left: 200px;
-            border-radius: 50px 0 0 50px;
-            background-color: white;
-            height: 100vh;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 
 <body>
@@ -184,8 +101,8 @@
             Customers
         </a>
     </div>
-    <div class="main-panel" style="">
-        <div id="main" style="">
+    <div class="main-panel">
+        <div id="main">
             <!-- <button class="openbtn" onclick="openNav()">☰ Open Sidebar</button> -->
             <nav>
                 <div class="row p-2">

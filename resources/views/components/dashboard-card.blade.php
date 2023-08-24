@@ -1,7 +1,7 @@
 <style>
     .d-card {
         background-image: linear-gradient(to right, #00A3FF, #023D5F);
-        width: 265px;
+        width: 100%;
         height: 110px;
         top: 122px;
         left: 287px;
@@ -14,13 +14,17 @@
     }
 </style>
 <div class="d-card">
-    <div class="d-flex">
+    <div class="row">
+        <div class="col-7">
         <div class="card-text">
-            <h4>{{ $value }}</h4>
-            <h5>{{ $label }}</h5>
+            <h5>{{ $value }}</h5>
+            <h6>{{ $label }}</h6>
         </div>
-        <div class="my-auto mx-auto">
+        </div>
+        <div class="col-5 my-auto">
+        <div class="text-right pr-2">
             <img src="{{ $svg }}" alt="SVG Image">
+        </div>
         </div>
     </div>
 </div>

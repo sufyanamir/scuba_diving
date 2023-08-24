@@ -81,6 +81,15 @@
         .form-control:focus {
             box-shadow: none;
         }
+        .lbl-text{
+            color:#999999; 
+            font-family: Poppins;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 20px;
+            letter-spacing: 0em;
+            text-align: left;                             
+        }
         
     </style>
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">  -->
@@ -232,15 +241,7 @@
                                     <a href="/register" style="color: #023D5F">Register here!</a>
                                 </p>
                             </div>
-                                <label style="color:#999999; 
-                                font-family: Poppins;
-                                font-size: 13px;
-                                font-weight: 500;
-                                line-height: 20px;
-                                letter-spacing: 0em;
-                                text-align: left;
-
-                                " class="ml-3 mb-0" for="">Email</label>
+                                <label class="ml-3 mb-0 lbl-text" for="">Email</label>
                             <div class="input-group col-lg-12 mb-4">
 
                                 <div class="input-group-prepend">
@@ -266,16 +267,7 @@
                                 </div>
                             </div>
                             <!-- password -->
-                            <label style="color:#999999; 
-                                font-family: Poppins;
-                                font-size: 13px;
-                                font-weight: 500;
-                                line-height: 20px;
-                                letter-spacing: 0em;
-                                text-align: left;
-
-
-                                " class="ml-3 mb-0" for="">Password</label>
+                            <label class="ml-3 mb-0 lbl-text" for="">Password</label>
                             <div class="input-group col-lg-12 mb-2">
                                 <div class="input-group-prepend">
                                     <span

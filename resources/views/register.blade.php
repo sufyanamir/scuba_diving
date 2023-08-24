@@ -226,8 +226,8 @@
                             If you already have an account register
                             </p>
                                 <p>
-                                    You can <span style="color: #023D5F">Login here!</span>
-                                    {{-- <a href="/register" class="text-warning ml-2">@lang('lang.register_here')!</a> --}}
+                                    You can
+                                    <a href="/" style="color: #023D5F">Login here!</a>
                                 </p>
                             </div>
                             {{-- full name --}}
@@ -385,7 +385,8 @@
                             @endif
                             <!-- Submit Button -->
                             <div class="form-group col-lg-12 mx-auto mt-5 ">
-                                <button type="submit" id="btn_user_login"
+                                <a href="/">
+                                <button type="butotn" id="btn_user_login"
                                     class="font-weight-bold sign_up btn btn-block py-2 text-white"
                                     style=" border:none; background-image: linear-gradient(#00A3FF, #023D5F); "
                                     name="submit">
@@ -393,6 +394,7 @@
                                     </div>
                                     <span id="text">Request For a Service</span>
                                 </button>
+                                </a>
                             </div>
                         </div>
                     </form>

@@ -9,13 +9,10 @@
         </div>
         <div class="col-4 text-center my-3 pl-5">
             <x-add-button :value="'+ Add Button'" :dataTarget="'#add-modal'"></x-add-button>
-            <x-modal></x-modal>
+            <x-modal :modalId="'add-modal'"></x-modal>
         </div>
     </div>
     <table class="table " id="myTable">
-
-
-
         <thead class="thead-color ">
             <tr>
                 <th>Company Name </th>
@@ -23,13 +20,10 @@
                 <th>Phone Number</th>
                 <th>Address</th>
                 <th>Action</th>
-
             </tr>
         </thead>
         <tbody>
-
             <tr>
-
                 <td>
                     <img class="img-size" src="{{asset('assets/images/salman.jpg')}}" alt="image">
                     <span>Testing</span>
@@ -57,11 +51,8 @@
                             </svg>
                     </button>
                 </td>
-
-
             </tr>
             <tr>
-
                 <td>
                     <img class="img-size" src="{{asset('assets/images/salman.jpg')}}" alt="image">
                     <span>Testing</span>
@@ -88,23 +79,13 @@
                                 <path d="M17.75 15.3977C16.9724 15.3977 16.2267 15.7066 15.6769 16.2564C15.1271 16.8063 14.8182 17.552 14.8182 18.3295C14.8182 19.1071 15.1271 19.8528 15.6769 20.4027C16.2267 20.9525 16.9724 21.2614 17.75 21.2614C18.5276 21.2614 19.2733 20.9525 19.8231 20.4027C20.3729 19.8528 20.6818 19.1071 20.6818 18.3295C20.6818 17.552 20.3729 16.8063 19.8231 16.2564C19.2733 15.7066 18.5276 15.3977 17.75 15.3977ZM17.75 23.2159C16.4541 23.2159 15.2112 22.7011 14.2948 21.7847C13.3784 20.8684 12.8636 19.6255 12.8636 18.3295C12.8636 17.0336 13.3784 15.7907 14.2948 14.8744C15.2112 13.958 16.4541 13.4432 17.75 13.4432C19.0459 13.4432 20.2888 13.958 21.2052 14.8744C22.1216 15.7907 22.6364 17.0336 22.6364 18.3295C22.6364 19.6255 22.1216 20.8684 21.2052 21.7847C20.2888 22.7011 19.0459 23.2159 17.75 23.2159ZM17.75 11C12.8636 11 8.69068 14.0393 7 18.3295C8.69068 22.6198 12.8636 25.6591 17.75 25.6591C22.6364 25.6591 26.8093 22.6198 28.5 18.3295C26.8093 14.0393 22.6364 11 17.75 11Z" fill="#4361EE" fill-opacity="0.8" />
                             </svg>
                     </button>
-
                 </td>
-
-
             </tr>
-
-
-
         </tbody>
     </table>
 </div>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script>
-    new DataTable('#myTable');
-</script>
+
+
 
 
 @include('layouts.footer')

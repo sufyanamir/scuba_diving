@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class text-area extends Component
+class text_area extends Component
 {
     public $name;
     public $value;

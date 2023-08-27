@@ -1,0 +1,1 @@
+<button class="btn btn-info btn-md px-3" type="button" name="{{ $name }}">{{ $label }}</button>

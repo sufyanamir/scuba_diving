@@ -8,8 +8,8 @@
             </div>
         </div>
         <div class="col-4 text-center my-3 pl-5">
-            <x-add-button :value="'+ Add Staff'" :dataTarget="'#add-modal'"></x-add-button>
-            <x-modal :modalId="'add-modal'"></x-modal>
+            <x-add-button :value="'+ Add Staff'" :dataTarget="'#add-staff'"></x-add-button>
+            <x-modal :modalId="'add-staff'"></x-modal>
         </div>
     </div>
     <div class="table-responsive">

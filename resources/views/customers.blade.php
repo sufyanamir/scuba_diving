@@ -22,8 +22,8 @@
                 </div>
             </div>
             <div class="col-4 text-center my-3 pl-5">
-                <x-add-button :value="'+ Add Customers'" :dataTarget="'#add-modal'"></x-add-button>
-                <x-modal :modalId="'add-modal'"></x-modal>
+                <x-add-button :value="'+ Add Customers'" :dataTarget="'#add-customer'"></x-add-button>
+                <x-modal :modalId="'add-customer'"></x-modal>
             </div>
         </div>
         <table class="table " id="myTable">

@@ -1,3 +1,59 @@
+
+window.onload = function() {
+
+  var chart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: true,
+      theme: "light2", // "light1", "light2", "dark1", "dark2"
+      title: {
+          text: "Top Oil Reserves"
+      },
+      axisY: {
+          title: "Reserves(MMbbl)"
+      },
+      data: [{
+          type: "column",
+          showInLegend: true,
+          legendMarkerColor: "grey",
+          legendText: "MMbbl = one million barrels",
+          dataPoints: [{
+                  y: 300878,
+                  label: "Venezuela"
+              },
+              {
+                  y: 266455,
+                  label: "Saudi"
+              },
+              {
+                  y: 169709,
+                  label: "Canada"
+              },
+              {
+                  y: 158400,
+                  label: "Iran"
+              },
+              {
+                  y: 142503,
+                  label: "Iraq"
+              },
+              {
+                  y: 101500,
+                  label: "Kuwait"
+              },
+              {
+                  y: 97800,
+                  label: "UAE"
+              },
+              {
+                  y: 80000,
+                  label: "Russia"
+              }
+          ]
+      }]
+  });
+  chart.render();
+
+}
+
 //header open close
 function openNav() {
     document.getElementById("mySidebar").style.width = "250px";
@@ -16,45 +72,3 @@ function closeNav() {
 // data Table
     new DataTable('#myTable');
 // data Table
-
-
-
-
-
-
-
-  // Get references to the necessary elements
-  const fileInput = document.getElementById('fileInput1');
-  const profileImage = document.getElementById('profileImage');
-  const form = document.getElementById('myForm');
-
-  // Handle file input change
-  fileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    if (!$('.error-image').hasClass('d-none')) {
-      $('.error-image').addClass('d-none');
-    }
-
-    // Check the file size and type of file
-    if (file.type.startsWith('image/')) {
-      if (file.size <= 1048576) {
-        reader.readAsDataURL(file);
-
-        reader.onload = function(e) {
-          profileImage.src = e.target.result;
-          form.action = "";
-        };
-      } else {
-        $('.error-image').removeClass('d-none').text('The user pic should be less than or equal to 1024KB');
-        console.log("Image size exceeds the limit of 1 MB.");
-        fileInput.value = "";
-      }
-    } else {
-      $('.error-image').removeClass('d-none').text('Please select an image file.');
-      console.log("Please select an image file.");
-      fileInput.value = "";
-    }
-
-
-  });

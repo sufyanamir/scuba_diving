@@ -113,8 +113,8 @@
 
         .main-panel {
             margin-left: 200px;
-            border-radius: 50px 0 0 50px;
-            background-color: white;
+            border-radius: 30px 0 0 30px;
+            background-color: #f5F5F5;
             height: 100vh;
         }
     </style>
@@ -153,7 +153,7 @@
             Customers
         </a>
     </div>
-    <div class="main-panel">
+    <div class="main-panel" style="overflow-x: auto;">
         <div id="main">
             <!-- <button class="openbtn" onclick="openNav()">☰ Open Sidebar</button> -->
             <nav>

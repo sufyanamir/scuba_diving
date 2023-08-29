@@ -23,7 +23,7 @@
             </div>
             <div class="col-4 text-center my-3 pl-5">
                 <x-add-button :value="'+ Add Customers'" :dataTarget="'#add-customer'"></x-add-button>
-                <x-modal :modalId="'add-customer'"></x-modal>
+                <x-modal :modalId="'add-customer'" :formAction="''"></x-modal>
             </div>
         </div>
         <div class="table-responsive">

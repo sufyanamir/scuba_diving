@@ -21,7 +21,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="" method="post">
+        <form action="{{ $formAction }}" method="post" id="{{ $modalId }}" enctype="multipart/form-data">
+          @csrf
           <div class="row">
             <div class="col-8">
               <div class="row">

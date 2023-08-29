@@ -2,26 +2,16 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
-
-    public function showCompany()
-    {
-        // Use a custom select query to retrieve specific columns
-        $companies = DB::table('company')
-            ->select('company_id', 'company_name', 'company_email', 'company_phone', 'company_address')
-            ->get();
-
-        return view('company', compact('companies'));
-    }
-
     public function addCompany(Request $request)
     {
-        // Validate the form data
+        // Validate the form data 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',

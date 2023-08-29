@@ -1,11 +1,10 @@
 <?php
 
-// app/Http/Controllers/CompanyController.php
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Company; // Assuming your Company model is named like this
 use Illuminate\Http\Request;
-
+use App\Models\Company;
+use Illuminate\Support\Facades\DB;
 class CompanyController extends Controller
 {
     public function addCompany(Request $request)
@@ -20,32 +19,40 @@ class CompanyController extends Controller
             // Add more validation rules for other fields
         ]);
 
+        // dd($validatedData);
         // Create a new Company instance and fill it with validated data
-        $company = new Company();
-        $company->company_name = $validatedData['name'];
-        $company->company_email = $validatedData['email'];
-        $company->company_phone = $validatedData['phone'];
-        $company->company_address = $validatedData['address'];
-        if ($request->hasFile('upload_image')) {
-            // Get the uploaded file
-            $image = $request->file('upload_image');
-            
-            // Generate a unique name for the image
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            
-            // Store the image in the specified storage location
-            $image->storeAs('public/company_images', $imageName); // Adjust storage path as needed
-        
-            // Save the image file name to the database
-            $company->upload_image = $imageName;
-        }
-        // Set other fields here
-        
-        // Save the company data
-        $company->save();
+        // Insert data into the database using the DB facade
+    DB::table('company')->insert([
+        'company_name' => $validatedData['name'],
+        'company_email' => $validatedData['email'],
+        'company_phone' => $validatedData['phone'],
+        'company_address' => $validatedData['address'],
+        'company_image' => $validatedData['upload_image'],
+        // Add other fields as needed
+    ]);
 
-        // Optionally, you can redirect back with a success message
-        return redirect()->back()->with('success', 'Company added successfully.');
+    // Optionally, you can check if the 'upload_image' field exists and handle file uploading
+    if ($request->hasFile('upload_image')) {
+        // Get the uploaded file
+        $image = $request->file('upload_image');
+        
+        // Generate a unique name for the image
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        
+        // Store the image in the specified storage location
+        $image->storeAs('public/company_images', $imageName); // Adjust storage path as needed
+        
+        // Now, if you want to associate the uploaded image filename with the inserted record, you would need to retrieve the last inserted ID.
+        $lastInsertedId = DB::getPdo()->lastInsertId();
+
+        // Update the 'upload_image' field for the inserted record
+        DB::table('company')
+            ->where('company_id', $lastInsertedId)
+            ->update(['company_image' => $imageName]);
     }
+    
+    // Optionally, you can redirect back with a success message
+    return redirect()->back()->with('success', 'Company added successfully.');
 }
+    }
 

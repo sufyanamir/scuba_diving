@@ -3,9 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\TestController;
-Route::match(['post'], 'company/store', [TestController::class, 'addCompany']);
 
-// Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +16,7 @@ Route::match(['post'], 'company/store', [TestController::class, 'addCompany']);
 |
 */
 
+Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);
 
 
 Route::get('/', function () {

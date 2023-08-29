@@ -23,7 +23,7 @@ class StaffController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|digits|max:20',
+            'phone' => 'required|string|max:20',
             'address' => 'required|string|max:500',
             'category' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',

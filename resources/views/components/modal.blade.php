@@ -27,18 +27,18 @@
             <div class="col-8">
               <div class="row">
                 <div class="col-6 mb-3">
-                  <x-input :name="'name'" :value="''" :label="'Name'"></x-input>
+                  <x-input :name="'name'" :value="''" :label="'Name'"  :inputType="'text'"></x-input>
                 </div>
                 <div class="col-6 mb-3">
                   @if($modalId == 'add-service')
-                  <x-input :name="'subtitle'" :value="''" :label="'Subtitle'"></x-input>
+                  <x-input :name="'subtitle'" :value="''" :label="'Subtitle'" :inputType="'text'"></x-input>
                   @else
-                  <x-input :name="'email'" :value="''" :label="'Email'"></x-input>
+                  <x-input :name="'email'" :value="''" :label="'Email'" :inputType="'email'"></x-input>
                   @endif
                 </div>
                 @if($modalId == 'add-staff')
                 <div class="col-6 mb-3">
-                  <x-input :name="'phone'" :value="''" :label="'Phone Number'"></x-input>
+                  <x-input :name="'phone'" :value="''" :label="'Phone Number'" :inputType="'tel'"></x-input>
                 </div>
                 <div class="col-6 mb-3">
                   <select name="" id="" class="form-control" style="height: 51px; border-radius: 0.5rem;">
@@ -50,11 +50,11 @@
                 </div>
                 @elseif($modalId == 'add-service')
                 <div class="col-12 mb-3">
-                  <x-input :name="'charges'" :value="''" :label="'Charges'"></x-input>
+                  <x-input :name="'charges'" :value="''" :label="'Charges'" :inputType="'number'"></x-input>
                 </div>
                 @else
                 <div class="col-12 mb-3">
-                  <x-input :name="'phone'" :value="''" :label="'Phone Number'"></x-input>
+                  <x-input :name="'phone'" :value="''" :label="'Phone Number'" :inputType="'tel'"></x-input>
                 </div>
                 @endif
                 <div class="col-12 mb-3">
@@ -84,26 +84,26 @@
             </div>
             @elseif($modalId == 'add-service')
             <div class="col-5 mb-3">
-              <x-input :name="'cost_name'" :value="''" :label="'Cost Name'"></x-input>
+              <x-input :name="'cost_name'" :value="''" :label="'Cost Name'" :inputType="'text'"></x-input>
             </div>
             <div class="col-5 mb-3">
-              <x-input :name="'cost'" :value="''" :label="'Cost'"></x-input>
+              <x-input :name="'cost'" :value="''" :label="'Cost'" :inputType="'number'"></x-input>
             </div>
             <div class="col-2 my-2">
               <x-plus-button :name="'add_row'" :label="'+'"></x-plus-button>
             </div>
             @else
             <div class="col-6 mb-3">
-              <x-input :name="'admin_name'" :value="''" :label="'Admin Name'"></x-input>
+              <x-input :name="'admin_name'" :value="''" :label="'Admin Name'" :inputType="'text'"></x-input>
             </div>
             <div class="col-6 mb-3">
-              <x-input :name="'admin_email'" :value="''" :label="'Email'"></x-input>
+              <x-input :name="'admin_email'" :value="''" :label="'Email'" :inputType="'email'"></x-input>
             </div>
             <div class="col-6 mb-3">
-              <x-input :name="'admin_phone'" :value="''" :label="'Phone Number'"></x-input>
+              <x-input :name="'admin_phone'" :value="''" :label="'Phone Number'" :inputType="'tel'"></x-input>
             </div>
             <div class="col-6 mb-3">
-              <x-input :name="'admin_userName'" :value="''" :label="'User Name'"></x-input>
+              <x-input :name="'admin_userName'" :value="''" :label="'User Name'" :inputType="'text'"></x-input>
             </div>
             <div class="col-8 mb-3">
               <x-text-area :name="'admin_address'" :value="''" :label="'Address'"></x-text-area>

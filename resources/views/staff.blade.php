@@ -9,7 +9,7 @@
         </div>
         <div class="col-4 text-center my-3 pl-5">
             <x-add-button :value="'+ Add Staff'" :dataTarget="'#add-staff'"></x-add-button>
-            <x-modal :modalId="'add-staff'"></x-modal>
+            <x-modal :modalId="'add-staff'" :formAction="''"></x-modal>
         </div>
     </div>
     <div class="table-responsive">

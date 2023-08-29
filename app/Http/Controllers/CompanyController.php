@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
 class CompanyController extends Controller
 {
+    
     public function addCompany(Request $request)
     {
-        // Validate the form data
+        // Validate the form data 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',

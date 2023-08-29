@@ -16,7 +16,7 @@
             <table class="display" id="myTable">
                 <thead class="thead-color ">
                     <tr>
-                        <th>Company Name </th>
+                        <th>{{$companies->company_name}} </th>
                         <th>Email</th>
                         <th>Phone Number</th>
                         <th>Address</th>

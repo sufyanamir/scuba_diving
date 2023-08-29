@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TestController;
 
 
@@ -17,6 +18,7 @@ use App\Http\Controllers\TestController;
 */
 
 Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);
+Route::match(['post'], 'staff/store', [StaffController::class, 'addStaff']);
 
 
 Route::get('/', function () {
@@ -30,17 +32,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
-Route::get('/company', function () {
-    return view('company');
-});
+Route::get('/company', [CompanyController::class,'index']);
+
 
 Route::get('/product', function () {
     return view('products');
 });
 
-Route::get('/staff', function () {
-    return view('staff');
-});
+Route::get('/staff', [StaffController::class,'index']);
+Route::get('/staff/delete/{id}', [StaffController::class,'destroy'])->name('staff.delete');
 
 Route::get('/services', function () {
     return view('services');

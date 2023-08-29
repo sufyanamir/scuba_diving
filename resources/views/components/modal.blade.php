@@ -41,11 +41,11 @@
                   <x-input :name="'phone'" :value="''" :label="'Phone Number'" :inputType="'tel'"></x-input>
                 </div>
                 <div class="col-6 mb-3">
-                  <select name="" id="" class="form-control" style="height: 51px; border-radius: 0.5rem;">
-                    <option value="">Select</option>
-                    <option value="">Manager</option>
-                    <option value="">Worker</option>
-                    <option value="">Trainer</option>
+                  <select name="category" id="" class="form-control" style="height: 51px; border-radius: 0.5rem;">
+                    <option value="not-select">Select</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Worker">Worker</option>
+                    <option value="Trainer">Trainer</option>
                   </select>
                 </div>
                 @elseif($modalId == 'add-service')

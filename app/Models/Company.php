@@ -16,7 +16,7 @@ class Company extends Model
         'company_phone',
         'company_address',
         'company_image', // Add other columns as needed
-    ];
+    ]; 
 
     // If you have timestamps (created_at and updated_at) in your table
     public $timestamps = true;

@@ -17,6 +17,9 @@
     <div class="pt-2" style="border-radius: 20px;">
         <div id="chartContainer" style="height: 100%; width: 100%;"></div>
     </div>
+    {{
+        print_r($user_details)
+    }}
 </div>
 <script>
     

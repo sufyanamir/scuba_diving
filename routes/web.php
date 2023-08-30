@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TestController;
@@ -25,26 +26,15 @@ Route::get('/company', [CompanyController::class, 'index']);
 
 // staff
 Route::match(['post'], 'staff/store', [StaffController::class, 'addStaff']);
-Route::get('/staff', [StaffController::class,'index']);
-Route::get('/staff/delete/{id}', [StaffController::class,'destroy'])->name('staff.delete');
-// staff
-
-// Customer
-Route::match(['post'], 'customers/store', [CustomerController::class, 'addCustomer']);
-Route::get('/customers', [CustomerController::class,'index']);
-Route::get('/customers/delete/{id}', [CustomerController::class,'destroy'])->name('customer.delete');
-// Customer
 
 
-Route::get('/', function () {
-    return view('login');
-});
+
 Route::get('/register',function(){
     return view('register');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('dashboard')->name('dashboard');
 });
 // Route::get('/company', function () {
 //     return view('company');

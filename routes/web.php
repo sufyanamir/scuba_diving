@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TestController;
 
 
@@ -17,8 +18,22 @@ use App\Http\Controllers\TestController;
 |
 */
 
+// company
 Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);
+Route::get('/company', [CompanyController::class, 'index']);
+// company
+
+// staff
 Route::match(['post'], 'staff/store', [StaffController::class, 'addStaff']);
+Route::get('/staff', [StaffController::class,'index']);
+Route::get('/staff/delete/{id}', [StaffController::class,'destroy'])->name('staff.delete');
+// staff
+
+// Customer
+Route::match(['post'], 'customers/store', [CustomerController::class, 'addCustomer']);
+Route::get('/customers', [CustomerController::class,'index']);
+Route::get('/customers/delete/{id}', [CustomerController::class,'destroy'])->name('customer.delete');
+// Customer
 
 
 Route::get('/', function () {
@@ -31,21 +46,21 @@ Route::get('/register',function(){
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
+// Route::get('/company', function () {
+//     return view('company');
+// });
 
-Route::get('/company', [CompanyController::class,'index']);
+// Route::get('/', [CompanyController::class,'index']);
 
 
 Route::get('/product', function () {
     return view('products');
 });
 
-Route::get('/staff', [StaffController::class,'index']);
-Route::get('/staff/delete/{id}', [StaffController::class,'destroy'])->name('staff.delete');
-
 Route::get('/services', function () {
     return view('services');
 });
 
-Route::get('/customers', function () {
-    return view('customers');
-});
+// Route::get('/customers', function () {
+//     return view('customers');
+// });

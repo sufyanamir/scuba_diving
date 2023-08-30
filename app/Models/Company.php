@@ -1,25 +1,25 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+    use HasFactory;
+
     protected $table = 'company';
 
     protected $primaryKey = 'company_id';
-    
+
     protected $fillable = [
         'company_name',
         'company_email',
         'company_phone',
         'company_address',
-        'company_image', // Add other columns as needed
-    ]; 
+        'company_image',
+    ];
 
-    // If you have timestamps (created_at and updated_at) in your table
     public $timestamps = true;
-
-    // Define any relationships with other models here if needed
 }

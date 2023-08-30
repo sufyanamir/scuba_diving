@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TestController;
 
@@ -19,17 +20,19 @@ use App\Http\Controllers\TestController;
 
 Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);
 Route::match(['post'], 'staff/store', [StaffController::class, 'addStaff']);
+Route::get('/', [LoginController::class,'index']);
+
+Route::post('/', [LoginController::class,'login']);
 
 
-Route::get('/', function () {
-    return view('login');
-});
+
+
 Route::get('/register',function(){
     return view('register');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('dashboard')->name('dashboard');
 });
 
 Route::get('/company', [CompanyController::class,'index']);

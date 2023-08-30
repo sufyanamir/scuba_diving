@@ -2,12 +2,12 @@
 
 <div class="card px-0  box-shadow mt-4 ">
     <div class="row">
-        <div class="col-8">
+        <div class="col-10">
             <div class="mx-3 my-3">
                 <h4>Services List</h4>
             </div>
         </div>
-        <div class="col-4 text-center my-3 pl-5">
+        <div class="col-2  my-3 pl-4">
             <x-add-button :value="'+ Add Service'" :dataTarget="'#add-service'"></x-add-button>
             <x-modal :modalId="'add-service'" :formAction="''"></x-modal>
         </div>
@@ -91,6 +91,7 @@
                 </tr>
             </tbody>
         </table>
+        <br/><br/>
     </div>
 </div>
 

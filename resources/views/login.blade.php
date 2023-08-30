@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scooble</title>
+    <title>Scuba Diving</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -206,7 +206,7 @@
                     </a>
                 </div>
                 <div class="row mt-4 ">
-                    <form action="login" id="login-form" method="post" style="width: 500px !important;">
+                    <form action="/" id="login-form" method="post" style="width: 500px !important;">
                         @csrf
                         <div class="row">
                             <div class="w-100" style="padding-left: 15px;">
@@ -328,17 +328,16 @@
                             @endif
                             <!-- Submit Button -->
                             <div class="form-group col-lg-12 mx-auto mt-5 ">
-                                <a href="/dashboard">
-                                <button type="button" id="btn_user_login"
+                                <button type="submit" id="btn_user_login"
                                     class="font-weight-bold sign_up btn btn-block py-2 text-white"
                                     style=" border:none; background-image: linear-gradient(#00A3FF, #023D5F); " name="submit">
                                     <div class="spinner-border spinner-border-sm text-white d-none" id="spinner">
                                     </div>
                                     <span id="text">Sign In</span>
                                 </button>
-                                </a>
+                                
                             </div>
-                        </div>
+                        </div> 
                     </form>
                 </div>
             </div>

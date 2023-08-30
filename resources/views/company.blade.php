@@ -27,8 +27,8 @@
             <tbody>
                 @foreach($company as $item)
                 <tr>
-                    <td>
-                        <img class="img-size" src="{{asset('storage/company_images/'.$item->comapny_image)}}" alt="image">
+                    <td> 
+                        <img class="img-size" src="{{asset('storage/company_images/'.$item->company_image)}}" alt="image">
                     </td>
                     <td>{{ $item->company_name }}</td>
                     <td>{{ $item->company_email }}</td>

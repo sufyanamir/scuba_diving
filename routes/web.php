@@ -33,9 +33,7 @@ Route::get('/register',function(){
     return view('register');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard')->name('dashboard');
-});
+Route::get('/dashboard',[TestController::class,'index']);
 // Route::get('/company', function () {
 //     return view('company');
 // });
@@ -66,4 +64,4 @@ Route::get('/customers/delete/{id}', [CustomerController::class,'destroy'])->nam
 // Customer
 Route::get('/', [LoginController::class,'index']);
 
-Route::post('/', [LoginController::class,'login']);
+Route::post('/dashboard', [LoginController::class,'login']);

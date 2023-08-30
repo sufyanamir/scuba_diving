@@ -9,7 +9,7 @@
         </div>
         <div class="col-2  my-3 pl-4">
             <x-add-button :value="'+ Add Service'" :dataTarget="'#add-service'"></x-add-button>
-            <x-modal :modalId="'add-service'" :formAction="''"></x-modal>
+            <x-modal :modalId="'add-service'" :formAction="''" :editData="''"></x-modal>
         </div>
     </div>
     <div class="table-responsive">

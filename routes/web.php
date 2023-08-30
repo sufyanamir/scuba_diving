@@ -54,3 +54,16 @@ Route::get('/services', function () {
 // Route::get('/customers', function () {
 //     return view('customers');
 // });
+
+Route::get('/staff', [StaffController::class,'index']);
+Route::get('/staff/delete/{id}', [StaffController::class,'destroy'])->name('staff.delete');
+// staff
+
+// Customer
+Route::match(['post'], 'customers/store', [CustomerController::class, 'addCustomer']);
+Route::get('/customers', [CustomerController::class,'index']);
+Route::get('/customers/delete/{id}', [CustomerController::class,'destroy'])->name('customer.delete');
+// Customer
+Route::get('/', [LoginController::class,'index']);
+
+Route::post('/', [LoginController::class,'login']);

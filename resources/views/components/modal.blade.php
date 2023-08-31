@@ -96,6 +96,9 @@
               <x-plus-button :name="'add_row'" :addRow="'addRow'" :label="'+'"></x-plus-button>
             </div>
           </div>
+          <div class="row col-12 ml-3" id="addedRow">
+
+           </div>
             @else
             <div class="col-6 mb-3">
               <x-input :name="'admin_name'" :value="''" :label="'Admin Name'" :inputType="'text'" :id="''" ></x-input>
@@ -122,6 +125,28 @@
     </div>
   </div>
 </div>
+<script>
+  
+  const addRow = document.getElementById('addRow');
+  const costNameInput = document.getElementById('costName');
+  const costInput = document.getElementById('cost');
+  const AddedRow = document.getElementById('addedRow');
+
+    addRow.addEventListener('click', () => {
+    const costName = costNameInput.value;
+    const cost= costInput.value;
+
+    if (costName && cost) {
+        const linkElement = document.createElement('div');
+        linkElement.classList.add("ml-3");
+        linkElement.textContent = ` ${costName}: ${cost} `;
+        addedRow.appendChild(linkElement);
+
+        costNameInput.value = '';
+        costInput.value = '';
+    }
+  });
+</script>
 
 <script>
    // Get references to the necessary elements

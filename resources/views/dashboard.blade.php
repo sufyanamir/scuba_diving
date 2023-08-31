@@ -1,10 +1,5 @@
 @include('layouts.header')
 <div class="container-fluid">
-    @if(session()->has('user_details'))
-    <p>Welcome, {{ session('user_details')['name'] }}!</p>
-    <p>{{ session('user_details')['role'] }}</p>
-    <!-- Access other user details as needed -->
-    @endif
     <div class="row">
         <div class="col-12 col-sm-12 col-lg-6 col-xl-3 mb-2">
             <x-dashboard-card :value="'496'" :label="'Total Admins'" :svg="asset('assets/images/d-user-icon.svg')"></x-dashboard-card>

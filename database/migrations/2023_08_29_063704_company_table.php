@@ -20,7 +20,8 @@ return new class extends Migration
             $table->integer('company_phone');
             $table->text('company_address');
             $table->text('company_image');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
 
         });
     }

@@ -24,7 +24,8 @@ return new class extends Migration
             $table->string('customer_social_links');
             $table->text('customer_image');
             $table->integer('customer_status')->default(0);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
 
         });
     }

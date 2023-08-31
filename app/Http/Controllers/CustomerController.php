@@ -28,6 +28,8 @@ class CustomerController extends Controller
             'phone' => 'required|string|max:20',
             'address' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'company_id' => 'required',
+            'added_user_id' => 'required',
             // Add more validation rules for other fields
         ]);
         $fbAcc = $request->input('fb_acc');
@@ -42,6 +44,8 @@ class CustomerController extends Controller
             'customer_phone' => $validatedData['phone'],
             'customer_address' => $validatedData['address'],
             'customer_image' => $validatedData['upload_image'],
+            'company_id' => $validatedData['company_id'],
+            'added_user_id' => $validatedData['added_user_id'],
             'customer_social_links' => $socailLinks,
             // Add other fields as needed
         ]);

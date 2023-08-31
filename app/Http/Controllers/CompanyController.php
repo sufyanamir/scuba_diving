@@ -36,6 +36,7 @@ class CompanyController extends Controller
             'admin_email' => 'required|email|max:255',
             'admin_phone' => 'required|string|max:20',
             'admin_address' => 'required|string|max:500',
+            'password' => 'required|string|max:500',
             // Add more validation rules for other fields
         ]);
 
@@ -66,7 +67,9 @@ class CompanyController extends Controller
             'email' => $validatedData['admin_email'],
             'phone' => $validatedData['admin_phone'],
             'address' => $validatedData['admin_address'],
+            'password' => md5($validatedData['password']),
             'company_id' => $companyID,
+            'user_role'=>'1',
             // Add other fields as needed
         ]);
 

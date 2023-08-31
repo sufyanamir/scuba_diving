@@ -13,44 +13,41 @@ class LoginController extends Controller
     {
         return view('login');
     }
+
     public function login(Request $request)
-    {
+{
+    $email = $request->input('email');
+    $token = $request->input('_token');
+    $password = $request->input('password');
 
+    $user = User::where('email', $email)->first();
 
+    if ($user && md5($password) === $user->password) {
+        // Authentication was successful
+        $userRole = $user->user_role;
+        // Create a session for the user
+        session(['user_details' => [
+            'token' => $token, // Set token value if needed
+            'name' => $user->name,
+            'user_id' => $user->id,
+            'company_id' => $user->company_id,
+            'role' => $userRole,
+        ]]);
 
-
-
-
-        $email = $request->input('email');
-        
-       
-        $password = $request->input('password');
-
-        $user = User::where('email', $email)->first();
-
-        //data storing on session  
-        session(['access_token'=>$request->input('_token'),
-                 'name' =>$user->name,
-                 'user_id'=>$user->id,
-                 'company_id' => $user->company_id 
-                ]);
-        
-        // && Hash::check($password, $user->password)
-        if ($user && $password == $user->password) {
-
-            $user_details =[
-                'access_token' => session('access_token', 'Token not found'),
-                'name' => session('name', 'Name not found'),
-                'user_id' => session('user_id', 'ID not found'),
-                'company_id' => session('company_id', 'Company_id not found'),
-            ];
-            return view('/dashboard',compact('user_details'));
-        } else {
-            return response()->json(['error' => 'Invalid credentials'], 401);
-        }
-
-        // return redirect('dashboard')->with(response());
-
-
+        return view('dashboard', ['user_details' => session('user_details')]);
+    } else {
+        // Authentication failed
+        return response()->json(['error' => 'Invalid credentials'], 401);
     }
+}
+
+
+public function logout(Request $request)
+{
+    $request->session()->forget('user_details');
+    $request->session()->regenerate();
+    
+    return redirect('/');
+}
+
 }

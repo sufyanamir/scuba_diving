@@ -5,11 +5,6 @@
         <div class="col-8">
             <div class="mx-3 my-3">
                 <h4>Company List</h4>
-                @if(session()->has('user_details'))
-                <p>Welcome, {{ session('user_details')['name'] }}!</p>
-                <p>{{ session('user_details')['user_id'] }}</p>
-                <!-- Access other user details as needed -->
-                @endif
             </div>
         </div>
         <div class="col-4 text-center my-3 pl-5">

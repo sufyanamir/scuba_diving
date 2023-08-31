@@ -27,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <!-- <tr>
                     <td>
                         <img class="img-size" src="{{asset('assets/images/salman.jpg')}}" alt="image">
                     </td>
@@ -88,7 +88,7 @@
                             </svg>
                         </button>
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
         <br/><br/>

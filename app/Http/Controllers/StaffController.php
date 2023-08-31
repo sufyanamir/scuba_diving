@@ -31,6 +31,7 @@ class StaffController extends Controller
             'address' => 'required|string|max:500',
             'category' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'company_id' => 'required',
             // Add more validation rules for other fields
         ]);
         $fbAcc = $request->input('fb_acc');
@@ -46,6 +47,7 @@ class StaffController extends Controller
             'address' => $validatedData['address'],
             'category' => $validatedData['category'],
             'user_image' => $validatedData['upload_image'],
+            'company_id' => $validatedData['company_id'],
             'social_links' => $socailLinks,
             'user_role'=>'2'
             // Add other fields as needed

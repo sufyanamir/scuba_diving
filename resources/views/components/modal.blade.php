@@ -23,6 +23,8 @@
       <div class="modal-body">
         <form action="{{ $formAction }}" method="post" id="{{ $modalId }}" enctype="multipart/form-data">
           @csrf
+          <input type="hidden" name="company_id" value="{{ session('user_details')['company_id'] }}">
+          <input type="hidden" name="added_user_id" value="{{ session('user_details')['user_id'] }}">
           <div class="row">
             <div class="col-8">
               <div class="row">
@@ -103,7 +105,7 @@
               <x-input :name="'admin_phone'" :value="''" :label="'Phone Number'" :inputType="'tel'"></x-input>
             </div>
             <div class="col-6 mb-3">
-              <x-input :name="'admin_userName'" :value="''" :label="'User Name'" :inputType="'text'"></x-input>
+              <x-input :name="'password'" :value="''" :label="'Assign Password'" :inputType="'text'"></x-input>
             </div>
             <div class="col-8 mb-3">
               <x-text-area :name="'admin_address'" :value="''" :label="'Address'"></x-text-area>

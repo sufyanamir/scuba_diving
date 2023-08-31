@@ -27,18 +27,18 @@
             <div class="col-8">
               <div class="row">
                 <div class="col-6 mb-3">
-                  <x-input :name="'name'" :value="''" :label="'Name'"  :inputType="'text'"></x-input>
+                  <x-input :name="'name'" :value="''" :label="'Name'"  :inputType="'text'" :id="''" ></x-input>
                 </div>
                 <div class="col-6 mb-3">
                   @if($modalId == 'add-service')
-                  <x-input :name="'subtitle'" :value="''" :label="'Subtitle'" :inputType="'text'"></x-input>
+                  <x-input :name="'subtitle'" :value="''" :label="'Subtitle'" :inputType="'text'" :id="''" ></x-input>
                   @else
-                  <x-input :name="'email'" :value="''" :label="'Email'" :inputType="'email'"></x-input>
+                  <x-input :name="'email'" :value="''" :label="'Email'" :inputType="'email'" :id="''" ></x-input>
                   @endif
                 </div>
                 @if($modalId == 'add-staff')
                 <div class="col-6 mb-3">
-                  <x-input :name="'phone'" :value="''" :label="'Phone Number'" :inputType="'tel'"></x-input>
+                  <x-input :name="'phone'" :value="''" :label="'Phone Number'" :inputType="'tel'" :id="''" ></x-input>
                 </div>
                 <div class="col-6 mb-3">
                   <select name="category" id="" class="form-control" style="height: 51px; border-radius: 0.5rem;">
@@ -50,11 +50,11 @@
                 </div>
                 @elseif($modalId == 'add-service')
                 <div class="col-12 mb-3">
-                  <x-input :name="'charges'" :value="''" :label="'Charges'" :inputType="'number'"></x-input>
+                  <x-input :name="'charges'" :value="''" :label="'Charges'" :inputType="'number'" :id="''" ></x-input>
                 </div>
                 @else
                 <div class="col-12 mb-3">
-                  <x-input :name="'phone'" :value="''" :label="'Phone Number'" :inputType="'tel'"></x-input>
+                  <x-input :name="'phone'" :value="''" :label="'Phone Number'" :inputType="'tel'" :id="''" ></x-input>
                 </div>
                 @endif
                 <div class="col-12 mb-3">
@@ -83,27 +83,29 @@
               <x-social-input :socialLogo="'assets/images/tt-logo.svg'" :name="'tt_acc'" :qrId="''" :qrName="''"></x-social-input>
             </div>
             @elseif($modalId == 'add-service')
+            <div class="row ml-1 col-12" id="costRows">
             <div class="col-5 mb-3">
-              <x-input :name="'cost_name'" :value="''" :label="'Cost Name'" :inputType="'text'"></x-input>
+              <x-input :name="'cost_name'" :value="''" :label="'Cost Name'" :inputType="'text'" :id="'costName'" ></x-input>
             </div>
             <div class="col-5 mb-3">
-              <x-input :name="'cost'" :value="''" :label="'Cost'" :inputType="'number'"></x-input>
+              <x-input :name="'cost'" :value="''" :label="'Cost'" :inputType="'number'" :id="'cost'" ></x-input>
             </div>
             <div class="col-2 my-2">
-              <x-plus-button :name="'add_row'" :label="'+'"></x-plus-button>
+              <x-plus-button :name="'add_row'" :addRow="'addRow'" :label="'+'"></x-plus-button>
             </div>
+          </div>
             @else
             <div class="col-6 mb-3">
-              <x-input :name="'admin_name'" :value="''" :label="'Admin Name'" :inputType="'text'"></x-input>
+              <x-input :name="'admin_name'" :value="''" :label="'Admin Name'" :inputType="'text'" :id="''" ></x-input>
             </div>
             <div class="col-6 mb-3">
-              <x-input :name="'admin_email'" :value="''" :label="'Email'" :inputType="'email'"></x-input>
+              <x-input :name="'admin_email'" :value="''" :label="'Email'" :inputType="'email'" :id="''" ></x-input>
             </div>
             <div class="col-6 mb-3">
-              <x-input :name="'admin_phone'" :value="''" :label="'Phone Number'" :inputType="'tel'"></x-input>
+              <x-input :name="'admin_phone'" :value="''" :label="'Phone Number'" :inputType="'tel'" :id="''" ></x-input>
             </div>
             <div class="col-6 mb-3">
-              <x-input :name="'admin_userName'" :value="''" :label="'User Name'" :inputType="'text'"></x-input>
+              <x-input :name="'admin_userName'" :value="''" :label="'User Name'" :inputType="'text'" :id="''" ></x-input>
             </div>
             <div class="col-8 mb-3">
               <x-text-area :name="'admin_address'" :value="''" :label="'Address'"></x-text-area>

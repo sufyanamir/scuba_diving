@@ -206,7 +206,7 @@
                     </a>
                 </div>
                 <div class="row mt-4 ">
-                    <form action="/" id="login-form" method="post" style="width: 500px !important;">
+                    <form action="/dashboard" id="login-form" method="post" style="width: 500px !important;">
                         @csrf
                         <div class="row">
                             <div class="w-100" style="padding-left: 15px;">

@@ -11,9 +11,13 @@ class StaffController extends Controller
 {
 
     public function index(){
+//to get all users data
+        // $staff = User::all();
+        // return view('staff',compact('staff'));
 
-        $staff = User::all();
-        return view('staff',compact('staff'));
+// just staff data
+        $staff = User::where('user_role','2')->get();
+        return view('staff', compact('staff'));
     }
     
 
@@ -43,6 +47,7 @@ class StaffController extends Controller
             'category' => $validatedData['category'],
             'user_image' => $validatedData['upload_image'],
             'social_links' => $socailLinks,
+            'user_role'=>'2'
             // Add other fields as needed
         ]);
 

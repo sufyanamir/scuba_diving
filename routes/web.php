@@ -43,6 +43,7 @@ Route::get('/dashboard', [DashboardController::class, 'index']);
 
 });
 
+
 Route::get('/register',function(){
     return view('register');
 });
@@ -60,3 +61,4 @@ Route::get('/', [LoginController::class,'index']);
 Route::post('/', [LoginController::class,'login']);
 Route::match(['get', 'post'], '/logout', [LoginController::class,'logout']);
 //Auth
+

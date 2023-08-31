@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 // use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,9 +18,8 @@ class LoginController extends Controller
     public function login(Request $request)
 {
     $email = $request->input('email');
-    $token = $request->input('_token');
+    $token = Str::random(60);
     $password = $request->input('password');
-
     $user = User::where('email', $email)->first();
 
     if ($user && md5($password) === $user->password) {

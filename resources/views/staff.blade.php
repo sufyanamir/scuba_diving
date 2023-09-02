@@ -2,12 +2,12 @@
 
 <div class="card px-0  box-shadow mt-4 ">
     <div class="row">
-        <div class="col-8">
+        <div class="col-12 col-xl-10">
             <div class="mx-3 my-3">
                 <h4>Staff List</h4>
             </div>
         </div>
-        <div class="col-4 text-center my-3 pl-5">
+        <div class="col-12 col-xl-2 my-3 text-right pr-5">
             <x-add-button :value="'+ Add Staff'" :dataTarget="'#add-staff'"></x-add-button>
             <x-modal :modalId="'add-staff'" :formAction="'staff/store'" :editData="''"></x-modal>
         </div>

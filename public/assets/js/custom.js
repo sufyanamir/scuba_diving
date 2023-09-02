@@ -56,13 +56,21 @@ window.onload = function() {
 
 //header open close
 function openNav() {
-    document.getElementById("mySidebar").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    document.getElementById("mySidebar").style.width = "200px";
+    document.getElementById("main-panel").style.marginLeft = "200px";
+    document.getElementById("main-panel").style.borderRadius = "30px 0 0 30px";
+    document.getElementById("closebtn").style.display = "block";
+    document.getElementById("openbtn").style.display = "none";
+    // document.getElementById("main").style.marginLeft = "250px";
 }
 
 function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
     document.getElementById("main").style.marginLeft = "0";
+    document.getElementById("main-panel").style.marginLeft = "0";
+    document.getElementById("main-panel").style.borderRadius = "0";
+    document.getElementById("closebtn").style.display = "none";
+    document.getElementById("openbtn").style.display = "block";
 }
 //header open close
 

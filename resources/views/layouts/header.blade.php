@@ -19,14 +19,14 @@
     <style>
         body {
             font-family: "Lato", sans-serif;
-            margin: 0 0 0 8px;
+            margin: 0;
             background: #023d5f;
         }
 
         .sidebar {
             padding-top: 10px !important;
             height: 100%;
-            width: 200PX;
+            width: 200px;
             position: fixed;
             z-index: 1;
             top: 0;
@@ -84,14 +84,14 @@
         .openbtn {
             font-size: 20px;
             cursor: pointer;
-            background-color: #111;
+            background-color: #00A3FF;
             color: white;
             padding: 10px 15px;
             border: none;
         }
 
         .openbtn:hover {
-            background-color: #444;
+            background-color: #00A3F2;
         }
 
         #main {
@@ -116,6 +116,7 @@
             border-radius: 30px 0 0 30px;
             background-color: #f5F5F5;
             height: 100vh;
+            transition: margin-left .5s;
         }
     </style>
 </head>
@@ -126,7 +127,6 @@
         <div align="center">
             <img src="{{ asset('assets/images/company-logo.svg') }}" alt="Image">
         </div>
-        <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a> -->
         @if(session()->has('user_details'))
         <a href="/dashboard" class="link">
             <img src="{{ asset('assets/images/d-white.svg') }}" class="white-img mb-1" alt="Image">
@@ -172,15 +172,15 @@
         </a>
         @endif
     </div>
-    <div class="main-panel" style="overflow-x: auto;">
+    <div class="main-panel" id="main-panel" style="overflow-x: auto;">
         <div id="main">
-            <!-- <button class="openbtn" onclick="openNav()">☰ Open Sidebar</button> -->
             <nav>
                 <div class="row p-2">
-                    <div class="col-9">
-
+                    <div class="col-lg-9 col-6 col-xl-9">
+                        <button class="openbtn" id="closebtn" onclick="closeNav()">×</button>
+                        <button class="openbtn" id="openbtn" style="display: none;" onclick="openNav()">☰</button>
                     </div>
-                    <div class="col-3 d-flex justify-content-evenly">
+                    <div class="col-lg-3 col-6 col-xl-3 d-flex justify-content-evenly">
                         <form action="/lang_change" method="post">
                             @csrf
                             <select id="lang-select" class="form-control mx-2" style="width: 90%; height: 80%;" name="lang" onchange="this.form.submit()">

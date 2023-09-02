@@ -7,6 +7,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LanguageController;
 
 
 /*
@@ -24,6 +25,7 @@ Route::middleware(['customauth'])->group(function () {
 // company
 Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);
 Route::get('/company', [CompanyController::class, 'index']);
+Route::get('/company/delete/{id}', [CompanyController::class,'destroy'])->name('company.delete');
 // company
 
 // staff
@@ -40,6 +42,8 @@ Route::get('/customers/delete/{id}', [CustomerController::class,'destroy'])->nam
 
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
+
+Route::match(['post','get'],'/lang_change', [LanguageController::class, 'lang_change']);
 
 });
 

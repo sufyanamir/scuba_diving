@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class CompanyController extends Controller
 {
@@ -76,4 +77,19 @@ class CompanyController extends Controller
         // Optionally, you can redirect back with a success message
         return redirect()->back()->with('success', 'Company added successfully.');
     }
+
+    public function destroy($id)
+{
+    $company = Company::find($id);
+    $path = 'storage/company_images/'.$company->company_image;
+    
+    if (File::exists($path)) {
+        File::delete($path);
+    }
+    
+    $company->delete();
+    
+    return redirect('company')->with('status','Company Deleted successfully');
+}
+
 }

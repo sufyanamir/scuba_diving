@@ -9,6 +9,31 @@ class Company extends Model
 {
     use HasFactory;
 
+    protected static function boot()
+{
+    parent::boot();
+
+    static::deleting(function ($company) {
+        // Delete related users
+        $company->users()->delete();
+
+        // Delete related customers
+        $company->customers()->delete();
+    });
+}
+
+public function users()
+{
+    return $this->hasMany(User::class, 'company_id');
+}
+
+public function customers()
+{
+    return $this->hasMany(Customers::class, 'company_id');
+}
+
+
+
     protected $table = 'company';
 
     protected $primaryKey = 'company_id';

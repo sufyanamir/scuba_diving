@@ -9,6 +9,12 @@ class Customers extends Model
 {
     use HasFactory;
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+
+
     protected $table = 'customers';
 
     protected $primaryKey = 'customer_id';

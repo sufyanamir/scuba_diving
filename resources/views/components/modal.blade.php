@@ -96,6 +96,9 @@
                 <x-plus-button :name="'add_row'" :addRow="'addRow'" :label="'+'" onclick="duplicateInputFields()"></x-plus-button>
               </div>
             </div>
+          <div class="row col-12 ml-3" id="addedRow">
+
+           </div>
             @else
             <div class="col-6 mb-3">
               <x-input :name="'admin_name'" :value="''" :label="'Admin Name'" :inputType="'text'" :id="''"></x-input>

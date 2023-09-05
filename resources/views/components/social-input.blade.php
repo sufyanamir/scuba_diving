@@ -13,7 +13,4 @@
     <div class="col-8 pr-0">
         <input type="text" value="{{$value}}" class="social-input" name="{{ $name }}">
     </div>
-    <div class="col-1 px-0">
-        <img src="{{ asset('assets/images/qr-field.svg') }}" id="{{ $qrId }}" name="{{ $qrName }}" alt="Image">
-    </div>
 </div>

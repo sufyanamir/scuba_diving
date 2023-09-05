@@ -12,14 +12,18 @@ class StaffController extends Controller
 {
 
     public function index(){
-//to get all users data
-        // $staff = User::all();
-        // return view('staff',compact('staff'));
-
-// just staff data
-        $staff = User::where('user_role','2')->get();
-        return view('staff', compact('staff'));
+        // Retrieve the user's id from the session
+        $userDetails = session('user_details');
+        $companyId = $userDetails['company_id'];
+    
+        // Retrieve staff members that have the same added_user_id as the user's id and user_role '2'
+        $staff = User::where('user_role', '2')
+                     ->where('company_id', $companyId)
+                     ->get();
+    
+        return view('staff', compact('staff', 'userDetails'));
     }
+    
     
 
     public function addStaff(Request $request){

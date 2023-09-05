@@ -224,6 +224,7 @@
                 @endforeach
             </tbody>
         </table>
+        <br/>
     </div>
 </div>
 

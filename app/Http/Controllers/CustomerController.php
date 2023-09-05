@@ -12,10 +12,15 @@ class CustomerController extends Controller
 {
 
     public function index(){
-
-        $customers = Customers::all();
+        
         // dd($customers);
-        return view('customers', ['customers'=>$customers]);
+        $user_details = session('user_details');
+
+        $userId = $user_details['user_id'];
+
+        $customers = Customers::where('added_user_id', $userId)->get();
+
+        return view('customers', ['customers'=>$customers, 'userDetails'=>$user_details]);
     }
     
 
@@ -36,6 +41,8 @@ class CustomerController extends Controller
         $igAcc = $request->input('ig_acc');
         $ttAcc = $request->input('tt_acc');
 
+        $status = 1;
+
         $socailLinks="$fbAcc,$igAcc,$ttAcc";
 
         DB::table('customers')->insert([
@@ -47,6 +54,7 @@ class CustomerController extends Controller
             'company_id' => $validatedData['company_id'],
             'added_user_id' => $validatedData['added_user_id'],
             'customer_social_links' => $socailLinks,
+            'customer_status' => $status,
             // Add other fields as needed
         ]);
 

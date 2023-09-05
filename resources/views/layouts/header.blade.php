@@ -10,17 +10,18 @@
     <!-- style -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <!-- style -->
-
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/company-logo1.svg') }}">
     <!-- dataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <!-- dataTables -->
 
+    <title>Dive Monies</title>
 
     <style>
         body {
             font-family: "Lato", sans-serif;
             margin: 0;
-            background: #023d5f;
+            background: #025F94;
         }
 
         .sidebar {
@@ -32,16 +33,16 @@
             top: 0;
             left: 0;
             background: rgb(0, 163, 255);
-            background: linear-gradient(90deg, rgba(0, 163, 255, 1) 10%, rgba(2, 61, 95, 1) 100%);
+            background: linear-gradient(90deg, rgba(0, 163, 255, 1) 35%, rgba(2, 61, 95, 1) 130%);
             overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
         }
 
         .sidebar a {
-            padding: 8px 8px 8px 32px;
+            padding: 8px 8px 8px 18px;
             text-decoration: none;
-            font-size: 20px;
+            font-size: 14px;
             color: #FFFF;
             display: block;
             transition: 0.3s;
@@ -118,6 +119,9 @@
             height: 100vh;
             transition: margin-left .5s;
         }
+        .link>img{
+            margin-right: 10px;
+        }
     </style>
 </head>
 
@@ -162,12 +166,13 @@
         </a>
         @endif
         <a href="/logout">
-            <button class="btn">
-                <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button class="btn p-0">
+                <img src="{{ asset('assets/images/logout-btn.svg') }}" style="width: 100%; height: 100%;" alt="button">
+                <!-- <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M13.7907 5.75V3.375C13.7907 2.74511 13.5457 2.14102 13.1096 1.69562C12.6734 1.25022 12.0819 1 11.4651 1H3.32558C2.7088 1 2.11728 1.25022 1.68115 1.69562C1.24502 2.14102 1 2.74511 1 3.375V17.625C1 18.2549 1.24502 18.859 1.68115 19.3044C2.11728 19.7498 2.7088 20 3.32558 20H11.4651C12.0819 20 12.6734 19.7498 13.1096 19.3044C13.5457 18.859 13.7907 18.2549 13.7907 17.625V15.25" stroke="#452C88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                     <path d="M4.72095 10.5H21M21 10.5L17.5116 6.9375M21 10.5L17.5116 14.0625" stroke="#452C88" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
-                <span style="color: #452C88;">Logout</span>
+                <span style="color: #452C88;">Logout</span> -->
             </button>
         </a>
         @endif
@@ -177,7 +182,7 @@
             <nav>
                 <div class="row p-2">
                     <div class="col-lg-9 col-6 col-xl-9">
-                        <button class="openbtn" id="closebtn" onclick="closeNav()">×</button>
+                        <button class="openbtn" id="closebtn" onclick="closeNav()">☰</button>
                         <button class="openbtn" id="openbtn" style="display: none;" onclick="openNav()">☰</button>
                     </div>
                     <div class="col-lg-3 col-6 col-xl-3 d-flex justify-content-evenly">
@@ -185,17 +190,41 @@
                             @csrf
                             <select id="lang-select" class="form-control mx-2" style="width: 90%; height: 80%;" name="lang" onchange="this.form.submit()">
                                 <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English</option>
-                                <option value="es" {{ session()->get('locale') == 'th' ? 'selected' : '' }}>Thai</option>
+                                <option value="th" {{ session()->get('locale') == 'th' ? 'selected' : '' }}>Thai</option>
                             </select>
                         </form>
                         <div class="mx-2 my-auto" style="position: relative;">
-                            <div style="position: absolute; display: flex; justify-content: center; bottom: 70%; left: 40%;">
-                                <span class="badge badge-danger" style="width: 20px; height: 20px; border-radius: 50px;">4</span>
+                            <div style="z-index: 1; position: absolute; display: flex; justify-content: center; bottom: 70%; left: 40%;">
+                                <span class="badge badge-danger" style="width: 20px; height: 20px; border-radius: 50px;">0</span>
                             </div>
-                            <img src="{{  asset('assets/images/bell.svg')  }}" style="position: initial;" alt="image">
+                            <div class="dropdown" style="position: initial;">
+                                <div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="{{  asset('assets/images/bell.svg')  }}" alt="image">
+                                </div>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <h5 class="text-left px-2">Notification</h5>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">
+                                        <p>No Notification yet!</p>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                         <div class="mx-2 pb-2">
-                            <img src="{{ asset('assets/images/nav-user.svg') }}" alt="image">
+                            <div class="dropdown">
+                                <div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="{{ asset('assets/images/nav-user.svg') }}" alt="image">
+                                </div>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <h5 class="text-left px-2">Profile</h5>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">{{ session('user_details')['name'] }}</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/logout">
+                                        <img src="{{ asset('assets/images/logout-btn.svg') }}" style="width: 100%; height: 100%;" alt="button">
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

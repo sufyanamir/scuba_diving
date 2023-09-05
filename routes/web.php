@@ -40,6 +40,7 @@ Route::post('/staff/update/{id}', [StaffController::class, 'update']);
 Route::match(['post'], 'customers/store', [CustomerController::class, 'addCustomer']);
 Route::get('/customers', [CustomerController::class,'index']);
 Route::get('/customers/delete/{id}', [CustomerController::class,'destroy'])->name('customer.delete');
+Route::post('/customer/update/{id}', [CustomerController::class, 'update']);
 // Customer
 
 // Services

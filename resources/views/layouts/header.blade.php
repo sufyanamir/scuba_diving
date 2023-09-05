@@ -42,7 +42,7 @@
         .sidebar a {
             padding: 8px 8px 8px 18px;
             text-decoration: none;
-            font-size: 20px;
+            font-size: 14px;
             color: #FFFF;
             display: block;
             transition: 0.3s;
@@ -118,6 +118,9 @@
             background-color: #f5F5F5;
             height: 100vh;
             transition: margin-left .5s;
+        }
+        .link>img{
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -201,7 +204,7 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <h5 class="text-left px-2">Notification</h5>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/logout">
+                                    <a class="dropdown-item" href="#">
                                         <p>No Notification yet!</p>
                                     </a>
                                 </div>

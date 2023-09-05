@@ -5,10 +5,10 @@ window.onload = function() {
       animationEnabled: true,
       theme: "light2", // "light1", "light2", "dark1", "dark2"
       title: {
-          text: "Top Oil Reserves"
+          text: "Scuba Diving Revenue"
       },
       axisY: {
-          title: "Reserves(MMbbl)"
+          title: "Revenue"
       },
       data: [{
           type: "column",
@@ -17,35 +17,35 @@ window.onload = function() {
           legendText: "MMbbl = one million barrels",
           dataPoints: [{
                   y: 300878,
-                  label: "Venezuela"
+                  label: "company1"
               },
               {
                   y: 266455,
-                  label: "Saudi"
+                  label: "Company2"
               },
               {
                   y: 169709,
-                  label: "Canada"
+                  label: "Company3"
               },
               {
                   y: 158400,
-                  label: "Iran"
+                  label: "Company4"
               },
               {
                   y: 142503,
-                  label: "Iraq"
+                  label: "Company5"
               },
               {
                   y: 101500,
-                  label: "Kuwait"
+                  label: "Company6"
               },
               {
                   y: 97800,
-                  label: "UAE"
+                  label: "Company7"
               },
               {
                   y: 80000,
-                  label: "Russia"
+                  label: "Company8"
               }
           ]
       }]

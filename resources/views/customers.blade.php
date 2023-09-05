@@ -50,7 +50,28 @@
                         <td>{{$customer->customer_email}}</td>
                         <td>{{$customer->customer_phone}}</td>
                         <td>{{$customer->customer_address}}</td>
-                        <td>{{$customer->customer_social_links}}</td>
+                        <td>
+                            <?php
+                            $customerLinks = $customer->customer_social_links; // Replace this with your actual string
+
+                            $linkArray = explode(',', $customerLinks);
+
+                            // Define an array of social media icons and their respective links
+                            $icons = [
+                                $linkArray[0] => 'assets/images/fb-logo.svg',
+                                $linkArray[1] => 'assets/images/ig-logo.svg',
+                                $linkArray[2] => 'assets/images/tt-logo.svg',
+                            ];
+
+                            // Loop through the links and display the icons and links
+                            foreach ($linkArray as $index => $link) {
+                                $iconSrc = isset($icons[$link]) ? $icons[$link] : 'default-icon.png'; // Use a default icon if not found
+                                $iconAlt = ucfirst(str_replace('.com', '', $link)); // Generate alt text
+
+                                echo "<a href='$link' target='_blank'><img src='$iconSrc' alt='$iconAlt' /></a>";
+                            }
+                            ?>
+                        </td>
                         @if($customer->customer_status == '1')
                         <td>
                             <div style="width: 100%; height: 100%; padding-top: 5px; padding-bottom: 5px; padding-left: 19px; padding-right: 20px; background: rgba(48.62, 165.75, 19.34, 0.18); border-radius: 3px; justify-content: center; align-items: center; display: inline-flex">
@@ -90,6 +111,7 @@
                     @endforeach
                 </tbody>
             </table>
+            <br />
         </div>
     </div>
 </div>

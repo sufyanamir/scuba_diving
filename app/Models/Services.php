@@ -29,6 +29,8 @@ class Services extends Model
         'service_charges',
         'service_desc',
         'service_image',
+        'added_user_id',
+        'company_id',
     ];
     public $timestamps = true;
 }

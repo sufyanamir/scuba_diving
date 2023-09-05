@@ -166,7 +166,7 @@ img {
      fill: #233A85;
    } */
 .dropdown-menu {
-  width: 100px;
+  width: 300%;
   border: none;
   text-align: center;
 }

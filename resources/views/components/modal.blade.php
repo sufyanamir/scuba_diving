@@ -54,14 +54,19 @@
                 <div class="col-12 mb-3">
                   <x-input :name="'charges'" :value="''" :label="'Charges'" :inputType="'number'" :id="''"></x-input>
                 </div>
+                <div class="col-12 mb-3">
+                  <x-text-area :name="'description'" :value="''" :label="'Description'"></x-text-area>
+                </div>
                 @else
                 <div class="col-12 mb-3">
                   <x-input :name="'phone'" :value="''" :label="'Phone Number'" :inputType="'tel'" :id="''"></x-input>
                 </div>
                 @endif
+                @if($modalId != 'add-service')
                 <div class="col-12 mb-3">
                   <x-text-area :name="'address'" :value="''" :label="'Address'"></x-text-area>
                 </div>
+                @endif
               </div>
             </div>
             <div class="col-4">
@@ -87,13 +92,13 @@
             @elseif($modalId == 'add-service')
             <div class="row ml-1 col-12" id="costRows">
               <div class="col-5 mb-3">
-                <x-input :name="'cost_name'" :value="''" :label="'Cost Name'" :inputType="'text'" :id="'costName'"></x-input>
+                <x-input :name="'cost_name[]'" :value="''" :label="'Cost Name'" :inputType="'text'" :id="'costName'"></x-input>
               </div>
               <div class="col-5 mb-3">
-                <x-input :name="'cost'" :value="''" :label="'Cost'" :inputType="'number'" :id="'cost'"></x-input>
+                <x-input :name="'cost[]'" :value="''" :label="'Cost'" :inputType="'number'" :id="'cost'"></x-input>
               </div>
               <div class="col-2 my-2">
-                <x-plus-button :name="'add_row'" :addRow="'addRow'" :label="'+'" onclick="duplicateInputFields()"></x-plus-button>
+                <x-plus-button :name="'add_row'" :addRow="'addRow'" :label="'+'" :onclick="'duplicateInputFields()'"></x-plus-button>
               </div>
             </div>
             @else
@@ -123,17 +128,23 @@
   </div>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 function duplicateInputFields() {
-  // Clone the input fields
-  var $clone = $("#costRows .col-5.mb-3").clone();
+    console.log("Button clicked!");
+    // Clone the input fields
+    var $clone = $("#costRows .col-5.mb-3").clone();
 
-  // Clear the values of the cloned input fields
-  $clone.find("input").val("");
+    // Clear the values of the cloned input fields
+    $clone.find("input").val("");
 
-  // Append the cloned input fields to the parent container
-  $("#costRows").append($clone);
+    // Update the names of the cloned input fields to match the array notation
+    var newIndex = $("#costRows .col-5.mb-3").length; // Calculate the new index
+    $clone.find("input[name='cost_name']").attr("name", "overheads[][cost_name]");
+    $clone.find("input[name='cost']").attr("name", "overheads[][cost]");
+
+    // Append the cloned input fields to the parent container
+    $("#costRows").append($clone);
 }
 </script>
 

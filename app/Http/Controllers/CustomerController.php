@@ -7,6 +7,7 @@ use App\Models\Customers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
 {
@@ -79,6 +80,58 @@ class CustomerController extends Controller
         
         // Optionally, you can redirect back with a success message
         return redirect()->back()->with('success', 'Customer added successfully.');
+
+    }
+
+
+    public function update(Request $request ,$id){
+        $user = Customers::find($id);
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:500',
+            'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            // Add more validation rules for other fields
+        ]);
+        if($request->hasFile('upload_image')){
+            
+                $path = 'public/customer_images/'.$user->customer_image;
+                // dd($path);
+                if ($path) 
+                {
+                    Storage::delete($path);
+                }
+                
+                $image = $request->file('upload_image');
+                $ext = $image->getClientOriginalExtension();
+                $imageName = time().".".$ext;
+                $image->storeAs('public/customer_images', $imageName);
+                $user->customer_image = $imageName; 
+
+
+        }   
+        
+
+        $fbAcc = $request->input('fb_acc');
+        $igAcc = $request->input('ig_acc');
+        $ttAcc = $request->input('tt_acc');
+
+        $socailLinks="$fbAcc,$igAcc,$ttAcc";
+
+
+        $user->customer_name = $validatedData['name'];
+        $user->customer_email = $validatedData['email'];
+        $user->customer_phone = $validatedData['phone'];
+        $user->customer_address = $validatedData['address'];
+        $user->customer_social_links = $socailLinks;
+        $user->update();
+
+        return redirect('customers')->with('status','Customer Updated Successfully');
+
+
+
 
     }
 

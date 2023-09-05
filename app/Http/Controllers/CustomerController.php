@@ -12,10 +12,15 @@ class CustomerController extends Controller
 {
 
     public function index(){
-
-        $customers = Customers::all();
+        
         // dd($customers);
-        return view('customers', ['customers'=>$customers]);
+        $user_details = session('user_details');
+
+        $userId = $user_details['user_id'];
+
+        $customers = Customers::where('added_user_id', $userId)->get();
+
+        return view('customers', ['customers'=>$customers, 'userDetails'=>$user_details]);
     }
     
 

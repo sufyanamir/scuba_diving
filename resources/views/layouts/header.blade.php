@@ -10,11 +10,12 @@
     <!-- style -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <!-- style -->
-
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/company-logo1.svg') }}">
     <!-- dataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <!-- dataTables -->
 
+    <title>Dive Monies</title>
 
     <style>
         body {
@@ -186,12 +187,12 @@
                             @csrf
                             <select id="lang-select" class="form-control mx-2" style="width: 90%; height: 80%;" name="lang" onchange="this.form.submit()">
                                 <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English</option>
-                                <option value="es" {{ session()->get('locale') == 'th' ? 'selected' : '' }}>Thai</option>
+                                <option value="th" {{ session()->get('locale') == 'th' ? 'selected' : '' }}>Thai</option>
                             </select>
                         </form>
                         <div class="mx-2 my-auto" style="position: relative;">
                             <div style="z-index: 1; position: absolute; display: flex; justify-content: center; bottom: 70%; left: 40%;">
-                                <span class="badge badge-danger" style="width: 20px; height: 20px; border-radius: 50px;">4</span>
+                                <span class="badge badge-danger" style="width: 20px; height: 20px; border-radius: 50px;">0</span>
                             </div>
                             <div class="dropdown" style="position: initial;">
                                 <div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -34,8 +34,14 @@ class ServicesController extends Controller
 
     public function index()
     {
-        // Retrieve all services along with their associated service_overheads
-        $services = Services::with('serviceOverheads')->get();
+        // Retrieve user details from the session
+        $userDetails = session('user_details');
+        $userId = $userDetails['user_id'];
+
+        // Retrieve services that have the same added_user_id as the user's id
+        $services = Services::where('added_user_id', $userId)
+            ->with('serviceOverheads')
+            ->get();
 
         // Calculate the sum of overhead_cost for each service using DB::raw
         $totalOverheadCosts = ServiceOverheads::select('service_id', DB::raw('SUM(overhead_cost) as total_cost'))
@@ -43,15 +49,13 @@ class ServicesController extends Controller
             ->get()
             ->keyBy('service_id');
 
-        // Retrieve user details from the session
-        $user_details = session('user_details');
-
         return view('services', [
             'services' => $services,
             'totalOverheadCosts' => $totalOverheadCosts, // Pass the calculated sums to the view
-            'userDetails' => $user_details,
+            'userDetails' => $userDetails,
         ]);
     }
+
 
     public function addService(Request $request)
     {
@@ -63,6 +67,8 @@ class ServicesController extends Controller
             'charges' => 'required|numeric',
             'description' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'added_user_id' => 'required',
+            'company_id' => 'required',
             'overheads' => 'array', // Define 'overheads' as an array
             // 'overheads.*.cost_name' => 'required|string|max:255',
             // 'overheads.*.cost' => 'required|numeric',
@@ -74,6 +80,8 @@ class ServicesController extends Controller
             'service_subtitle' => $validatedData['subtitle'],
             'service_charges' => $validatedData['charges'],
             'service_desc' => $validatedData['description'],
+            'added_user_id' => $validatedData['added_user_id'],
+            'company_id' => $validatedData['company_id'],
         ]);
 
         // Upload and store the service image

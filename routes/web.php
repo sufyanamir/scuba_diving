@@ -33,6 +33,7 @@ Route::get('/company/delete/{id}', [CompanyController::class,'destroy'])->name('
 Route::match(['post'], 'staff/store', [StaffController::class, 'addStaff']);
 Route::get('/staff', [StaffController::class,'index']);
 Route::get('/staff/delete/{id}', [StaffController::class,'destroy'])->name('staff.delete');
+Route::post('/staff/update/{id}', [StaffController::class, 'update']);
 // staff
 
 // Customer

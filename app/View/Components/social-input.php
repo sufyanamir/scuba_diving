@@ -10,13 +10,16 @@ class social_input extends Component
     public $name;
     public $qrId;
     public $qrName;
+    public $value;
 
-    public function __construct($socialLogo, $name, $qrId, $qrName)
+    public function __construct($socialLogo,  $name, $qrId, $qrName,$value)
     {
         $this->socialLogo = $socialLogo;
         $this->name = $name;
         $this->qrId = $qrId;
         $this->qrName = $qrName;
+        $this->value = $value;
+    
     }
 
     /**

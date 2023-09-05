@@ -11,6 +11,6 @@
         <img src="{{ $socialLogo }}" alt="Image">
     </div>
     <div class="col-8 pr-0">
-        <input type="text" class="social-input" name="{{ $name }}">
+        <input type="text" value="{{$value}}" class="social-input" name="{{ $name }}">
     </div>
 </div>

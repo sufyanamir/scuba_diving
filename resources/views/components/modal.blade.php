@@ -70,7 +70,7 @@
               </div>
             </div>
             <div class="col-4">
-              <x-drop-zone :name="'upload_image'"></x-drop-zone>
+              <x-drop-zone :value="''"   :name="'upload_image'"></x-drop-zone>
             </div>
           </div>
           <div class="row">
@@ -85,9 +85,9 @@
             </div>
             @if($modalId == 'add-staff' || $modalId == 'add-customer')
             <div class="col-8 mb-3">
-              <x-social-input :socialLogo="'assets/images/fb-logo.svg'" :name="'fb_acc'" :qrId="''" :qrName="''"></x-social-input>
-              <x-social-input :socialLogo="'assets/images/ig-logo.svg'" :name="'ig_acc'" :qrId="''" :qrName="''"></x-social-input>
-              <x-social-input :socialLogo="'assets/images/tt-logo.svg'" :name="'tt_acc'" :qrId="''" :qrName="''"></x-social-input>
+              <x-social-input :socialLogo="'assets/images/fb-logo.svg'" :value="''" :name="'fb_acc'" :qrId="''" :qrName="''"></x-social-input>
+              <x-social-input :socialLogo="'assets/images/ig-logo.svg'" :value="''" :name="'ig_acc'" :qrId="''" :qrName="''"></x-social-input>
+              <x-social-input :socialLogo="'assets/images/tt-logo.svg'" :value="''" :name="'tt_acc'" :qrId="''" :qrName="''"></x-social-input>
             </div>
             @elseif($modalId == 'add-service')
             <div class="row ml-1 col-12" id="costRows">

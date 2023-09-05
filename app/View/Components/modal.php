@@ -14,7 +14,7 @@ class modal extends Component
     {
         $this->modalId = $modalId;
         $this->formAction = $formAction;
-        $this->$editData = $editData;
+        $this->editData = $editData;
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class StaffController extends Controller
 {
@@ -76,6 +77,65 @@ class StaffController extends Controller
         return redirect()->back()->with('success', 'Staff added successfully.');
 
     }
+
+    public function update(Request $request ,$id){
+        $user = User::find($id);
+
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:500',
+            'category' => 'required|string|max:500',
+            'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'company_id' => 'required',
+            // Add more validation rules for other fields
+        ]);
+        if($request->hasFile('upload_image')){
+            
+                $path = 'public/staff_images/'.$user->user_image;
+                // dd($path);
+                if ($path) 
+                {
+                    Storage::delete($path);
+                }
+                
+                $image = $request->file('upload_image');
+                $ext = $image->getClientOriginalExtension();
+                $imageName = time().".".$ext;
+                $image->storeAs('public/staff_images', $imageName);
+                $user->user_image = $imageName; 
+
+
+        }   
+        
+
+        $fbAcc = $request->input('fb_acc');
+        $igAcc = $request->input('ig_acc');
+        $ttAcc = $request->input('tt_acc');
+
+        $socailLinks="$fbAcc,$igAcc,$ttAcc";
+
+
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->phone = $validatedData['phone'];
+        $user->address = $validatedData['address'];
+        $user->category = $validatedData['category'];
+        $user->company_id = $validatedData['company_id'];
+        $user->social_links = $socailLinks;
+        $user->update();
+
+        return redirect('staff')->with('status','Staff Updated Successfully');
+
+
+
+
+    }
+
+
+
     public function destroy($id)
     {
         $user = User::find($id);
@@ -85,7 +145,7 @@ class StaffController extends Controller
             File::delete($path);
         }
         $user->delete();
-        return redirect('staff')->with('status','Staff Deleted successfully');
+        return redirect('/staff')->with('status','Staff Deleted successfully');
 
 
     }

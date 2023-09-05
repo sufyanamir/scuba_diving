@@ -36,6 +36,8 @@ class CustomerController extends Controller
         $igAcc = $request->input('ig_acc');
         $ttAcc = $request->input('tt_acc');
 
+        $status = 1;
+
         $socailLinks="$fbAcc,$igAcc,$ttAcc";
 
         DB::table('customers')->insert([
@@ -47,6 +49,7 @@ class CustomerController extends Controller
             'company_id' => $validatedData['company_id'],
             'added_user_id' => $validatedData['added_user_id'],
             'customer_social_links' => $socailLinks,
+            'customer_status' => $status,
             // Add other fields as needed
         ]);
 

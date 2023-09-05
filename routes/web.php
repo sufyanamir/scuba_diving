@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\ServicesController;
 
 
 /*
@@ -40,6 +41,11 @@ Route::get('/customers', [CustomerController::class,'index']);
 Route::get('/customers/delete/{id}', [CustomerController::class,'destroy'])->name('customer.delete');
 // Customer
 
+// Services
+Route::post('services/store', [ServicesController::class, 'addService']);
+Route::get('/services', [ServicesController::class, 'index']);
+Route::get('/services/delete/{id}', [ServicesController::class,'destroy'])->name('service.delete');
+// Services
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -56,9 +62,6 @@ Route::get('/product', function () {
     return view('products');
 });
 
-Route::get('/services', function () {
-    return view('services');
-});
 
 //Auth
 Route::get('/', [LoginController::class,'index']);

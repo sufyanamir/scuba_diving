@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('company_email');
             $table->integer('company_phone');
             $table->text('company_address');
-            $table->text('company_image');
+            $table->text('company_image')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
 

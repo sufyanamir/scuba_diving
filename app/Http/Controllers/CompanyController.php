@@ -100,7 +100,10 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         $company = Company::find($id);
-        
+
+
+
+
         // Validate the form data
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -114,7 +117,7 @@ class CompanyController extends Controller
             'admin_address' => 'required|string|max:500',
             // Add more validation rules for other fields
         ]);
-        
+
         if ($request->hasFile('upload_image')) {
 
             $path = 'public/company_images/' . $company->company_image;
@@ -137,6 +140,18 @@ class CompanyController extends Controller
 
         $company->update();
 
+
+        $user = $company->users()->where('user_role', 1)->first();
+
+
+        if (!$user) {
+            return redirect()->back()->with('status', 'Admin Not Exists.');
+        }
+        $user->name = $validatedData['admin_name'];
+        $user->email = $validatedData['admin_email'];
+        $user->phone = $validatedData['admin_phone'];
+        $user->address = $validatedData['admin_address'];
+        $user->update();
         // DB::table('company')->update([
         //     'company_name' => $validatedData['name'],
         //     'company_email' => $validatedData['email'],

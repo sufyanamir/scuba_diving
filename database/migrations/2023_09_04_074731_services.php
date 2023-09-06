@@ -19,7 +19,7 @@ return new class extends Migration
            $table->string('service_subtitle');
            $table->integer('service_charges');
            $table->text('service_desc');
-           $table->text('service_image');
+           $table->text('service_image')->nullable();
            $table->timestamp('created_at')->useCurrent();
            $table->timestamp('updated_at')->nullable()->useCurrent();
 

@@ -27,6 +27,7 @@ Route::middleware(['customauth'])->group(function () {
 Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);
 Route::get('/company', [CompanyController::class, 'index']);
 Route::get('/company/delete/{id}', [CompanyController::class,'destroy'])->name('company.delete');
+Route::post('/company/update/{id}', [CompanyController::class, 'update']);
 // company
 
 // staff
@@ -47,6 +48,7 @@ Route::post('/customer/update/{id}', [CustomerController::class, 'update']);
 Route::post('services/store', [ServicesController::class, 'addService']);
 Route::get('/services', [ServicesController::class, 'index']);
 Route::get('/services/delete/{id}', [ServicesController::class,'destroy'])->name('service.delete');
+Route::post('/services/update/{id}', [ServiceController::class, 'update']);
 // Services
 
 Route::get('/dashboard', [DashboardController::class, 'index']);

@@ -5,22 +5,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
 
     public function index()
     {
-        $company = Company::all();
 
-        // Retrieve user details from the session
         $user_details = session('user_details');
 
+        $company = DB::table('users')
+            ->join('company', 'users.company_id', '=', 'company.company_id')
+            ->where('users.user_role', 1)
+            ->select('users.*', 'company.*')
+            ->get();
         return view('company', [
             'company' => $company,
-            'userDetails' => $user_details, // Pass user details to the view
+            'user_details' => $user_details,
         ]);
     }
 
@@ -70,7 +75,7 @@ class CompanyController extends Controller
             'address' => $validatedData['admin_address'],
             'password' => md5($validatedData['password']),
             'company_id' => $companyID,
-            'user_role'=>'1',
+            'user_role' => '1',
             // Add other fields as needed
         ]);
 
@@ -79,17 +84,72 @@ class CompanyController extends Controller
     }
 
     public function destroy($id)
-{
-    $company = Company::find($id);
-    $path = 'storage/company_images/'.$company->company_image;
-    
-    if (File::exists($path)) {
-        File::delete($path);
-    }
-    
-    $company->delete();
-    
-    return redirect('company')->with('status','Company Deleted successfully');
-}
+    {
+        $company = Company::find($id);
+        $path = 'storage/company_images/' . $company->company_image;
 
+        if (File::exists($path)) {
+            File::delete($path);
+        }
+
+        $company->delete();
+
+        return redirect('company')->with('status', 'Company Deleted successfully');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $company = Company::find($id);
+        
+        // Validate the form data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:500',
+            'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'admin_name' => 'required|string|max:255',
+            'admin_email' => 'required|email|max:255',
+            'admin_phone' => 'required|string|max:20',
+            'admin_address' => 'required|string|max:500',
+            // Add more validation rules for other fields
+        ]);
+        
+        if ($request->hasFile('upload_image')) {
+
+            $path = 'public/company_images/' . $company->company_image;
+            // dd($path);
+            if ($path) {
+                Storage::delete($path);
+            }
+
+            $image = $request->file('upload_image');
+            $ext = $image->getClientOriginalExtension();
+            $imageName = time() . "." . $ext;
+            $image->storeAs('public/company_images', $imageName);
+            $company->company_image = $imageName;
+        }
+
+        $company->company_name = $validatedData['name'];
+        $company->company_email = $validatedData['email'];
+        $company->company_phone = $validatedData['phone'];
+        $company->company_address = $validatedData['address'];
+
+        $company->update();
+
+        // DB::table('company')->update([
+        //     'company_name' => $validatedData['name'],
+        //     'company_email' => $validatedData['email'],
+        //     'company_phone' => $validatedData['phone'],
+        //     'company_address' => $validatedData['address'],
+        // ]);
+
+        // DB::table('users')->update([
+        //     'name' => $validatedData['admin_name'],
+        //     'email' => $validatedData['admin_email'],
+        //     'phone' => $validatedData['admin_phone'],
+        //     'address' => $validatedData['admin_address'],
+        // ]);
+        return redirect()->back()->with('status', 'Company data updated Successfully.');
+    }
 }

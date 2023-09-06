@@ -10,13 +10,15 @@ class plus_button extends Component
     public $label;
     public $addRow;
     public $onclick;
+    public $class;
 
-    public function __construct($name, $label, $addRow, $onclick)
+    public function __construct($name, $label, $addRow, $onclick, $class)
     {
         $this->name = $name;
         $this->label = $label;
         $this->addRow = $addRow;
         $this->onclick = $onclick;
+        $this->class = $class;
     }
 
     /**

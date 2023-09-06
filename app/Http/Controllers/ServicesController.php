@@ -33,28 +33,33 @@ class ServicesController extends Controller
     }
 
     public function index()
-    {
-        // Retrieve user details from the session
-        $userDetails = session('user_details');
-        $userId = $userDetails['user_id'];
+{
+    // Retrieve user details from the session
+    $userDetails = session('user_details');
+    $userId = $userDetails['user_id'];
 
-        // Retrieve services that have the same added_user_id as the user's id
-        $services = Services::where('added_user_id', $userId)
-            ->with('serviceOverheads')
-            ->get();
+    // Retrieve services that have the same added_user_id as the user's id
+    $services = Services::where('added_user_id', $userId)
+        ->with('serviceOverheads')
+        ->get();
 
-        // Calculate the sum of overhead_cost for each service using DB::raw
-        $totalOverheadCosts = ServiceOverheads::select('service_id', DB::raw('SUM(overhead_cost) as total_cost'))
-            ->groupBy('service_id')
-            ->get()
-            ->keyBy('service_id');
+    // Retrieve all data from the services_overheads table
+    $allServiceOverheads = ServiceOverheads::all();
+    
+    // Calculate the sum of overhead_cost for each service using DB::raw
+    $totalOverheadCosts = ServiceOverheads::select('service_id', DB::raw('SUM(overhead_cost) as total_cost'))
+        ->groupBy('service_id')
+        ->get()
+        ->keyBy('service_id');
 
-        return view('services', [
-            'services' => $services,
-            'totalOverheadCosts' => $totalOverheadCosts, // Pass the calculated sums to the view
-            'userDetails' => $userDetails,
-        ]);
-    }
+    return view('services', [
+        'services' => $services,
+        'totalOverheadCosts' => $totalOverheadCosts, // Pass the calculated sums to the view
+        'userDetails' => $userDetails,
+        'allServiceOverheads' => $allServiceOverheads, // Pass all service overhead data to the view
+    ]);
+}
+
 
 
     public function addService(Request $request)

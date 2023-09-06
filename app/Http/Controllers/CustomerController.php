@@ -46,18 +46,23 @@ class CustomerController extends Controller
 
         $socailLinks="$fbAcc,$igAcc,$ttAcc";
 
-        DB::table('customers')->insert([
+        $dataToInsert = [
             'customer_name' => $validatedData['name'],
             'customer_email' => $validatedData['email'],
             'customer_phone' => $validatedData['phone'],
             'customer_address' => $validatedData['address'],
-            'customer_image' => $validatedData['upload_image'],
             'company_id' => $validatedData['company_id'],
             'added_user_id' => $validatedData['added_user_id'],
             'customer_social_links' => $socailLinks,
             'customer_status' => $status,
             // Add other fields as needed
-        ]);
+        ];
+
+        if (!empty($validatedData['upload_image'])) {
+            $dataToInsert['customer_image'] = $validatedData['upload_image'];
+        }
+
+        DB::table('customers')->insert($dataToInsert);
 
         if ($request->hasFile('upload_image')) {
             // Get the uploaded file

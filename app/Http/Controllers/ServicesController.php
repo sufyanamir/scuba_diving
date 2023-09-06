@@ -65,7 +65,6 @@ class ServicesController extends Controller
 
     public function addService(Request $request)
     {
-        //dd($request);
         // Validate the form data
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -76,8 +75,6 @@ class ServicesController extends Controller
             'added_user_id' => 'required',
             'company_id' => 'required',
             'overheads' => 'array', // Define 'overheads' as an array
-            // 'overheads.*.cost_name' => 'required|string|max:255',
-            // 'overheads.*.cost' => 'required|numeric',
         ]);
 
         // Insert data into the 'services' table
@@ -90,7 +87,7 @@ class ServicesController extends Controller
             'company_id' => $validatedData['company_id'],
         ]);
 
-        // Upload and store the service image
+        // Upload and store the service image if it exists
         if ($request->hasFile('upload_image')) {
             $image = $request->file('upload_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -100,7 +97,6 @@ class ServicesController extends Controller
 
         $service->save();
 
-        // Insert overhead data into the 'services_overheads' table for the service
         // Insert overhead data into the 'services_overheads' table for the service
         if (!empty($request['cost_name'])) {
             $overheads = $request['cost_name'];
@@ -113,13 +109,12 @@ class ServicesController extends Controller
                     'overhead_cost' => $_REQUEST['cost'][$i],
                 ]);
             }
-        } else {
-            //dd($_REQUEST);
         }
 
         // Optionally, you can redirect back with a success message
         return redirect()->back()->with('success', 'Service added successfully.');
     }
+
 
     public function update(Request $request, $id)
     {

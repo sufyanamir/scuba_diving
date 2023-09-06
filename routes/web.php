@@ -48,7 +48,7 @@ Route::post('/customer/update/{id}', [CustomerController::class, 'update']);
 Route::post('services/store', [ServicesController::class, 'addService']);
 Route::get('/services', [ServicesController::class, 'index']);
 Route::get('/services/delete/{id}', [ServicesController::class,'destroy'])->name('service.delete');
-Route::post('/services/update/{id}', [ServiceController::class, 'update']);
+Route::post('/services/update/{id}', [ServicesController::class, 'update']);
 // Services
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -62,9 +62,9 @@ Route::get('/register',function(){
     return view('register');
 });
 
-Route::get('/product', function () {
-    return view('products');
-});
+// Route::get('/product', function () {
+//     return view('products');
+// });
 
 
 //Auth

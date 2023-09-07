@@ -21,7 +21,7 @@ class LoginController extends Controller
         $token = Str::random(60);
         $password = $request->input('password');
         $user = User::where('email', $email)->first();
-    
+
         if ($user && md5($password) === $user->password) {
             // Check if the user role is 0 or 1
             $userRole = $user->user_role;
@@ -29,7 +29,7 @@ class LoginController extends Controller
                 // User role is not allowed to login
                 return response()->json(['error' => 'User role not allowed to login'], 401);
             }
-    
+
             // Create a session for the user
             session(['user_details' => [
                 'token' => $token, // Set token value if needed
@@ -38,22 +38,21 @@ class LoginController extends Controller
                 'company_id' => $user->company_id,
                 'role' => $userRole,
             ]]);
-    
-            return view('dashboard', ['user_details' => session('user_details')]);
+
+            return response()->json(['success' => 'Login successful', 'user_details' => session('user_details')]);
         } else {
             // Authentication failed
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
     }
-    
 
 
-public function logout(Request $request)
-{
-    $request->session()->forget('user_details');
-    $request->session()->regenerate();
-    
-    return redirect('/');
-}
 
+    public function logout(Request $request)
+    {
+        $request->session()->forget('user_details');
+        $request->session()->regenerate();
+
+        return redirect('/');
+    }
 }

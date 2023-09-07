@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/bootstrap.min.css') }}">
     <!-- bootstrap -->
 
     <!-- style -->
@@ -12,7 +12,7 @@
     <!-- style -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/images/company-logo1.svg') }}">
     <!-- dataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/js/dataTables.min.css') }}">
     <!-- dataTables -->
 
     <title>Dive Monies</title>
@@ -135,7 +135,7 @@
         <a href="/dashboard" class="link">
             <img src="{{ asset('assets/images/d-white.svg') }}" class="white-img mb-1" alt="Image">
             <img src="{{ asset('assets/images/d-dark.svg') }}" class="dark-img mb-1" alt="Image">
-            Dashboard
+            @lang('lang.dashboard')
         </a>
         @if(session('user_details')['role'] == '0')
         <a href="/company" class="link">

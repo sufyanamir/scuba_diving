@@ -53,8 +53,8 @@ Route::post('/services/update/{id}', [ServicesController::class, 'update']);
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
-Route::match(['post','get'],'/lang_change', [LanguageController::class, 'lang_change']);
-
+// Route::match(['post','get'],'/lang_change', [LanguageController::class, 'lang_change']);
+Route::post('/lang_change', [LanguageController::class, 'lang_change']);
 });
 
 

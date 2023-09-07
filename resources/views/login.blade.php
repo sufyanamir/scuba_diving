@@ -213,10 +213,16 @@ $(document).ready(function() {
             url: "/", // Replace with the actual URL to your login endpoint
             data: formData, // Send the form data
             dataType: "json", // Expect JSON response
+            beforeSend: function() {
+                        $('#spinner').removeClass('d-none');
+                        $('#text').addClass('d-none');
+                    },
             success: function(response) {
                 // Handle the success response here
                 if (response.success) {
                     // Redirect to the dashboard or do something else
+                    $('#text').removeClass('d-none');
+                        $('#spinner').addClass('d-none');
                     window.location.href = "/dashboard";
                 } else {
                     // Handle login failure, show an error message, etc.
@@ -230,6 +236,8 @@ $(document).ready(function() {
                 'Invalid Credentials!',
                 'warning'
                 )
+                $('#text').removeClass('d-none');
+                        $('#spinner').addClass('d-none');
                 console.error("AJAX Error: " + textStatus, errorThrown);
             }
         });

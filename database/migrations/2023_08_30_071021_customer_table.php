@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('added_user_id')->nullable();
             $table->string('customer_name');
             $table->string('customer_email')->unique();
-            $table->integer('customer_phone');
+            $table->bigInteger('customer_phone');
             $table->text('customer_address');
             $table->string('customer_social_links');
             $table->text('customer_image')->nullable();

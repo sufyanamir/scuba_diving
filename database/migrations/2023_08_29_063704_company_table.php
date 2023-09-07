@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('company_id');
             $table->string('company_name');
             $table->string('company_email');
-            $table->integer('company_phone');
+            $table->bigInteger('company_phone');
             $table->text('company_address');
             $table->text('company_image')->nullable();
             $table->timestamp('created_at')->useCurrent();

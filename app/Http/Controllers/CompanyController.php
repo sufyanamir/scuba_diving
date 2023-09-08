@@ -46,39 +46,56 @@ class CompanyController extends Controller
             // Add more validation rules for other fields
         ]);
 
-        // Prepare data for company insertion
-        $companyData = [
-            'company_name' => $validatedData['name'],
-            'company_email' => $validatedData['email'],
-            'company_phone' => $validatedData['phone'],
-            'company_address' => $validatedData['address'],
-        ];
+        try {
+            // Prepare data for company insertion
+            $companyData = [
+                'company_name' => $validatedData['name'],
+                'company_email' => $validatedData['email'],
+                'company_phone' => $validatedData['phone'],
+                'company_address' => $validatedData['address'],
+            ];
 
-        // Upload and store the company image if it exists
-        if ($request->hasFile('upload_image')) {
-            $image = $request->file('upload_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/company_images', $imageName); // Adjust storage path as needed
-            $companyData['company_image'] = $imageName;
+            // Upload and store the company image if it exists
+            if ($request->hasFile('upload_image')) {
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/company_images', $imageName); // Adjust storage path as needed
+                $companyData['company_image'] = $imageName;
+            }
+
+            // Insert data into the 'company' table using DB facade
+            $companyID = DB::table('company')->insertGetId($companyData);
+
+            // Insert data into the 'users' table using DB facade
+            DB::table('users')->insert([
+                'name' => $validatedData['admin_name'],
+                'email' => $validatedData['admin_email'],
+                'phone' => $validatedData['admin_phone'],
+                'address' => $validatedData['admin_address'],
+                'password' => md5($validatedData['password']),
+                'company_id' => $companyID,
+                'user_role' => '1',
+                // Add other fields as needed
+            ]);
+
+            // Prepare a success response
+            $response = [
+                'success' => true,
+                'message' => 'Company added successfully.',
+                'company_id' => $companyID,
+            ];
+
+            return redirect()->back()->with($response);
+        } catch (\Exception $e) {
+            // Handle any unexpected exceptions here
+            $errorResponse = [
+                'success' => false,
+                'message' => 'An error occurred while adding the company.',
+                'error' => $e->getMessage(), // Optionally include the error message
+            ];
+
+            return response()->json($errorResponse, 500); // Return a 500 Internal Server Error response
         }
-
-        // Insert data into the 'company' table using DB facade
-        $companyID = DB::table('company')->insertGetId($companyData);
-
-        // Insert data into the 'users' table using DB facade
-        DB::table('users')->insert([
-            'name' => $validatedData['admin_name'],
-            'email' => $validatedData['admin_email'],
-            'phone' => $validatedData['admin_phone'],
-            'address' => $validatedData['admin_address'],
-            'password' => md5($validatedData['password']),
-            'company_id' => $companyID,
-            'user_role' => '1',
-            // Add other fields as needed
-        ]);
-
-        // Optionally, you can redirect back with a success message
-        return redirect()->back()->with('success', 'Company added successfully.');
     }
 
 

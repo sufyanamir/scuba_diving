@@ -159,6 +159,13 @@
         </a>
         @endif
         @if(session('user_details')['role'] == '1')
+        <a href="/gallery" class="link">
+            <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image">
+            <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image">
+            Gallery
+        </a>
+        @endif
+        @if(session('user_details')['role'] == '1')
         <a href="/customers" class="link">
             <img src="{{ asset('assets/images/u-white.svg') }}" class="white-img mb-1" alt="Image">
             <img src="{{ asset('assets/images/u-dark.svg') }}" class="dark-img mb-1" alt="Image">

@@ -48,7 +48,7 @@
                                         fill="#233A85" />
                                 </svg>
                             </button>
-                            <a href="{{ route('staff.delete', ['id' => $item->id]) }}">
+                            <a href="{{ route('staff.delete', ['id' => $item->id]) }}"class="confirm-button">
                                 <button class="btn p-0" style="background: none;">
                                     <svg width="36" height="36" viewBox="0 0 36 36" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -216,5 +216,25 @@
         <br/>
     </div>
 </div>
+<script src="{{ asset('assets/js/jquery.js') }}"></script>
+<script type="text/javascript">
+    $('.confirm-button').click(function(event) {
+        event.preventDefault();
+        var deleteLink = $(this).attr('href');
+        
+        swal({
+            title: `Are you sure you want to delete this row?`,
+            text: "It will be gone forever",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                window.location.href = deleteLink; // Redirect to the delete action
+            }
+        });
+    });
+</script>
 
 @include('layouts.footer')

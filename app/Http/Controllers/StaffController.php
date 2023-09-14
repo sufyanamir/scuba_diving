@@ -34,7 +34,7 @@ class StaffController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|regex:/^[0-9]+$/|max:20',
             'address' => 'required|string|max:500',
             'category' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
@@ -86,7 +86,8 @@ class StaffController extends Controller
         }
 
         // Optionally, you can redirect back with a success message
-        return redirect()->back()->with('status', 'Staff added successfully.');
+        return redirect('/staff')->with('status', 'Staff added successfully.');
+
     }
 
     public function update(Request $request, $id)
@@ -97,7 +98,7 @@ class StaffController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|regex:/^[0-9]+$/|max:20',
             'address' => 'required|string|max:500',
             'category' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',

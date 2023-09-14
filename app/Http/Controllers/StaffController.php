@@ -86,7 +86,7 @@ class StaffController extends Controller
         }
 
         // Optionally, you can redirect back with a success message
-        return redirect()->back()->with('success', 'Staff added successfully.');
+        return redirect()->back()->with('status', 'Staff added successfully.');
     }
 
     public function update(Request $request, $id)

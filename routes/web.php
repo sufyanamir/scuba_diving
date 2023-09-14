@@ -61,6 +61,9 @@ Route::post('/lang_change', [LanguageController::class, 'lang_change']);
 Route::get('/register',function(){
     return view('register');
 });
+Route::get('/gallery',function(){
+    return view('gallery');
+});
 
 // Route::get('/product', function () {
 //     return view('products');

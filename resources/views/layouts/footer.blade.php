@@ -29,6 +29,23 @@
         //     }
         // });
     </script>
+    @elseif($errors->any()){
+    <script>
+        swal({
+            title: "Opps!",
+            text: "Something went wrong",
+            icon: "error",
+            buttons: "OK",
+        })
+        // .then((willClose) => {
+        //     if (willClose) {
+        //         // Add any additional actions you want to perform on close
+        //         // For example, redirect to another page
+        //         window.location.href = "/another-paege";
+        //     }
+        // });
+    </script>
+    }
 @endif
 </body>
 

@@ -35,12 +35,12 @@ class CompanyController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|regex:/^[0-9]+$/|max:20',
             'address' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             'admin_name' => 'required|string|max:255',
             'admin_email' => 'required|email|max:255',
-            'admin_phone' => 'required|string|max:20',
+            'admin_phone' => 'required|regex:/^[0-9]+$/|max:20',
             'admin_address' => 'required|string|max:500',
             'password' => 'required|string|max:500',
             // Add more validation rules for other fields
@@ -124,12 +124,12 @@ class CompanyController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => 'required|regex:/^[0-9]+$/|max:20',
             'address' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             'admin_name' => 'required|string|max:255',
             'admin_email' => 'required|email|max:255',
-            'admin_phone' => 'required|string|max:20',
+            'admin_phone' => 'required|regex:/^[0-9]+$/|max:20',
             'admin_address' => 'required|string|max:500',
             // Add more validation rules for other fields
         ]);

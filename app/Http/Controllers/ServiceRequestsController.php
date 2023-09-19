@@ -80,4 +80,13 @@ class ServiceRequestsController extends Controller
             return redirect('/requests')->with('error', $e->getMessage());
         }
     }
+
+    public function destroy($id){
+        $request = ServiceRequests::find($id);
+
+        $request->delete();
+
+        return redirect()->back()->with('success', 'Request denied!');
+
+    }
 }

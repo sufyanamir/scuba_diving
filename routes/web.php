@@ -27,6 +27,7 @@ Route::middleware(['customauth'])->group(function () {
 
 Route::get('/requests', [ServiceRequestsController::class, 'index']);
 Route::post('/requests/approve/{id}', [ServiceRequestsController::class, 'update']);
+Route::post('/requests/delete/{id}', [ServiceRequestsController::class, 'destroy'])->name('request.delete');
 
 // company
 Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);

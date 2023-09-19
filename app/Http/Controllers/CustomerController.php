@@ -30,7 +30,7 @@ class CustomerController extends Controller
         
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|unique:customers,customer_email',
             'phone' => 'required|regex:/^[0-9]+$/|max:20',
             'address' => 'required|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
@@ -84,7 +84,7 @@ class CustomerController extends Controller
         }
         
         // Optionally, you can redirect back with a success message
-        return redirect()->back()->with('success', 'Customer added successfully.');
+        return redirect()->back()->with('status', 'Customer added successfully.');
 
     }
 

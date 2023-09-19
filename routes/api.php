@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::match(['post'], '/login', [ApiController::class, 'login']);
+Route::match(['post'], '/register', [ApiController::class, 'makeRequest']);

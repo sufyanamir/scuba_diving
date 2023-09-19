@@ -29,7 +29,7 @@ class ServiceRequestsController extends Controller
             $validatedData = $request->validate([
                 'req_name' => 'required|string|max:255',
                 'req_company_name' => 'required|string|max:255',
-                'req_email' => 'required|email',
+                'req_email' => 'required|email|max:255|unique:users,email|unique:service_requests,req_email',
                 'req_address' => 'required|string|max:255',
             ]);
 
@@ -56,12 +56,13 @@ class ServiceRequestsController extends Controller
     {
 
         try {
-            $requestedCompany = DB::table('services_requests')->where('req_id', $id)->first();
+            $requestedCompany = DB::table('service_requests')->where('req_id', $id)->first();
 
             $companyId = DB::table('company')->insertGetId([
                 'company_name' => $requestedCompany->req_company_name,
+                'company_address' => $requestedCompany->req_address,
+
             ]);
-            dd($companyId);
             DB::table('users')->insert([
                 'name' => $requestedCompany->req_name,
                 'email' => $requestedCompany->req_email,
@@ -74,9 +75,9 @@ class ServiceRequestsController extends Controller
 
             DB::table('service_requests')->where('req_id', $id)->delete();
 
-            return redirect('/requests')->back()->with('success', 'Request approved successfully');
+            return redirect('/requests')->with('success', 'Request approved successfully');
         } catch (\Exception $e) {
-            return redirect('/requests')->back()->with('error', $e->getMessage());
+            return redirect('/requests')->with('error', $e->getMessage());
         }
     }
 }

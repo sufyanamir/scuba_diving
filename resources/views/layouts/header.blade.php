@@ -6,7 +6,7 @@
     <!-- bootstrap -->
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/bootstrap.min.css') }}">
     <!-- bootstrap -->
-
+    <script src="https://kit.fontawesome.com/4ae3f77a6d.js" crossorigin="anonymous"></script>
     <!-- style -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <!-- style -->
@@ -141,7 +141,14 @@
         <a href="/company" class="link">
             <img src="{{ asset('assets/images/c-white.svg') }}" class="white-img mb-1" alt="Image">
             <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img mb-1" alt="Image">
-            Companny
+            Company
+        </a>
+        @endif
+        @if(session('user_details')['role'] == '0')
+        <a href="/requests" class="link">
+            <img src="{{ asset('assets/images/c-white.svg') }}" class="white-img mb-1" alt="Image">
+            <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img mb-1" alt="Image">
+            Requests
         </a>
         @endif
         @if(session('user_details')['role'] == '1')

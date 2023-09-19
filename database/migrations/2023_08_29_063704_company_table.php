@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('company', function (Blueprint $table){
             $table->id('company_id');
-            $table->string('company_name');
-            $table->string('company_email');
-            $table->bigInteger('company_phone');
-            $table->text('company_address');
+            $table->string('company_name')->nullable();
+            $table->string('company_email')->nullable()->unique();
+            $table->bigInteger('company_phone')->nullable();
+            $table->text('company_address')->nullable();
             $table->text('company_image')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();

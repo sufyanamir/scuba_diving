@@ -4,12 +4,10 @@
     <div class="row">
         <div class="col-12 col-xl-10">
             <div class="mx-3 my-3">
-                <h4>Company List</h4>
+                <h4>Request List</h4>
             </div>
         </div>
         <div class="col-12 col-xl-2 my-3 text-right pr-5">
-            <x-add-button :value="'+ Add Company'" :dataTarget="'#add-company'"></x-add-button>
-            <x-modal :modalId="'add-company'" :formAction="'company/store'" :editData="''"></x-modal>
         </div>
     </div>
     <div class="table-responsive">
@@ -35,7 +33,8 @@
                     <td>{{ $item->req_email }}</td>
                     <td>{{ $item->req_address }}</td>
                     <td>
-                        <form action="{{ url('/requests/approve/'.$item->req_id) }}" method="post">
+                        <form action="{{ url('/requests/approve/'.$item->req_id) }}"  method="post">
+                            @csrf
                             <button class="btn">
                                 <i class="fa-regular fa-thumbs-up"></i>
                             </button>

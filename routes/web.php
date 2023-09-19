@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\ServiceRequestsController;
 
 
 /*
@@ -23,6 +24,9 @@ use App\Http\Controllers\ServicesController;
 |
 */
 Route::middleware(['customauth'])->group(function () {
+
+Route::get('/requests', [ServiceRequestsController::class, 'index']);
+Route::post('/requests/approve/{id}', [ServiceRequestsController::class, 'update']);
 
 // company
 Route::match(['post'], 'company/store', [CompanyController::class, 'addCompany']);
@@ -77,3 +81,6 @@ Route::post('/', [LoginController::class,'login']);
 Route::match(['get', 'post'], '/logout', [LoginController::class,'logout']);
 //Auth
 
+//Requesting Service
+Route::post('/register', [ServiceRequestsController::class, 'makeRequest']);
+//Requesting Service

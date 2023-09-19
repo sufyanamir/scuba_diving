@@ -7,6 +7,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ServicesController;
 
@@ -50,6 +51,9 @@ Route::get('/services', [ServicesController::class, 'index']);
 Route::get('/services/delete/{id}', [ServicesController::class,'destroy'])->name('service.delete');
 Route::post('/services/update/{id}', [ServicesController::class, 'update']);
 // Services
+//Gallery
+Route::get('/gallery',[GalleryController::class,'index']);
+//Gallery
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -60,9 +64,6 @@ Route::post('/lang_change', [LanguageController::class, 'lang_change']);
 
 Route::get('/register',function(){
     return view('register');
-});
-Route::get('/gallery',function(){
-    return view('gallery');
 });
 
 // Route::get('/product', function () {

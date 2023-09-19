@@ -29,6 +29,23 @@
         //     }
         // });
     </script>
+    @elseif($errors->has('email') || $errors->has('admin_email')){
+    <script>
+        swal({
+            title: "Email",
+            text: "Already registed enter new email",
+            icon: "error",
+            buttons: "OK",
+        })
+        // .then((willClose) => {
+        //     if (willClose) {
+        //         // Add any additional actions you want to perform on close
+        //         // For example, redirect to another page
+        //         window.location.href = "/another-paege";
+        //     }
+        // });
+    </script>
+    }
     @elseif($errors->any()){
     <script>
         swal({

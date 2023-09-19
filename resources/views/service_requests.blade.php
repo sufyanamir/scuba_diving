@@ -33,15 +33,19 @@
                     <td>{{ $item->req_email }}</td>
                     <td>{{ $item->req_address }}</td>
                     <td>
-                        <form action="{{ url('/requests/approve/'.$item->req_id) }}"  method="post">
+                        <form class="d-inline" action="{{ url('/requests/approve/'.$item->req_id) }}" method="post">
                             @csrf
                             <button class="btn">
                                 <i class="fa-regular fa-thumbs-up"></i>
                             </button>
                         </form>
-                        <button class="btn">
-                            <i class="fa-regular fa-thumbs-down"></i>
-                        </button>
+                        <form class="d-inline" action="{{ route('request.delete', ['id' => $item->req_id]) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn">
+                                <i class="fa-regular fa-thumbs-down"></i>
+                            </button>
+                        </form>
+
                     </td>
                 </tr>
                 @endforeach

@@ -6,7 +6,7 @@
     <!-- bootstrap -->
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/bootstrap.min.css') }}">
     <!-- bootstrap -->
-    <script src="https://kit.fontawesome.com/4ae3f77a6d.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/fontawesome/fontawesome.js') }}"></script>
     <!-- style -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <!-- style -->

@@ -536,7 +536,7 @@ class ApiController extends Controller
 
             $data = Customers::where('company_id', $user->company_id)->get();
 
-            $totalCustomers = Customers::count();
+            $totalCustomers = Customers::where('company_id', $user->company_id)->count();
 
             if ($data->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['cutomers' => $data, 'totalCustomers' => $totalCustomers]], 200);

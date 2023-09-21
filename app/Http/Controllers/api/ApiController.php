@@ -9,10 +9,13 @@ use App\Models\ServiceRequests;
 use App\Models\Services;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiController extends Controller
 {
@@ -23,12 +26,11 @@ class ApiController extends Controller
     public function getService()
     {
         try {
-            // Retrieve user details from the session
-            // $userDetails = session('user_details');
-            // $userId = $userDetails['user_id'];
+
+            $user = Auth::user();
 
             // Retrieve services that have the same added_user_id as the user's id
-            $services = Services::all();
+            $services = Services::where('company_id', $user->company_id)->get();
 
             // Retrieve all data from the services_overheads table
             $allServiceOverheads = ServiceOverheads::all();
@@ -87,8 +89,8 @@ class ApiController extends Controller
                 'charges' => 'required|numeric',
                 'description' => 'required|string|max:500',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-                'added_user_id' => 'required',
-                'company_id' => 'required',
+                // 'added_user_id' => 'required',
+                // 'company_id' => 'required',
                 'overheads' => 'array', // Define 'overheads' as an array
                 // 'overheads.*.cost_name' => 'required|string|max:255',
                 // 'overheads.*.cost' => 'required|numeric',
@@ -100,14 +102,14 @@ class ApiController extends Controller
             if (!$service) {
                 return redirect()->back()->with('error', 'Service not found.');
             }
-
+            $user = Auth::user();
             // Update the service data
             $service->service_name = $validatedData['name'];
             $service->service_subtitle = $validatedData['subtitle'];
             $service->service_charges = $validatedData['charges'];
             $service->service_desc = $validatedData['description'];
-            $service->added_user_id = $validatedData['added_user_id'];
-            $service->company_id = $validatedData['company_id'];
+            $service->added_user_id = $user->id;
+            $service->company_id = $user->company_id;
 
             // Upload and store the updated service image
             if ($request->hasFile('upload_image')) {
@@ -158,19 +160,20 @@ class ApiController extends Controller
                 'charges' => 'required|numeric',
                 'description' => 'required|string|max:500',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-                'added_user_id' => 'required',
-                'company_id' => 'required',
+                // 'added_user_id' => 'required',
+                // 'company_id' => 'required',
                 'overheads' => 'array', // Define 'overheads' as an array
             ]);
 
+            $user = Auth::user();
             // Insert data into the 'services' table
             $service = new Services([
                 'service_name' => $validatedData['name'],
                 'service_subtitle' => $validatedData['subtitle'],
                 'service_charges' => $validatedData['charges'],
                 'service_desc' => $validatedData['description'],
-                'added_user_id' => $validatedData['added_user_id'],
-                'company_id' => $validatedData['company_id'],
+                'added_user_id' => $user->id,
+                'company_id' => $user->company_id,
             ]);
 
             // Upload and store the service image if it exists
@@ -213,9 +216,9 @@ class ApiController extends Controller
     //get staff
     public function getStaff()
     {
-
+        $user = Auth::user();
         try {
-            $staff = User::Where('user_role', '2')->get();
+            $staff = User::Where('user_role', '2')->where('company_id', $user->company_id)->get();
 
             return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
         } catch (\Exception $e) {
@@ -259,7 +262,7 @@ class ApiController extends Controller
                 'address' => 'required|string|max:500',
                 'category' => 'required|string|max:500',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-                'company_id' => 'required',
+                // 'company_id' => 'required',
                 // Add more validation rules for other fields
             ]);
             if ($request->hasFile('upload_image')) {
@@ -290,7 +293,7 @@ class ApiController extends Controller
             $user->phone = $validatedData['phone'];
             $user->address = $validatedData['address'];
             $user->category = $validatedData['category'];
-            $user->company_id = $validatedData['company_id'];
+            $user->company_id = $user->company_id;
             $user->social_links = $socailLinks;
             $user->update();
 
@@ -313,7 +316,7 @@ class ApiController extends Controller
                 'address' => 'required|string|max:500',
                 'category' => 'required|string|max:500',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-                'company_id' => 'required',
+                // 'company_id' => 'required',
                 // Add more validation rules for other fields
             ]);
             $fbAcc = $request->input('fb_acc');
@@ -321,14 +324,14 @@ class ApiController extends Controller
             $ttAcc = $request->input('tt_acc');
 
             $socailLinks = "$fbAcc,$igAcc,$ttAcc";
-
+            $user = Auth::user();
             $dataToInsert = [
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
                 'phone' => $validatedData['phone'],
                 'address' => $validatedData['address'],
                 'category' => $validatedData['category'],
-                'company_id' => $validatedData['company_id'],
+                'company_id' => $user->company_id,
                 'social_links' => $socailLinks,
                 'user_role' => '2',
                 // Add other fields as needed
@@ -372,6 +375,19 @@ class ApiController extends Controller
 
     //----------------------------------------------------Customer APIs------------------------------------------------------//
 
+    //get customer
+    public function getCustomer()
+    {
+        $user = Auth::user();
+        try {
+            $staff = Customers::where('company_id', $user->company_id)->get();
+
+            return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //get customer
     //delete customer
     public function deleteCustomer($id)
     {
@@ -401,8 +417,8 @@ class ApiController extends Controller
                 'phone' => 'required|regex:/^[0-9]+$/|max:20',
                 'address' => 'required|string|max:500',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-                'company_id' => 'required',
-                'added_user_id' => 'required',
+                // 'company_id' => 'required',
+                // 'added_user_id' => 'required',
                 // Add more validation rules for other fields
             ]);
             $fbAcc = $request->input('fb_acc');
@@ -412,14 +428,14 @@ class ApiController extends Controller
             $status = 1;
 
             $socailLinks = "$fbAcc,$igAcc,$ttAcc";
-
+            $user = Auth::user();
             $dataToInsert = [
                 'customer_name' => $validatedData['name'],
                 'customer_email' => $validatedData['email'],
                 'customer_phone' => $validatedData['phone'],
                 'customer_address' => $validatedData['address'],
-                'company_id' => $validatedData['company_id'],
-                'added_user_id' => $validatedData['added_user_id'],
+                'company_id' => $user->company_id,
+                'added_user_id' => $user->id,
                 'customer_social_links' => $socailLinks,
                 'customer_status' => $status,
                 // Add other fields as needed
@@ -514,28 +530,22 @@ class ApiController extends Controller
     //getting dashboard
     public function adminDashboard()
     {
+        try {
 
-        // if(session()->has('user_details')){
-        // $user_details = session('user_details');
+            $user = Auth::user();
 
-        // $companyId = $user_details['company_id'];
+            $data = Customers::where('company_id', $user->company_id)->get();
 
-        $data = Customers::all();
+            $totalCustomers = Customers::count();
 
-        $totalCustomers = Customers::count();
-
-        if ($data->count() > 0) {
-            return response()->json(['success' => true, 'data' => ['cutomers' => $data, 'totalCustomers' => $totalCustomers]], 200);
-        } else {
-            return response()->json(['success' => false, 'error' => 'No records found'], 404);
+            if ($data->count() > 0) {
+                return response()->json(['success' => true, 'data' => ['cutomers' => $data, 'totalCustomers' => $totalCustomers]], 200);
+            } else {
+                return response()->json(['success' => false, 'error' => 'No records found'], 404);
+            }
+        } catch (\Exception $e) {
+            return response(['success' => false, 'error' => $e->getMessage()], 500);
         }
-
-        // }else {
-        //     return response()->json(['success' => false, 'data' => ['message' => 'Request not procceed']], 500);
-
-        // }
-
-
     }
     //getting dashboard
 
@@ -546,38 +556,42 @@ class ApiController extends Controller
     {
         try {
             $email = $request->input('email');
-            $token = Str::random(60);
             $password = $request->input('password');
+
             $user = User::where('email', $email)->first();
 
             if (!$user || md5($password) !== $user->password) {
-                // Authentication failed
                 return response()->json(['success' => false, 'error' => 'Invalid credentials'], 401);
             }
 
-            // Check if the user role is 0 or 1
             $userRole = $user->user_role;
             if ($userRole != 1 && $userRole != 2) {
                 // User role is not allowed to login
-                return response()->json(['success' => false, 'error' => 'This user has no access to login'], 401);
+                return response()->json(['error' => 'User role not allowed to login'], 401);
             }
 
-            // Create a session for the user
-            session(['user_details' => [
-                'token' => $token, // Set token value if needed
-                'name' => $user->name,
-                'user_id' => $user->id,
-                'company_id' => $user->company_id,
-                'role' => $userRole,
-            ]]);
+            // Generate a personal access token for the user
+            $token = $user->createToken('api-token')->plainTextToken;
 
-            return response()->json(['success' => true, 'message' => 'Login successful', 'user_details' => session('user_details')], 200);
+            return response()->json(['success' => true, 'access_token' => $token], 200);
         } catch (\Exception $e) {
-            // Handle any exceptions that may occur
-            return response()->json(['success' => false, 'message' => 'An error occurred while processing your request', 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
     //login
+    public function logout(Request $request)
+    {
+        try {
+            $user = Auth::user();
+
+            // Revoke the user's token(s)
+            $user->tokens()->delete();
+
+            return response()->json(['success' => true, 'message' => 'Logged out successfully'], 200);
+        } catch (\Exception $e) {
+            return response(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
 
     //request for a service
     public function makeRequest(Request $request)
@@ -610,14 +624,10 @@ class ApiController extends Controller
         }
     }
     //request for a service
-    
-    public function gteUserDetails(){
-        $user_details = session('user_details');
 
-        $userId = $user_details['user_id'];
-
-        $user = User::where('id', $userId)->get();
-
+    public function getUserDetails(Request $request)
+    {
+        $user = $request->user(); // This will give you the authenticated user
         return response()->json(['success' => true, 'data' => ['user_details' => $user]], 200);
     }
 

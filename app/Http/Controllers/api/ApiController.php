@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customers;
+use App\Models\ServiceOverheads;
 use App\Models\ServiceRequests;
+use App\Models\Services;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +16,532 @@ use Illuminate\Support\Str;
 
 class ApiController extends Controller
 {
+
+    //----------------------------------------------------Service APIs------------------------------------------------------//
+
+    //get service
+    public function getService()
+    {
+        try {
+            // Retrieve user details from the session
+            // $userDetails = session('user_details');
+            // $userId = $userDetails['user_id'];
+
+            // Retrieve services that have the same added_user_id as the user's id
+            $services = Services::all();
+
+            // Retrieve all data from the services_overheads table
+            $allServiceOverheads = ServiceOverheads::all();
+
+            // Calculate the sum of overhead_cost for each service using DB::raw
+            $totalOverheadCosts = ServiceOverheads::select('service_id', DB::raw('SUM(overhead_cost) as total_cost'))
+                ->groupBy('service_id')
+                ->get()
+                ->keyBy('service_id');
+
+            // dd($allServiceOverheads);
+            return response()->json(['success' => true, 'data' => ['services' => $services, 'allServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //get service
+
+    //delete service
+    public function deleteService($id)
+    {
+        try {
+            $service = Services::find($id);
+
+            if (!$service) {
+                return response()->json(['success' => false, 'error' => 'No services found'], 404);
+            }
+
+            // Delete associated overheads.
+            $service->overheads()->delete();
+
+            $path = 'storage/service_images/' . $service->service_image;
+
+            if (File::exists($path)) {
+                File::delete($path);
+            }
+
+            $service->delete();
+
+            return response()->json(['success' => true, 'message' => 'Service deleted successfully!'], 200);
+        } catch (\Exception $e) {
+
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 200);
+        }
+    }
+    //delete service
+
+    //update service
+    public function updateService(Request $request, $id)
+    {
+        try {
+            // Validate the form data
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'subtitle' => 'required|string|max:255',
+                'charges' => 'required|numeric',
+                'description' => 'required|string|max:500',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'added_user_id' => 'required',
+                'company_id' => 'required',
+                'overheads' => 'array', // Define 'overheads' as an array
+                // 'overheads.*.cost_name' => 'required|string|max:255',
+                // 'overheads.*.cost' => 'required|numeric',
+            ]);
+
+            // Find the service to be updated
+            $service = Services::find($id);
+
+            if (!$service) {
+                return redirect()->back()->with('error', 'Service not found.');
+            }
+
+            // Update the service data
+            $service->service_name = $validatedData['name'];
+            $service->service_subtitle = $validatedData['subtitle'];
+            $service->service_charges = $validatedData['charges'];
+            $service->service_desc = $validatedData['description'];
+            $service->added_user_id = $validatedData['added_user_id'];
+            $service->company_id = $validatedData['company_id'];
+
+            // Upload and store the updated service image
+            if ($request->hasFile('upload_image')) {
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/service_images', $imageName); // Adjust storage path as needed
+                $service->service_image = $imageName;
+            }
+
+            $service->save();
+
+            // Delete existing overhead data for the service
+            ServiceOverheads::where('service_id', $id)->delete();
+
+            // Insert updated overhead data into the 'services_overheads' table for the service
+            if (!empty($request['cost_name'])) {
+                $overheads = $request['cost_name'];
+                $count = count($overheads);
+
+                for ($i = 0; $i < $count; $i++) {
+                    ServiceOverheads::create([
+                        'service_id' => $service->service_id,
+                        'overhead_name' => $_REQUEST['cost_name'][$i],
+                        'overhead_cost' => $_REQUEST['cost'][$i],
+                    ]);
+                }
+            }
+
+            // Optionally, you can redirect back with a success message
+            return response()->json(['success' => true, 'message' => 'Service updated successfully!']);
+        } catch (\Exception $e) {
+
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+        }
+    }
+    //update service
+
+
+    //add service
+    public function addService(Request $request)
+    {
+
+        try {
+            // Validate the form data
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'subtitle' => 'required|string|max:255',
+                'charges' => 'required|numeric',
+                'description' => 'required|string|max:500',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'added_user_id' => 'required',
+                'company_id' => 'required',
+                'overheads' => 'array', // Define 'overheads' as an array
+            ]);
+
+            // Insert data into the 'services' table
+            $service = new Services([
+                'service_name' => $validatedData['name'],
+                'service_subtitle' => $validatedData['subtitle'],
+                'service_charges' => $validatedData['charges'],
+                'service_desc' => $validatedData['description'],
+                'added_user_id' => $validatedData['added_user_id'],
+                'company_id' => $validatedData['company_id'],
+            ]);
+
+            // Upload and store the service image if it exists
+            if ($request->hasFile('upload_image')) {
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/service_images', $imageName); // Adjust storage path as needed
+                $service->service_image = $imageName;
+            }
+
+            $service->save();
+
+            // Insert overhead data into the 'services_overheads' table for the service
+            if (!empty($request['cost_name'])) {
+                $overheads = $request['cost_name'];
+                $count = count($overheads);
+
+                for ($i = 0; $i < $count; $i++) {
+                    ServiceOverheads::create([
+                        'service_id' => $service->service_id,
+                        'overhead_name' => $_REQUEST['cost_name'][$i],
+                        'overhead_cost' => $_REQUEST['cost'][$i],
+                    ]);
+                }
+            }
+
+            // Optionally, you can redirect back with a success message
+            return response()->json(['success' => true, 'message' => 'Service added successfully!']);
+        } catch (\Exception $e) {
+
+            return response()->json(['success' => true, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //add service
+
+    //----------------------------------------------------Service APIs------------------------------------------------------//
+
+    //----------------------------------------------------Staff APIs------------------------------------------------------//
+
+    //get staff
+    public function getStaff()
+    {
+
+        try {
+            $staff = User::Where('user_role', '2')->get();
+
+            return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //get staff
+
+    //delete staff
+    public function deleteStaff($id)
+    {
+        try {
+            $user = User::find($id);
+            $path = 'storage/staff_images/' . $user->user_image;
+            if (File::exists($path)) {
+
+                File::delete($path);
+            }
+            $user->delete();
+
+            return response()->json(['success' => true, 'message' => 'Staff deleted successfully!'], 200);
+        } catch (\Exception $e) {
+
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //delete staff
+
+    //update staff
+    public function updateStaff(Request $request, $id)
+    {
+
+        try {
+            $user = User::find($id);
+
+
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'phone' => 'required|regex:/^[0-9]+$/|max:20',
+                'address' => 'required|string|max:500',
+                'category' => 'required|string|max:500',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'company_id' => 'required',
+                // Add more validation rules for other fields
+            ]);
+            if ($request->hasFile('upload_image')) {
+
+                $path = 'public/staff_images/' . $user->user_image;
+                // dd($path);
+                if ($path) {
+                    Storage::delete($path);
+                }
+
+                $image = $request->file('upload_image');
+                $ext = $image->getClientOriginalExtension();
+                $imageName = time() . "." . $ext;
+                $image->storeAs('public/staff_images', $imageName);
+                $user->user_image = $imageName;
+            }
+
+
+            $fbAcc = $request->input('fb_acc');
+            $igAcc = $request->input('ig_acc');
+            $ttAcc = $request->input('tt_acc');
+
+            $socailLinks = "$fbAcc,$igAcc,$ttAcc";
+
+
+            $user->name = $validatedData['name'];
+            $user->email = $validatedData['email'];
+            $user->phone = $validatedData['phone'];
+            $user->address = $validatedData['address'];
+            $user->category = $validatedData['category'];
+            $user->company_id = $validatedData['company_id'];
+            $user->social_links = $socailLinks;
+            $user->update();
+
+            return response()->json(['success' => true, 'message' => 'Staff updated successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //update staff
+
+    //add staff
+    public function addStaff(Request $request)
+    {
+
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:users,email',
+                'phone' => 'required|regex:/^[0-9]+$/|max:20',
+                'address' => 'required|string|max:500',
+                'category' => 'required|string|max:500',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'company_id' => 'required',
+                // Add more validation rules for other fields
+            ]);
+            $fbAcc = $request->input('fb_acc');
+            $igAcc = $request->input('ig_acc');
+            $ttAcc = $request->input('tt_acc');
+
+            $socailLinks = "$fbAcc,$igAcc,$ttAcc";
+
+            $dataToInsert = [
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'phone' => $validatedData['phone'],
+                'address' => $validatedData['address'],
+                'category' => $validatedData['category'],
+                'company_id' => $validatedData['company_id'],
+                'social_links' => $socailLinks,
+                'user_role' => '2',
+                // Add other fields as needed
+            ];
+
+            if (!empty($validatedData['upload_image'])) {
+                $dataToInsert['user_image'] = $validatedData['upload_image'];
+            }
+
+            DB::table('users')->insert($dataToInsert);
+
+
+            if ($request->hasFile('upload_image')) {
+                // Get the uploaded file
+                $image = $request->file('upload_image');
+
+                // Generate a unique name for the image
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+                // Store the image in the specified storage location
+                $image->storeAs('public/staff_images', $imageName); // Adjust storage path as needed
+
+                // Now, if you want to associate the uploaded image filename with the inserted record, you would need to retrieve the last inserted ID.
+                $lastInsertedId = DB::getPdo()->lastInsertId();
+
+                // Update the 'upload_image' field for the inserted record
+                DB::table('users')
+                    ->where('id', $lastInsertedId)
+                    ->update(['user_image' => $imageName]);
+            }
+
+            // Optionally, you can redirect back with a success message
+            return response()->json(['success' => true, 'message' => 'Staff added successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //add staff
+
+    //----------------------------------------------------Staff APIs------------------------------------------------------//
+
+    //----------------------------------------------------Customer APIs------------------------------------------------------//
+
+    //delete customer
+    public function deleteCustomer($id)
+    {
+        try {
+            $user = Customers::find($id);
+            $path = 'storage/customer_images/' . $user->customer_image;
+            if (File::exists($path)) {
+
+                File::delete($path);
+            }
+            $user->delete();
+
+            return response()->json(['success' => true, 'message' => 'Customer deleted successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //delete customer
+
+    //add customer
+    public function addCustomer(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:customers,customer_email',
+                'phone' => 'required|regex:/^[0-9]+$/|max:20',
+                'address' => 'required|string|max:500',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'company_id' => 'required',
+                'added_user_id' => 'required',
+                // Add more validation rules for other fields
+            ]);
+            $fbAcc = $request->input('fb_acc');
+            $igAcc = $request->input('ig_acc');
+            $ttAcc = $request->input('tt_acc');
+
+            $status = 1;
+
+            $socailLinks = "$fbAcc,$igAcc,$ttAcc";
+
+            $dataToInsert = [
+                'customer_name' => $validatedData['name'],
+                'customer_email' => $validatedData['email'],
+                'customer_phone' => $validatedData['phone'],
+                'customer_address' => $validatedData['address'],
+                'company_id' => $validatedData['company_id'],
+                'added_user_id' => $validatedData['added_user_id'],
+                'customer_social_links' => $socailLinks,
+                'customer_status' => $status,
+                // Add other fields as needed
+            ];
+
+            if (!empty($validatedData['upload_image'])) {
+                $dataToInsert['customer_image'] = $validatedData['upload_image'];
+            }
+
+            DB::table('customers')->insert($dataToInsert);
+
+            if ($request->hasFile('upload_image')) {
+                // Get the uploaded file
+                $image = $request->file('upload_image');
+
+                // Generate a unique name for the image
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+                // Store the image in the specified storage location
+                $image->storeAs('public/customer_images', $imageName); // Adjust storage path as needed
+
+                // Now, if you want to associate the uploaded image filename with the inserted record, you would need to retrieve the last inserted ID.
+                $lastInsertedId = DB::getPdo()->lastInsertId();
+
+                // Update the 'upload_image' field for the inserted record
+                DB::table('customers')
+                    ->where('customer_id', $lastInsertedId)
+                    ->update(['customer_image' => $imageName]);
+            }
+
+            // Optionally, you can redirect back with a success message
+            return response()->json(['success' => true, 'message' => 'Customer added successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //add customer
+
+    //updating customer
+    public function updateCustomer(Request $request, $id)
+    {
+        try {
+            $user = Customers::find($id);
+
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'phone' => 'required|regex:/^[0-9]+$/|max:20',
+                'address' => 'required|string|max:500',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                // Add more validation rules for other fields
+            ]);
+            if ($request->hasFile('upload_image')) {
+
+                $path = 'public/customer_images/' . $user->customer_image;
+                // dd($path);
+                if ($path) {
+                    Storage::delete($path);
+                }
+
+                $image = $request->file('upload_image');
+                $ext = $image->getClientOriginalExtension();
+                $imageName = time() . "." . $ext;
+                $image->storeAs('public/customer_images', $imageName);
+                $user->customer_image = $imageName;
+            }
+
+
+            $fbAcc = $request->input('fb_acc');
+            $igAcc = $request->input('ig_acc');
+            $ttAcc = $request->input('tt_acc');
+
+            $socailLinks = "$fbAcc,$igAcc,$ttAcc";
+
+
+            $user->customer_name = $validatedData['name'];
+            $user->customer_email = $validatedData['email'];
+            $user->customer_phone = $validatedData['phone'];
+            $user->customer_address = $validatedData['address'];
+            $user->customer_social_links = $socailLinks;
+            $user->update();
+
+            return response()->json(['success' => true, 'message' => 'Customer updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    //updating customer
+
+    //----------------------------------------------------Customer APIs------------------------------------------------------//
+
+    //getting dashboard
+    public function adminDashboard()
+    {
+
+        // if(session()->has('user_details')){
+        // $user_details = session('user_details');
+
+        // $companyId = $user_details['company_id'];
+
+        $data = Customers::all();
+
+        $totalCustomers = Customers::count();
+
+        if ($data->count() > 0) {
+            return response()->json(['success' => true, 'data' => ['cutomers' => $data, 'totalCustomers' => $totalCustomers]], 200);
+        } else {
+            return response()->json(['success' => false, 'error' => 'No records found'], 404);
+        }
+
+        // }else {
+        //     return response()->json(['success' => false, 'data' => ['message' => 'Request not procceed']], 500);
+
+        // }
+
+
+    }
+    //getting dashboard
+
+    //----------------------------------------------------Authentication APIs------------------------------------------------------//
+
+    //login
     public function login(Request $request)
     {
         try {
@@ -23,14 +552,14 @@ class ApiController extends Controller
 
             if (!$user || md5($password) !== $user->password) {
                 // Authentication failed
-                return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
+                return response()->json(['success' => false, 'error' => 'Invalid credentials'], 401);
             }
 
             // Check if the user role is 0 or 1
             $userRole = $user->user_role;
-            if ($userRole != 0 && $userRole != 1 && $userRole != 2) {
+            if ($userRole != 1 && $userRole != 2) {
                 // User role is not allowed to login
-                return response()->json(['success' => false, 'message' => 'This user has no access to login'], 401);
+                return response()->json(['success' => false, 'error' => 'This user has no access to login'], 401);
             }
 
             // Create a session for the user
@@ -48,6 +577,9 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => 'An error occurred while processing your request', 'error' => $e->getMessage()], 500);
         }
     }
+    //login
+
+    //request for a service
     public function makeRequest(Request $request)
     {
         try {
@@ -77,4 +609,18 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => 'An error occurred while adding the service request.', 'error' => $e->getMessage()], 500);
         }
     }
+    //request for a service
+    
+    public function gteUserDetails(){
+        $user_details = session('user_details');
+
+        $userId = $user_details['user_id'];
+
+        $user = User::where('id', $userId)->get();
+
+        return response()->json(['success' => true, 'data' => ['user_details' => $user]], 200);
+    }
+
+    //----------------------------------------------------Authentication APIs------------------------------------------------------//
+
 }

@@ -42,7 +42,11 @@ class ApiController extends Controller
                 ->keyBy('service_id');
 
             // dd($allServiceOverheads);
-            return response()->json(['success' => true, 'data' => ['services' => $services, 'allServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
+            if($services->count() > 0 && $allServiceOverheads->count() > 0 && $totalOverheadCosts->count() > 0){
+                return response()->json(['success' => true, 'data' => ['services' => $services, 'allServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
+            }else{
+                return response()->json(['success' => false, 'error' => 'No services found!'], 404);
+            }
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
@@ -56,7 +60,7 @@ class ApiController extends Controller
             $service = Services::find($id);
 
             if (!$service) {
-                return response()->json(['success' => false, 'error' => 'No services found'], 404);
+                return response()->json(['success' => false, 'error' => 'No services found!'], 404);
             }
 
             // Delete associated overheads.
@@ -100,7 +104,7 @@ class ApiController extends Controller
             $service = Services::find($id);
 
             if (!$service) {
-                return redirect()->back()->with('error', 'Service not found.');
+                return response()->json(['success' => false, 'error' => 'No service found!'], 404);
             }
             $user = Auth::user();
             // Update the service data
@@ -216,11 +220,15 @@ class ApiController extends Controller
     //get staff
     public function getStaff()
     {
-        $user = Auth::user();
         try {
-            $staff = User::Where('user_role', '2')->where('company_id', $user->company_id)->get();
+            $user = Auth::user();
 
-            return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
+            $staff = User::Where('user_role', '2')->where('company_id', $user->company_id)->get();
+            if ($staff->count() > 0) {
+                return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
+            }else{
+                return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
+            }
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
@@ -232,6 +240,11 @@ class ApiController extends Controller
     {
         try {
             $user = User::find($id);
+
+            if (!$user) {
+                return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
+            }
+
             $path = 'storage/staff_images/' . $user->user_image;
             if (File::exists($path)) {
 
@@ -254,6 +267,9 @@ class ApiController extends Controller
         try {
             $user = User::find($id);
 
+            if (!$user) {
+                return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
+            }
 
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -380,9 +396,12 @@ class ApiController extends Controller
     {
         $user = Auth::user();
         try {
-            $staff = Customers::where('company_id', $user->company_id)->get();
-
-            return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
+            $customer = Customers::where('company_id', $user->company_id)->get();
+            if ($customer->count() > 0) {
+                return response()->json(['success' => true, 'data' => ['customer' => $customer]], 200);
+            }else {
+                return response()->json(['success' => false, 'error' => 'No customers found!'], 404);
+            }
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
@@ -393,6 +412,11 @@ class ApiController extends Controller
     {
         try {
             $user = Customers::find($id);
+
+            if (!$user) {
+                return response()->json(['success' => false, 'error' => 'No customer found!'], 404);
+            }
+
             $path = 'storage/customer_images/' . $user->customer_image;
             if (File::exists($path)) {
 
@@ -479,6 +503,10 @@ class ApiController extends Controller
     {
         try {
             $user = Customers::find($id);
+
+            if (!$user) {
+                return response()->json(['success' => false, 'error' => 'No customer found!'], 404);
+            }
 
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',

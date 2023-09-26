@@ -23,14 +23,22 @@ class ApiController extends Controller
     //----------------------------------------------------Service APIs------------------------------------------------------//
 
     //get service
-    public function getService()
+    public function getService(Request $request)
     {
         try {
-
             $user = Auth::user();
+            $search = $request->input('search'); // Get the 'name' parameter from the request
 
-            // Retrieve services that have the same added_user_id as the user's id
-            $services = Services::where('company_id', $user->company_id)->get();
+            // Start by retrieving all services that belong to the user's company
+            $query = Services::where('company_id', $user->company_id);
+
+            // If a 'name' parameter is provided, filter services by service_name
+            if (!empty($search)) {
+                $query->where('service_name', 'like', '%' . $search . '%');
+            }
+
+            // Retrieve the filtered services
+            $services = $query->get();
 
             // Retrieve all data from the services_overheads table
             $allServiceOverheads = ServiceOverheads::all();
@@ -41,16 +49,16 @@ class ApiController extends Controller
                 ->get()
                 ->keyBy('service_id');
 
-            // dd($allServiceOverheads);
-            if($services->count() > 0 && $allServiceOverheads->count() > 0 && $totalOverheadCosts->count() > 0){
+            if ($services->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['services' => $services, 'allServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
-            }else{
+            } else {
                 return response()->json(['success' => false, 'error' => 'No services found!'], 404);
             }
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
+
     //get service
 
     //delete service
@@ -218,21 +226,31 @@ class ApiController extends Controller
     //----------------------------------------------------Staff APIs------------------------------------------------------//
 
     //get staff
-    public function getStaff()
+    public function getStaff(Request $request)
     {
         try {
             $user = Auth::user();
+            $search = $request->input('search'); // Get the 'search' parameter from the request
 
-            $staff = User::Where('user_role', '2')->where('company_id', $user->company_id)->get();
+            $query = User::where('user_role', '2')->where('company_id', $user->company_id);
+
+            // If a 'search' parameter is provided, filter staff by user name
+            if (!empty($search)) {
+                $query->where('name', 'like', '%' . $search . '%');
+            }
+
+            $staff = $query->get();
+
             if ($staff->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
-            }else{
+            } else {
                 return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
             }
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
+
     //get staff
 
     //delete staff
@@ -392,20 +410,30 @@ class ApiController extends Controller
     //----------------------------------------------------Customer APIs------------------------------------------------------//
 
     //get customer
-    public function getCustomer()
+    public function getCustomer(Request $request)
     {
         $user = Auth::user();
+        $search = $request->input('search'); // Get the 'name' parameter from the request
+
         try {
-            $customer = Customers::where('company_id', $user->company_id)->get();
-            if ($customer->count() > 0) {
-                return response()->json(['success' => true, 'data' => ['customer' => $customer]], 200);
-            }else {
+            $query = Customers::where('company_id', $user->company_id);
+
+            if (!empty($search)) {
+                $query->where('customer_name', 'like', '%' . $search . '%');
+            }
+
+            $customers = $query->get();
+
+            if ($customers->count() > 0) {
+                return response()->json(['success' => true, 'data' => ['customers' => $customers]], 200);
+            } else {
                 return response()->json(['success' => false, 'error' => 'No customers found!'], 404);
             }
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
+
     //get customer
     //delete customer
     public function deleteCustomer($id)

@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AccountActivation;
 
 class ServiceRequestsController extends Controller
 {
@@ -54,24 +56,40 @@ class ServiceRequestsController extends Controller
 
     public function update(Request $request, $id)
     {
-
         try {
             $requestedCompany = DB::table('service_requests')->where('req_id', $id)->first();
 
             $companyId = DB::table('company')->insertGetId([
                 'company_name' => $requestedCompany->req_company_name,
                 'company_address' => $requestedCompany->req_address,
-
             ]);
+
+            $password = '12345'; // Set the default password
+
             DB::table('users')->insert([
                 'name' => $requestedCompany->req_name,
                 'email' => $requestedCompany->req_email,
                 'address' => $requestedCompany->req_address,
-                'password' => md5('12345'),
+                'password' => md5($password),
                 'company_id' => $companyId,
                 'user_role' => '1',
-
             ]);
+
+
+
+            $emailData = [
+                'email' => $requestedCompany->req_email,
+                'name' => $requestedCompany->req_name,
+                'password' => $password,
+            ];
+            
+            $mail = new AccountActivation($emailData);
+// dd($mail);
+            try {
+                Mail::to($requestedCompany->req_email)->send($mail);
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
 
             DB::table('service_requests')->where('req_id', $id)->delete();
 
@@ -81,12 +99,12 @@ class ServiceRequestsController extends Controller
         }
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $request = ServiceRequests::find($id);
 
         $request->delete();
 
         return redirect()->back()->with('success', 'Request denied!');
-
     }
 }

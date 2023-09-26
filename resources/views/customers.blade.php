@@ -2,16 +2,16 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-sm-12 col-lg-6 col-xl-3 mb-2">
-            <x-dashboard-card :value="'459'" :label="'Total Customers'" :svg="asset('assets/images/d-user-icon.svg')"></x-dashboard-card>
+            <x-dashboard-card :value="$customersCount" :label="'Total Customers'" :svg="asset('assets/images/d-user-icon.svg')"></x-dashboard-card>
         </div>
         <div class="col-12 col-sm-12 col-lg-6 col-xl-3 mb-2">
             <x-dashboard-card :value="'123'" :label="'Unassigned'" :svg="asset('assets/images/d-dollar.svg')"></x-dashboard-card>
         </div>
         <div class="col-12 col-sm-12 col-lg-6 col-xl-3 mb-2">
-            <x-dashboard-card :value="'247'" :label="'Active'" :svg="asset('assets/images/d-orders.svg')"></x-dashboard-card>
+            <x-dashboard-card :value="$activeCount" :label="'Active'" :svg="asset('assets/images/d-orders.svg')"></x-dashboard-card>
         </div>
         <div class="col-12 col-sm-12 col-lg-6 col-xl-3 mb-2">
-            <x-dashboard-card :value="'872'" :label="'Pending'" :svg="asset('assets/images/d-user-icon.svg')"></x-dashboard-card>
+            <x-dashboard-card :value="$pendingCount" :label="'Pending'" :svg="asset('assets/images/d-user-icon.svg')"></x-dashboard-card>
         </div>
     </div>
     <div class="px-0  box-shadow mt-4 ">

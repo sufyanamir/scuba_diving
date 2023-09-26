@@ -13,6 +13,11 @@ class CustomerController extends Controller
 {
 
     public function index(){
+        $customersCount=Customers::count();
+        $activeCount = Customers::where('customer_status',1)->count();
+        $pendingCount = Customers::where('customer_status',0)->count();
+
+
         
         // dd($customers);
         $user_details = session('user_details');
@@ -21,7 +26,13 @@ class CustomerController extends Controller
 
         $customers = Customers::where('added_user_id', $userId)->get();
 
-        return view('customers', ['customers'=>$customers, 'userDetails'=>$user_details]);
+        return view('customers', ['customers'=>$customers,
+        'userDetails'=>$user_details,
+        'customersCount'=>$customersCount,
+        'activeCount'=>$activeCount,
+        'pendingCount'=>$pendingCount,
+
+    ]);
     }
     
 

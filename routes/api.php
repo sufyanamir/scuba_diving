@@ -30,24 +30,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/addService', [ApiController::class, 'addService']);
     Route::post('/service/update/{id}', [ApiController::class, 'updateService']);
     Route::match(['post', 'get'], '/service/delete/{id}', [ApiController::class, 'deleteService']);
-    Route::get('/getService', [ApiController::class, 'getService']);
+    Route::get('/getServices', [ApiController::class, 'getService']);
+    Route::get('/getService', [ApiController::class, 'getServiceDetail']);
     //service APIs
     
     //customer APIs
     Route::post('/addCustomer', [ApiController::class, 'addCustomer']);
     Route::post('/customer/update/{id}', [ApiController::class, 'updateCustomer']);
     Route::match(['post', 'get'], '/customer/delete/{id}', [ApiController::class, 'deleteCustomer']);
-    Route::get('/getCustomer', [ApiController::class, 'getCustomer']);
+    Route::get('/getCustomers', [ApiController::class, 'getCustomer']);
+    Route::get('/getCustomer', [ApiController::class, 'getCustomerDetail']);
     //customer APIs
     
     //staff APIs
     Route::post('/addStaff', [ApiController::class, 'addStaff']);
     Route::post('/staff/update/{id}', [ApiController::class, 'updateStaff']);
     Route::match(['post', 'get'], '/staff/delete/{id}', [ApiController::class, 'deleteStaff']);
-    Route::get('/getStaff', [ApiController::class, 'getStaff']);
+    Route::get('/getStaffs', [ApiController::class, 'getStaff']);
+    Route::get('/getStaff', [ApiController::class, 'getStaffDetail']);
     //staff APIs
     
     Route::get('/adminDashboard', [ApiController::class, 'adminDashboard']);
+
+    Route::post('/user/update/{id}', [ApiController::class, 'updateUserDetail']);
 });
 
 Route::middleware('auth:sanctum')->post('/logout', [ApiController::class, 'logout']);

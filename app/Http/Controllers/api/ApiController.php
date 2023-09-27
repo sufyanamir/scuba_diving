@@ -21,6 +21,44 @@ class ApiController extends Controller
 {
 
     //----------------------------------------------------Service APIs------------------------------------------------------//
+    //get service detail
+    public function getServicedetail(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $serviceId = $request->input('serviceId'); // Get the 'name' parameter from the request
+
+            // Start by retrieving all services that belong to the user's company
+            $query = Services::where('company_id', $user->company_id);
+
+            // If a 'name' parameter is provided, filter services by service_name
+            if (!empty($serviceId)) {
+                $query->where('service_id', 'like', '%' . $serviceId . '%');
+            }
+
+            // Retrieve the filtered services
+            $services = $query->get();
+
+            // Retrieve all data from the services_overheads table
+            $allServiceOverheads = ServiceOverheads::all();
+
+            // Calculate the sum of overhead_cost for each service using DB::raw
+            $totalOverheadCosts = ServiceOverheads::select('service_id', DB::raw('SUM(overhead_cost) as total_cost'))
+                ->groupBy('service_id')
+                ->get()
+                ->keyBy('service_id');
+
+            if ($services->count() > 0) {
+                return response()->json(['success' => true, 'data' => ['service' => $services, 'ServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
+            } else {
+                return response()->json(['success' => false, 'error' => 'No services found!'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    //get service detail
 
     //get service
     public function getService(Request $request)
@@ -224,7 +262,33 @@ class ApiController extends Controller
     //----------------------------------------------------Service APIs------------------------------------------------------//
 
     //----------------------------------------------------Staff APIs------------------------------------------------------//
+    //get staff detail
+    public function getStaffDetail(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $StaffId = $request->input('staffId'); // Get the 'search' parameter from the request
 
+            $query = User::where('user_role', '2')->where('company_id', $user->company_id);
+
+            // If a 'search' parameter is provided, filter staff by user name
+            if (!empty($StaffId)) {
+                $query->where('id', 'like', '%' . $StaffId . '%');
+            }
+
+            $staff = $query->get();
+
+            if ($staff->count() > 0) {
+                return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
+            } else {
+                return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    //get staff detail
     //get staff
     public function getStaff(Request $request)
     {
@@ -408,7 +472,32 @@ class ApiController extends Controller
     //----------------------------------------------------Staff APIs------------------------------------------------------//
 
     //----------------------------------------------------Customer APIs------------------------------------------------------//
+    //get customer detail
+    public function getCustomerDetail(Request $request)
+    {
+        $user = Auth::user();
+        $customerId = $request->input('customerId'); // Get the 'name' parameter from the request
 
+        try {
+            $query = Customers::where('company_id', $user->company_id);
+
+            if (!empty($customerId)) {
+                $query->where('customer_id', 'like', '%' . $customerId . '%');
+            }
+
+            $customers = $query->get();
+
+            if ($customers->count() > 0) {
+                return response()->json(['success' => true, 'data' => ['customer' => $customers]], 200);
+            } else {
+                return response()->json(['success' => false, 'error' => 'No customers found!'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    //get customer
     //get customer
     public function getCustomer(Request $request)
     {
@@ -681,12 +770,74 @@ class ApiController extends Controller
     }
     //request for a service
 
+    //----------------------------------------------------Authentication APIs------------------------------------------------------//
+
+    //----------------------------------------------------User APIs------------------------------------------------------//
+    //get user detail
     public function getUserDetails(Request $request)
     {
         $user = $request->user(); // This will give you the authenticated user
         return response()->json(['success' => true, 'data' => ['user_details' => $user]], 200);
     }
+    //get user detail
 
-    //----------------------------------------------------Authentication APIs------------------------------------------------------//
+    //update user detail
+    public function updateUserDetail(Request $request, $id){
+        try {
+            $user = User::find($id);
+    
+            if (!$user) {
+                return response()->json(['success' => false, 'error' => 'User not found'], 404);
+            }
+    
+            $validatedData = $request->validate([
+                'name' => 'nullable|string|max:255',
+                'phone' => 'nullable|regex:/^[0-9]+$/|max:20',
+                'password' => 'nullable',
+                'address' => 'nullable|string|max:500',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'role' => 'required|in:1,2',
+            ]);
+    
+            $folder = ($request->role == 1) ? 'company_images' : 'staff_images';
+    
+            if ($request->hasFile('upload_image')) {
+                
+                if ($user->user_image) {
+                    Storage::delete($user->user_image);
+                }    
+
+                $imagePath = $request->file('upload_image')->store('public/' . $folder);
+                $user->user_image = $imagePath;
+            }
+    
+            // Conditionally update user attributes if they are not null
+            if ($validatedData['name'] !== null) {
+                $user->name = $validatedData['name'];
+            }
+    
+            if ($validatedData['phone'] !== null) {
+                $user->phone = $validatedData['phone'];
+            }
+    
+            if ($validatedData['password'] !== null) {
+                $user->password = md5($validatedData['password']);
+            }
+    
+            if ($validatedData['address'] !== null) {
+                $user->address = $validatedData['address'];
+            }
+    
+            $user->update();
+    
+            return response()->json(['success' => true, 'message' => 'Data updated successfully'], 200);
+    
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+    
+    //update user detail
+    //----------------------------------------------------User APIs------------------------------------------------------//
 
 }

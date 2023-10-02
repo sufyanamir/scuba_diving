@@ -26,6 +26,7 @@ use App\Http\Controllers\SettingsController;
 Route::middleware(['customauth'])->group(function () {
 
 Route::get('/settings',[SettingsController::class,'index']);
+Route::post('/settings/update/{id}',[SettingsController::class,'update']);
 
 
 Route::get('/requests', [ServiceRequestsController::class, 'index']);

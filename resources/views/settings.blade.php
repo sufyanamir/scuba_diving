@@ -75,8 +75,9 @@
 
                     <span>@lang('lang.admin_details')</span>
                 </h3>
-                <form id="formData" action="userStore" method="post" enctype="multipart/form-data">
+                <form id="formData" action="{{ url('settings/update/'.$userDetails->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="company_id" value="{{ session('user_details')['company_id'] }}">
                     <div class="row mb-3">
                         <div class="col-lg-12 text-center">
                             <div id="dropzone" class="dropzone">
@@ -84,7 +85,7 @@
                                     style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;"
                                     alt="text">
                                 <div class="file-input-container">
-                                    <input class="file-input" type="file" name="user_pic" id="fileInput1">
+                                    <input class="file-input" type="file" name="upload_image" id="fileInput1">
                                     <div class="upload-icon" onclick="document.getElementById('fileInput1').click()">
                                         <svg width="36" height="36" viewBox="0 0 36 36" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -102,8 +103,6 @@
                             <p></p>
                         </div>
                     </div>
-                    <!-- </form> -->
-
                     <div class="row">
                         <div class="col-lg-6 col-sm-12 mt-3" style="width: 100%;">
                             <x-input :name="'user_name'" :value="$userDetails->name" :label="'Your Name'" :inputType="'text'"
@@ -115,7 +114,8 @@
                         </div>
                         <div class="col-lg-4 col-sm-6 mt-3">
                             <x-input :name="'user_address'" :value="$userDetails->address" :label="'Your Address'" :inputType="'text'"
-                                :id="''"></x-input>                        </div>
+                                :id="''"></x-input>
+                        </div>
                         <div class="col-lg-4 col-sm-6 mt-3">
                             <x-input :name="'user_password'" :value="''" :label="'New Password'" :inputType="'password'"
                                 :id="'password'"></x-input>
@@ -130,21 +130,21 @@
 
                     </div>
                     <div class="row">
-    @if(session('user_details')['role'] == '1')
-                        <div class="col-12 mb-2 mt-4">
-                            <h5 class="text-left"> Company Details</h5>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 mt-3" style="width: 100%;">
-                            <x-input :name="'compnay_name'" :value="$company->company_name" :label="'Company Name'" :inputType="'text'"
-                                :id="''"></x-input>
-                        </div>
-                        <div class="col-lg-6 col-sm-12 mt-3">
-                            <x-input :name="'company_phone'" :value="$company->company_phone" :label="'Company Phone Number'" :inputType="'tel'"
-                                :id="''"></x-input>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 mt-3">
-                            <x-input :name="'company_address'" :value="$company->company_address" :label="'Company Address'" :inputType="'text'"
-                                :id="''"></x-input>
+                        @if (session('user_details')['role'] == '1')
+                            <div class="col-12 mb-2 mt-4">
+                                <h5 class="text-left"> Company Details</h5>
+                            </div>
+                            <div class="col-lg-6 col-sm-12 mt-3" style="width: 100%;">
+                                <x-input :name="'company_name'" :value="$company->company_name" :label="'Company Name'" :inputType="'text'"
+                                    :id="''"></x-input>
+                            </div>
+                            <div class="col-lg-6 col-sm-12 mt-3">
+                                <x-input :name="'company_phone'" :value="$company->company_phone" :label="'Company Phone Number'" :inputType="'tel'"
+                                    :id="''"></x-input>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 mt-3">
+                                <x-input :name="'company_address'" :value="$company->company_address" :label="'Company Address'" :inputType="'text'"
+                                    :id="''"></x-input>
                             </div>
                         @endif
                         <div class=" col-lg-12 mt-3 my-4 text-right">
@@ -157,6 +157,7 @@
                     </div>
 
                 </form>
+                {{-- form --}}
             </div>
         </div>
     </div>

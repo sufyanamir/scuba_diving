@@ -11,7 +11,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ServiceRequestsController;
-
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +25,7 @@ use App\Http\Controllers\ServiceRequestsController;
 */
 Route::middleware(['customauth'])->group(function () {
 
-Route::get('/settings', function(){
-    return view('settings');
-});
+Route::get('/settings',[SettingsController::class,'index']);
 
 
 Route::get('/requests', [ServiceRequestsController::class, 'index']);

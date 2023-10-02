@@ -12,24 +12,91 @@ use Illuminate\Http\Request;
 class SettingsController extends Controller
 {
 
-    public function index(){
+    public function index()
+    {
         $userDetails = Session('user_details');
         $companyId = $userDetails['company_id'];
 
 
-        $company = Company::where('company_id',$companyId)->first();
-        
-            if ($userDetails && isset($userDetails['user_id'])) {
-                // Retrieve the 'role' from user details
-                $userId = $userDetails['user_id'];
-                $User = User::where('id', $userId)->first();
-                return view('settings', [         
+        $company = Company::where('company_id', $companyId)->first();
+
+        if ($userDetails && isset($userDetails['user_id'])) {
+            // Retrieve the 'role' from user details
+            $userId = $userDetails['user_id'];
+            $User = User::where('id', $userId)->first();
+            return view(
+                'settings',
+                [
                     'userDetails' => $User,
                     'company' => $company
-                    ]
-                );
-                // Now $userRole contains the role of the currently logged-in user
-                // You can use $userRole as needed in your controller method
-            }
-}
+                ]
+            );
+            // Now $userRole contains the role of the currently logged-in user
+            // You can use $userRole as needed in your controller method
+        }
+    }
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+         // Validate the form data
+        $validatedData = $request->validate([
+            'user_name' => 'required|string|max:255',
+            'user_phone' => 'required|regex:/^[0-9]+$/|max:20',
+            'user_address' => 'required|string|max:500',
+            'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'company_name' => 'required|string|max:255',
+            'company_phone' => 'required|regex:/^[0-9]+$/|max:20',
+            'company_address' => 'required|string|max:500',
+            'user_password' => 'required|string|max:500',
+
+            // Add more validation rules for other fields
+        ]);
+
+        // if ($request->hasFile('upload_image')) {
+
+        //     $path = 'public/company_images/' . $company->company_image;
+        //     // dd($path);
+        //     if ($path) {
+        //         Storage::delete($path);
+        //     }
+
+        //     $image = $request->file('upload_image');
+        //     $ext = $image->getClientOriginalExtension();
+        //     $imageName = time() . "." . $ext;
+        //     $image->storeAs('public/company_images', $imageName);
+        //     $company->company_image = $imageName;
+        // }
+
+        $user->name = $validatedData['user_name'];
+        $user->phone = $validatedData['user_phone'];
+        $user->address = $validatedData['user_address'];
+        $user->password = md5($validatedData['user_password']);
+        $user->update();
+
+
+        $company = Company::where('company_id', $request->company_id)->first();
+
+
+        if (!$company) {
+            return redirect()->back()->with('status', 'Company Not Exists.');
+        }
+        $company->company_name = $validatedData['company_name'];
+        $company->company_phone = $validatedData['company_phone'];
+        $company->company_address = $validatedData['company_address'];
+        $company->update();
+        // DB::table('company')->update([
+        //     'company_name' => $validatedData['name'],
+        //     'company_email' => $validatedData['email'],
+        //     'company_phone' => $validatedData['phone'],
+        //     'company_address' => $validatedData['address'],
+        // ]);
+
+        // DB::table('users')->update([
+        //     'name' => $validatedData['admin_name'],
+        //     'email' => $validatedData['admin_email'],
+        //     'phone' => $validatedData['admin_phone'],
+        //     'address' => $validatedData['admin_address'],
+        // ]);
+        return redirect()->back()->with('status', 'Settings updated Successfully.');
+    }
 }

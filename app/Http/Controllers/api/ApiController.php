@@ -51,10 +51,10 @@ class ApiController extends Controller
             if ($services->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['service' => $services, 'ServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
             } else {
-                return response()->json(['success' => false, 'error' => 'No services found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No services found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -90,10 +90,10 @@ class ApiController extends Controller
             if ($services->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['services' => $services, 'allServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
             } else {
-                return response()->json(['success' => false, 'error' => 'No services found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No services found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -106,7 +106,7 @@ class ApiController extends Controller
             $service = Services::find($id);
 
             if (!$service) {
-                return response()->json(['success' => false, 'error' => 'No services found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No services found!'], 404);
             }
 
             // Delete associated overheads.
@@ -123,7 +123,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Service deleted successfully!'], 200);
         } catch (\Exception $e) {
 
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 200);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 200);
         }
     }
     //delete service
@@ -150,7 +150,7 @@ class ApiController extends Controller
             $service = Services::find($id);
 
             if (!$service) {
-                return response()->json(['success' => false, 'error' => 'No service found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No service found!'], 404);
             }
             $user = Auth::user();
             // Update the service data
@@ -192,7 +192,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Service updated successfully!']);
         } catch (\Exception $e) {
 
-            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
     //update service
@@ -254,7 +254,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Service added successfully!']);
         } catch (\Exception $e) {
 
-            return response()->json(['success' => true, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => true, 'message' => $e->getMessage()], 500);
         }
     }
     //add service
@@ -281,10 +281,10 @@ class ApiController extends Controller
             if ($staff->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
             } else {
-                return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -308,10 +308,10 @@ class ApiController extends Controller
             if ($staff->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
             } else {
-                return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -324,7 +324,7 @@ class ApiController extends Controller
             $user = User::find($id);
 
             if (!$user) {
-                return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
             }
 
             $path = 'storage/staff_images/' . $user->user_image;
@@ -337,7 +337,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Staff deleted successfully!'], 200);
         } catch (\Exception $e) {
 
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //delete staff
@@ -350,7 +350,7 @@ class ApiController extends Controller
             $user = User::find($id);
 
             if (!$user) {
-                return response()->json(['success' => false, 'error' => 'No staff found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
             }
 
             $validatedData = $request->validate([
@@ -397,7 +397,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Staff updated successfully!'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //update staff
@@ -464,7 +464,7 @@ class ApiController extends Controller
             // Optionally, you can redirect back with a success message
             return response()->json(['success' => true, 'message' => 'Staff added successfully!'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //add staff
@@ -490,10 +490,10 @@ class ApiController extends Controller
             if ($customers->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['customer' => $customers]], 200);
             } else {
-                return response()->json(['success' => false, 'error' => 'No customers found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No customers found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -516,10 +516,10 @@ class ApiController extends Controller
             if ($customers->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['customers' => $customers]], 200);
             } else {
-                return response()->json(['success' => false, 'error' => 'No customers found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No customers found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -531,7 +531,7 @@ class ApiController extends Controller
             $user = Customers::find($id);
 
             if (!$user) {
-                return response()->json(['success' => false, 'error' => 'No customer found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No customer found!'], 404);
             }
 
             $path = 'storage/customer_images/' . $user->customer_image;
@@ -543,7 +543,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Customer deleted successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //delete customer
@@ -610,7 +610,7 @@ class ApiController extends Controller
             // Optionally, you can redirect back with a success message
             return response()->json(['success' => true, 'message' => 'Customer added successfully!'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //add customer
@@ -622,7 +622,7 @@ class ApiController extends Controller
             $user = Customers::find($id);
 
             if (!$user) {
-                return response()->json(['success' => false, 'error' => 'No customer found!'], 404);
+                return response()->json(['success' => false, 'message' => 'No customer found!'], 404);
             }
 
             $validatedData = $request->validate([
@@ -665,7 +665,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Customer updated successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //updating customer
@@ -686,10 +686,10 @@ class ApiController extends Controller
             if ($data->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['cutomers' => $data, 'totalCustomers' => $totalCustomers]], 200);
             } else {
-                return response()->json(['success' => false, 'error' => 'No records found'], 404);
+                return response()->json(['success' => false, 'message' => 'No records found'], 404);
             }
         } catch (\Exception $e) {
-            return response(['success' => false, 'error' => $e->getMessage()], 500);
+            return response(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //getting dashboard
@@ -706,21 +706,21 @@ class ApiController extends Controller
             $user = User::where('email', $email)->first();
 
             if (!$user || md5($password) !== $user->password) {
-                return response()->json(['success' => false, 'error' => 'Invalid credentials'], 401);
+                return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
             }
 
             $userRole = $user->user_role;
             if ($userRole != 1 && $userRole != 2) {
                 // User role is not allowed to login
-                return response()->json(['error' => 'User role not allowed to login'], 401);
+                return response()->json(['message' => 'User role not allowed to login'], 401);
             }
 
             // Generate a personal access token for the user
             $token = $user->createToken('api-token')->plainTextToken;
 
-            return response()->json(['success' => true, 'access_token' => $token], 200);
+            return response()->json(['success' => true, 'message' => 'Login successful!', 'access_token' => $token], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //login
@@ -734,7 +734,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Logged out successfully'], 200);
         } catch (\Exception $e) {
-            return response(['success' => false, 'error' => $e->getMessage()], 500);
+            return response(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 
@@ -764,8 +764,8 @@ class ApiController extends Controller
             // Optionally, you can return a response or redirect to a success page
             return response()->json(['success' => true, 'message' => 'Service request added successfully! You will be notified through E-mail.'], 200);
         } catch (\Exception $e) {
-            // Handle other exceptions, such as database errors
-            return response()->json(['success' => false, 'message' => 'An error occurred while adding the service request.', 'error' => $e->getMessage()], 500);
+            // Handle other exceptions, such as database messages
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     //request for a service
@@ -787,7 +787,7 @@ class ApiController extends Controller
             $user = User::find($id);
     
             if (!$user) {
-                return response()->json(['success' => false, 'error' => 'User not found'], 404);
+                return response()->json(['success' => false, 'message' => 'User not found'], 404);
             }
     
             $validatedData = $request->validate([
@@ -833,7 +833,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Data updated successfully'], 200);
     
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
     

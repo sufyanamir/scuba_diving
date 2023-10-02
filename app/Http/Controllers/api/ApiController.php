@@ -49,7 +49,7 @@ class ApiController extends Controller
                 ->keyBy('service_id');
 
             if ($services->count() > 0) {
-                return response()->json(['success' => true, 'data' => ['service' => $services, 'ServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
+                return response()->json(['success' => true, 'data' => ['service' => $services, 'ServiceOverheads' => $allServiceOverheads]], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'No services found!'], 404);
             }
@@ -88,7 +88,7 @@ class ApiController extends Controller
                 ->keyBy('service_id');
 
             if ($services->count() > 0) {
-                return response()->json(['success' => true, 'data' => ['services' => $services, 'allServiceOverheads' => $allServiceOverheads, 'totalOverheadCosts' => $totalOverheadCosts]], 200);
+                return response()->json(['success' => true, 'data' => ['services' => $services, 'allServiceOverheads' => $allServiceOverheads]], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'No services found!'], 404);
             }

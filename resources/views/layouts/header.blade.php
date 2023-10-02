@@ -219,6 +219,11 @@
                     Gallery
                 </a>
             @endif
+            <a href="/settings" class="link">
+                    <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image">
+                    <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image">
+                    Settings
+                </a>
             <a href="/logout">
                 <button class="btn p-0">
                     <img src="{{ asset('assets/images/logout-btn.svg') }}" style="width: 100%; height: 100%;"

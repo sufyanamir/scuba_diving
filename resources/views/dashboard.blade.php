@@ -24,7 +24,7 @@
             <x-dashboard-card :value="$adminCount" :label="'Total Admins'" :svg="asset('assets/images/d-user-icon.svg')"></x-dashboard-card>
         </div>
         <div class="col-12 col-sm-12 col-lg-6 col-xl-3 mb-2">
-            <x-dashboard-card :value="$customersCount" :label="'Total Customers'" :svg="asset('assets/images/d-user-icon.svg')"></x-dashboard-card>
+            <x-dashboard-card :value="$adminCustomerCount" :label="'Total Customers'" :svg="asset('assets/images/d-user-icon.svg')"></x-dashboard-card>
         </div>
         <div class="col-12 col-sm-12 col-lg-6 col-xl-3 mb-2">
             <x-dashboard-card :value="'$87,561'" :label="'Total Revenue'" :svg="asset('assets/images/d-dollar.svg')"></x-dashboard-card>

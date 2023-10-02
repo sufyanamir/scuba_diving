@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+        use Illuminate\Support\Facades\Session;
 
 class TestController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
-        $keys = ['access_token', 'name', 'user_id','company_id'];
-        $user_details = [];
-    
-        foreach ($keys as $key) {
-            $user_details[$key] = $request->session()->get($key);
+
+
+        // Inside your controller method
+       
+            // Get the 'user_details' session variable
+            
         }
-    
-    
-        return view('dashboard',compact('user_details'));
-    
-    }
-
 }

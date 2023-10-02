@@ -7,6 +7,7 @@ return [
   "assign_password" => "Assign Password",
   "un_assignd" => "Un assignd ",
   "add_admin_details" => "Add Admin Details",
+  "admin_details" => "Admin Details",
   "select_driver" => "Select driver",
   "dashboard" => "Dashboard",
   "revenue" => "Revenue",

@@ -7,6 +7,7 @@ return [
   "assign_password" => "กำหนดรหัสผ่าน",
   "un_assignd" => "ไม่ได้กำหนด",
   "add_admin_details" => "เพิ่มรายละเอียดผู้ดูแลระบบ",
+  "admin_details" => "รายละเอียดผู้ดูแลระบบ",
   "select_driver" => "เลือกคนขับ",
   "dashboard" => "แดชบอร์ด",
   "revenue" => "รายได้",

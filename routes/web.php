@@ -25,6 +25,11 @@ use App\Http\Controllers\ServiceRequestsController;
 */
 Route::middleware(['customauth'])->group(function () {
 
+Route::get('/settings', function(){
+    return view('settings');
+});
+
+
 Route::get('/requests', [ServiceRequestsController::class, 'index']);
 Route::post('/requests/approve/{id}', [ServiceRequestsController::class, 'update']);
 Route::post('/requests/delete/{id}', [ServiceRequestsController::class, 'destroy'])->name('request.delete');

@@ -54,7 +54,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'No services found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -93,7 +93,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'No services found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -137,7 +137,7 @@ class ApiController extends Controller
                 'name' => 'required|string|max:255',
                 'subtitle' => 'required|string|max:255',
                 'charges' => 'required|numeric',
-                'description' => 'required|string|max:500',
+                'description' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 // 'added_user_id' => 'required',
                 // 'company_id' => 'required',
@@ -208,7 +208,7 @@ class ApiController extends Controller
                 'name' => 'required|string|max:255',
                 'subtitle' => 'required|string|max:255',
                 'charges' => 'required|numeric',
-                'description' => 'required|string|max:500',
+                'description' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 // 'added_user_id' => 'required',
                 // 'company_id' => 'required',
@@ -254,7 +254,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Service added successfully!']);
         } catch (\Exception $e) {
 
-            return response()->json(['success' => true, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => true, 'message' => $e->getMessage()], 400);
         }
     }
     //add service
@@ -284,7 +284,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -311,7 +311,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -337,7 +337,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Staff deleted successfully!'], 200);
         } catch (\Exception $e) {
 
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //delete staff
@@ -357,8 +357,8 @@ class ApiController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'phone' => 'required|regex:/^[0-9]+$/|max:20',
-                'address' => 'required|string|max:500',
-                'category' => 'required|string|max:500',
+                'address' => 'required|string|max:400',
+                'category' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 // 'company_id' => 'required',
                 // Add more validation rules for other fields
@@ -397,7 +397,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Staff updated successfully!'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //update staff
@@ -411,8 +411,8 @@ class ApiController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255|unique:users,email',
                 'phone' => 'required|regex:/^[0-9]+$/|max:20',
-                'address' => 'required|string|max:500',
-                'category' => 'required|string|max:500',
+                'address' => 'required|string|max:400',
+                'category' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 // 'company_id' => 'required',
                 // Add more validation rules for other fields
@@ -464,7 +464,7 @@ class ApiController extends Controller
             // Optionally, you can redirect back with a success message
             return response()->json(['success' => true, 'message' => 'Staff added successfully!'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //add staff
@@ -493,7 +493,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'No customers found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -519,7 +519,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'No customers found!'], 404);
             }
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -543,7 +543,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Customer deleted successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //delete customer
@@ -556,7 +556,7 @@ class ApiController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255|unique:customers,customer_email',
                 'phone' => 'required|regex:/^[0-9]+$/|max:20',
-                'address' => 'required|string|max:500',
+                'address' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 // 'company_id' => 'required',
                 // 'added_user_id' => 'required',
@@ -610,7 +610,7 @@ class ApiController extends Controller
             // Optionally, you can redirect back with a success message
             return response()->json(['success' => true, 'message' => 'Customer added successfully!'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //add customer
@@ -629,7 +629,7 @@ class ApiController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'phone' => 'required|regex:/^[0-9]+$/|max:20',
-                'address' => 'required|string|max:500',
+                'address' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 // Add more validation rules for other fields
             ]);
@@ -665,7 +665,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Customer updated successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //updating customer
@@ -689,7 +689,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'No records found'], 404);
             }
         } catch (\Exception $e) {
-            return response(['success' => false, 'message' => $e->getMessage()], 500);
+            return response(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //getting dashboard
@@ -720,7 +720,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Login successful!', 'access_token' => $token], 200);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //login
@@ -734,7 +734,7 @@ class ApiController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Logged out successfully'], 200);
         } catch (\Exception $e) {
-            return response(['success' => false, 'message' => $e->getMessage()], 500);
+            return response(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
 
@@ -765,7 +765,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Service request added successfully! You will be notified through E-mail.'], 200);
         } catch (\Exception $e) {
             // Handle other exceptions, such as database messages
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //request for a service
@@ -794,7 +794,7 @@ class ApiController extends Controller
                 'name' => 'nullable|string|max:255',
                 'phone' => 'nullable|regex:/^[0-9]+$/|max:20',
                 'password' => 'nullable',
-                'address' => 'nullable|string|max:500',
+                'address' => 'nullable|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 'role' => 'required|in:1,2',
             ]);
@@ -833,7 +833,7 @@ class ApiController extends Controller
             return response()->json(['success' => true, 'message' => 'Data updated successfully'], 200);
     
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     

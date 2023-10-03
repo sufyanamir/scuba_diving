@@ -634,7 +634,7 @@ class ApiController extends Controller
             $igAcc = $request->input('ig_acc');
             $ttAcc = $request->input('tt_acc');
 
-            $status = 1;
+            $status = 0;
 
             $socailLinks = "$fbAcc,$igAcc,$ttAcc";
             $user = Auth::user();

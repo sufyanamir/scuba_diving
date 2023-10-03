@@ -8,6 +8,7 @@ use App\Models\Compnay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -52,20 +53,24 @@ class SettingsController extends Controller
             // Add more validation rules for other fields
         ]);
 
-        // if ($request->hasFile('upload_image')) {
-
-        //     $path = 'public/company_images/' . $company->company_image;
-        //     // dd($path);
-        //     if ($path) {
-        //         Storage::delete($path);
-        //     }
-
-        //     $image = $request->file('upload_image');
-        //     $ext = $image->getClientOriginalExtension();
-        //     $imageName = time() . "." . $ext;
-        //     $image->storeAs('public/company_images', $imageName);
-        //     $company->company_image = $imageName;
-        // }
+        if ($request->hasFile('upload_image')) {
+            // Get the current user's profile image path
+            $currentImage = $user->user_image;
+    
+            // Check if the current image exists and delete it
+            if ($currentImage && Storage::exists("public/admins_images/$currentImage")) {
+                Storage::delete("public/admins_images/$currentImage");
+            }
+    
+            // Upload the new image
+            $image = $request->file('upload_image');
+            $ext = $image->getClientOriginalExtension();
+            $imageName = time() . "." . $ext;
+            $image->storeAs('public/admins_images', $imageName);
+    
+            // Update the user's profile image
+            $user->user_image = $imageName;
+        }
 
         $user->name = $validatedData['user_name'];
         $user->phone = $validatedData['user_phone'];

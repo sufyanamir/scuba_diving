@@ -18,7 +18,7 @@
         <div class="col-7">
         <div class="card-text">
             <h5>{{ $value }}</h5>
-            <h6>{{ $label }}</h6>
+            <h6>@lang($label)</h6>
         </div>
         </div>
         <div class="col-5 my-auto">

@@ -181,42 +181,42 @@
                 <a href="/company" class="link">
                     <img src="{{ asset('assets/images/c-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img mb-1" alt="Image">
-                    Company
+                    @lang('lang.company')
                 </a>
             @endif
             @if (session('user_details')['role'] == '0')
                 <a href="/requests" class="link">
                     <img src="{{ asset('assets/images/c-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img mb-1" alt="Image">
-                    Requests
+                    @lang('lang.requests')
                 </a>
             @endif
             @if (session('user_details')['role'] == '1')
                 <a href="/staff" class="link">
                     <img src="{{ asset('assets/images/c-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img mb-1" alt="Image">
-                    Staff
+                    @lang('lang.staff')
                 </a>
             @endif
             @if (session('user_details')['role'] == '1')
                 <a href="/services" class="link">
                     <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image">
-                    Services
+                    @lang('lang.services')
                 </a>
             @endif
             @if (session('user_details')['role'] == '1')
                 <a href="/customers" class="link">
                     <img src="{{ asset('assets/images/u-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/u-dark.svg') }}" class="dark-img mb-1" alt="Image">
-                    Customers
+                    @lang('lang.customers')
                 </a>
             @endif
             @if (session('user_details')['role'] == '1')
                 <a href="/gallery" class="link">
                     <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image">
-                    Gallery
+                    @lang('lang.gallery')
                 </a>
             @endif
             <a href="/settings" class="link">
@@ -224,7 +224,7 @@
                </span>
                     {{-- <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image"> --}}
                     {{-- <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image"> --}}
-                    Settings
+                    @lang('lang.settings')
                 </a>
             <a href="/logout">
                 <button class="btn p-0">
@@ -253,8 +253,8 @@
                             <select id="lang-select" class="form-control mx-2" style="width: 90%; height: 80%;"
                                 name="lang" onchange="this.form.submit()">
                                 <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>
-                                    English</option>
-                                <option value="th" {{ session()->get('locale') == 'th' ? 'selected' : '' }}>Thai
+                                    @lang('lang.english')</option>
+                                <option value="th" {{ session()->get('locale') == 'th' ? 'selected' : '' }}>@lang('lang.thai')
                                 </option>
                             </select>
                         </form>
@@ -273,7 +273,9 @@
                                     <h5 class="text-left px-2">Notification</h5>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">
-                                        <p>No Notification yet!</p>
+                                        <p>
+                                            @lang('lang.no_notification_yet!')
+                                        </p>
                                     </a>
                                 </div>
                             </div>
@@ -295,7 +297,7 @@
                                     <a class="dropdown-item" href="/settings">
                                         <span class="mr-2"><i class="fa fa-cog" aria-hidden="true"></i>
                                         </span>
-                                        Settings
+                                        @lang('lang.settings')
                                     </a>
                                 </div>
                             </div>

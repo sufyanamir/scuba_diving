@@ -16,7 +16,7 @@
     @if (session('status'))
     <script>
         swal({
-            title: "Success!",
+            title: "@lang('lang.success!')",
             text: "{{ session('status') }}",
             icon: "success",
             buttons: "OK",
@@ -33,7 +33,7 @@
     <script>
         swal({
             title: "Email",
-            text: "Already registed enter new email",
+            text: "@lang('lang.already_registered') @lang('lang.enter_new_email')",
             icon: "error",
             buttons: "OK",
         })
@@ -50,7 +50,7 @@
     <script>
         swal({
             title: "Opps!",
-            text: "Something went wrong",
+            text: "@lang('lang.something_went_wrong')",
             icon: "error",
             buttons: "OK",
         })

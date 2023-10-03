@@ -33,7 +33,7 @@ class ApiController extends Controller
 
             // If a 'serviceId' parameter is provided, filter services by 'service_name'
             if (!empty($serviceId)) {
-                $query->where('service_id', 'like', '%' . $serviceId . '%');
+                $query->where('service_id', $serviceId);
             }
 
             // Retrieve the filtered services
@@ -304,7 +304,7 @@ class ApiController extends Controller
 
             // If a 'search' parameter is provided, filter staff by user name
             if (!empty($StaffId)) {
-                $query->where('id', 'like', '%' . $StaffId . '%');
+                $query->where('id', $StaffId);
             }
 
             $staff = $query->get();
@@ -508,18 +508,29 @@ class ApiController extends Controller
     {
         $user = Auth::user();
         $customerId = $request->input('customerId'); // Get the 'name' parameter from the request
-
+        // Define a mapping of status labels to their numeric values
+        $statusMapping = [
+            'new' => 0,
+            'active' => 1,
+            'pending' => 2,
+            'completed' => 3,
+        ];
         try {
             $query = Customers::where('company_id', $user->company_id);
 
             if (!empty($customerId)) {
-                $query->where('customer_id', 'like', '%' . $customerId . '%');
+                $query->where('customer_id', $customerId);
             }
 
             $customers = $query->get();
 
             if ($customers->count() > 0) {
-                return response()->json(['success' => true, 'data' => ['customer' => $customers]], 200);
+                $customerData = $customers->map(function ($customer) use ($statusMapping) {
+                    // Map numeric status back to status labels
+                    $customer->customer_status = array_search($customer->customer_status, $statusMapping);
+                    return $customer;
+                });
+                return response()->json(['success' => true, 'data' => ['customer' => $customerData]], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'No customers found!'], 404);
             }
@@ -527,8 +538,8 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-
-    //get customer
+    //get customer detail
+    
     //get customer
     public function getCustomer(Request $request)
     {

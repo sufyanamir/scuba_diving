@@ -25,37 +25,52 @@ class ApiController extends Controller
     public function getServicedetail(Request $request)
     {
         try {
-            $user = Auth::user();
-            $serviceId = $request->input('serviceId'); // Get the 'name' parameter from the request
+        $user = Auth::user();
+        $serviceId = $request->input('serviceId'); // Get the 'serviceId' parameter from the request
 
-            // Start by retrieving all services that belong to the user's company
-            $query = Services::where('company_id', $user->company_id);
+        // Start by retrieving all services that belong to the user's company
+        $query = Services::where('company_id', $user->company_id);
 
-            // If a 'name' parameter is provided, filter services by service_name
-            if (!empty($serviceId)) {
-                $query->where('service_id', 'like', '%' . $serviceId . '%');
-            }
-
-            // Retrieve the filtered services
-            $services = $query->get();
-
-            // Retrieve all data from the services_overheads table
-            $allServiceOverheads = ServiceOverheads::all();
-
-            // Calculate the sum of overhead_cost for each service using DB::raw
-            $totalOverheadCosts = ServiceOverheads::select('service_id', DB::raw('SUM(overhead_cost) as total_cost'))
-                ->groupBy('service_id')
-                ->get()
-                ->keyBy('service_id');
-
-            if ($services->count() > 0) {
-                return response()->json(['success' => true, 'data' => ['service' => $services, 'ServiceOverheads' => $allServiceOverheads]], 200);
-            } else {
-                return response()->json(['success' => false, 'message' => 'No services found!'], 404);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        // If a 'serviceId' parameter is provided, filter services by 'service_name'
+        if (!empty($serviceId)) {
+            $query->where('service_id', 'like', '%' . $serviceId . '%');
         }
+
+        // Retrieve the filtered services
+        $services = $query->get();
+
+        // Initialize an empty array to store the final response data
+        $responseData = [];
+
+        // Retrieve all data from the 'service_overheads' table
+        $allServiceOverheads = ServiceOverheads::all();
+
+        // Iterate through each service to fetch its associated overheads
+        foreach ($services as $service) {
+            $serviceId = $service->service_id;
+
+            // Filter service overheads by service_id
+            $overheads = $allServiceOverheads->where('service_id', $serviceId)->toArray();
+
+            // Calculate the total overhead cost for this service
+            $totalCost = array_sum(array_column($overheads, 'overhead_cost'));
+
+            // Add 'service_overheads' and 'total_overhead_cost' to the 'service' object
+            $service->service_overheads = array_values($overheads); // Re-index the array
+            // $service->total_overhead_cost = $totalCost;
+
+            // Add the service data to the response array
+            $responseData[] = $service;
+        }
+
+        if (!empty($responseData)) {
+            return response()->json(['success' => true, 'data' => ['services' => $responseData]], 200);
+        } else {
+            return response()->json(['success' => false, 'message' => 'No services found!'], 404);
+        }
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+    }
     }
 
     //get service detail
@@ -319,7 +334,7 @@ class ApiController extends Controller
                 $query->where('name', 'like', '%' . $search . '%');
             }
 
-            $staff = $query->get();
+            $staff = $query->select('name', 'category as role')->get();
 
             if ($staff->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
@@ -527,7 +542,7 @@ class ApiController extends Controller
                 $query->where('customer_name', 'like', '%' . $search . '%');
             }
 
-            $customers = $query->get();
+            $customers = $query->select('customer_name', 'customer_email')->get();
 
             if ($customers->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['customers' => $customers]], 200);

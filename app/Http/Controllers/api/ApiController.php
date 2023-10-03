@@ -25,107 +25,107 @@ class ApiController extends Controller
     public function getServicedetail(Request $request)
     {
         try {
-        $user = Auth::user();
-        $serviceId = $request->input('serviceId'); // Get the 'serviceId' parameter from the request
+            $user = Auth::user();
+            $serviceId = $request->input('serviceId'); // Get the 'serviceId' parameter from the request
 
-        // Start by retrieving all services that belong to the user's company
-        $query = Services::where('company_id', $user->company_id);
+            // Start by retrieving all services that belong to the user's company
+            $query = Services::where('company_id', $user->company_id);
 
-        // If a 'serviceId' parameter is provided, filter services by 'service_name'
-        if (!empty($serviceId)) {
-            $query->where('service_id', 'like', '%' . $serviceId . '%');
+            // If a 'serviceId' parameter is provided, filter services by 'service_name'
+            if (!empty($serviceId)) {
+                $query->where('service_id', 'like', '%' . $serviceId . '%');
+            }
+
+            // Retrieve the filtered services
+            $services = $query->get();
+
+            // Initialize an empty array to store the final response data
+            $responseData = [];
+
+            // Retrieve all data from the 'service_overheads' table
+            $allServiceOverheads = ServiceOverheads::all();
+
+            // Iterate through each service to fetch its associated overheads
+            foreach ($services as $service) {
+                $serviceId = $service->service_id;
+
+                // Filter service overheads by service_id
+                $overheads = $allServiceOverheads->where('service_id', $serviceId)->toArray();
+
+                // Calculate the total overhead cost for this service
+                $totalCost = array_sum(array_column($overheads, 'overhead_cost'));
+
+                // Add 'service_overheads' and 'total_overhead_cost' to the 'service' object
+                $service->service_overheads = array_values($overheads); // Re-index the array
+                // $service->total_overhead_cost = $totalCost;
+
+                // Add the service data to the response array
+                $responseData[] = $service;
+            }
+
+            if (!empty($responseData)) {
+                return response()->json(['success' => true, 'data' => ['services' => $responseData]], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'No services found!'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-
-        // Retrieve the filtered services
-        $services = $query->get();
-
-        // Initialize an empty array to store the final response data
-        $responseData = [];
-
-        // Retrieve all data from the 'service_overheads' table
-        $allServiceOverheads = ServiceOverheads::all();
-
-        // Iterate through each service to fetch its associated overheads
-        foreach ($services as $service) {
-            $serviceId = $service->service_id;
-
-            // Filter service overheads by service_id
-            $overheads = $allServiceOverheads->where('service_id', $serviceId)->toArray();
-
-            // Calculate the total overhead cost for this service
-            $totalCost = array_sum(array_column($overheads, 'overhead_cost'));
-
-            // Add 'service_overheads' and 'total_overhead_cost' to the 'service' object
-            $service->service_overheads = array_values($overheads); // Re-index the array
-            // $service->total_overhead_cost = $totalCost;
-
-            // Add the service data to the response array
-            $responseData[] = $service;
-        }
-
-        if (!empty($responseData)) {
-            return response()->json(['success' => true, 'data' => ['services' => $responseData]], 200);
-        } else {
-            return response()->json(['success' => false, 'message' => 'No services found!'], 404);
-        }
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
-    }
     }
 
     //get service detail
 
     //get service
     public function getService(Request $request)
-{
-    try {
-        $user = Auth::user();
-        $search = $request->input('search'); // Get the 'search' parameter from the request
+    {
+        try {
+            $user = Auth::user();
+            $search = $request->input('search'); // Get the 'search' parameter from the request
 
-        // Start by retrieving all services that belong to the user's company
-        $query = Services::where('company_id', $user->company_id);
+            // Start by retrieving all services that belong to the user's company
+            $query = Services::where('company_id', $user->company_id);
 
-        // If a 'search' parameter is provided, filter services by 'service_name'
-        if (!empty($search)) {
-            $query->where('service_name', 'like', '%' . $search . '%');
+            // If a 'search' parameter is provided, filter services by 'service_name'
+            if (!empty($search)) {
+                $query->where('service_name', 'like', '%' . $search . '%');
+            }
+
+            // Retrieve the filtered services
+            $services = $query->get();
+
+            // Initialize an empty array to store the final response data
+            $responseData = [];
+
+            // Retrieve all data from the 'service_overheads' table
+            $allServiceOverheads = ServiceOverheads::all();
+
+            // Iterate through each service to fetch its associated overheads
+            foreach ($services as $service) {
+                $serviceId = $service->service_id;
+
+                // Filter service overheads by service_id
+                $overheads = $allServiceOverheads->where('service_id', $serviceId)->toArray();
+
+                // Calculate the total overhead cost for this service
+                $totalCost = array_sum(array_column($overheads, 'overhead_cost'));
+
+                // Add 'service_overheads' and 'total_overhead_cost' to the 'service' object
+                $service->service_overheads = array_values($overheads); // Re-index the array
+                // $service->total_overhead_cost = $totalCost;
+
+                // Add the service data to the response array
+                $responseData[] = $service;
+            }
+
+            if (!empty($responseData)) {
+                return response()->json(['success' => true, 'data' => ['services' => $responseData]], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'No services found!'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
-
-        // Retrieve the filtered services
-        $services = $query->get();
-
-        // Initialize an empty array to store the final response data
-        $responseData = [];
-
-        // Retrieve all data from the 'service_overheads' table
-        $allServiceOverheads = ServiceOverheads::all();
-
-        // Iterate through each service to fetch its associated overheads
-        foreach ($services as $service) {
-            $serviceId = $service->service_id;
-
-            // Filter service overheads by service_id
-            $overheads = $allServiceOverheads->where('service_id', $serviceId)->toArray();
-
-            // Calculate the total overhead cost for this service
-            $totalCost = array_sum(array_column($overheads, 'overhead_cost'));
-
-            // Add 'service_overheads' and 'total_overhead_cost' to the 'service' object
-            $service->service_overheads = array_values($overheads); // Re-index the array
-            // $service->total_overhead_cost = $totalCost;
-
-            // Add the service data to the response array
-            $responseData[] = $service;
-        }
-
-        if (!empty($responseData)) {
-            return response()->json(['success' => true, 'data' => ['services' => $responseData]], 200);
-        } else {
-            return response()->json(['success' => false, 'message' => 'No services found!'], 404);
-        }
-    } catch (\Exception $e) {
-        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
-}
 
 
     //get service
@@ -534,6 +534,15 @@ class ApiController extends Controller
     {
         $user = Auth::user();
         $search = $request->input('search'); // Get the 'name' parameter from the request
+        $statusFilter = $request->input('status'); // Get the 'status' parameter from the request
+
+        // Define a mapping of status labels to their numeric values
+        $statusMapping = [
+            'new' => 0,
+            'active' => 1,
+            'pending' => 2,
+            'completed' => 3,
+        ];
 
         try {
             $query = Customers::where('company_id', $user->company_id);
@@ -542,10 +551,27 @@ class ApiController extends Controller
                 $query->where('customer_name', 'like', '%' . $search . '%');
             }
 
-            $customers = $query->select('customer_id', 'customer_name', 'customer_email', 'customer_image')->get();
+            if (!empty($statusFilter)) {
+                // Check if the provided status exists in the mapping
+                if (isset($statusMapping[$statusFilter])) {
+                    $numericStatus = $statusMapping[$statusFilter];
+                    // Add status filtering to the query
+                    $query->where('customer_status', $numericStatus);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'Invalid status filter.'], 400);
+                }
+            }
+
+            $customers = $query->select('customer_id', 'customer_name', 'customer_email', 'customer_image', 'customer_status')->get();
 
             if ($customers->count() > 0) {
-                return response()->json(['success' => true, 'data' => ['customers' => $customers]], 200);
+                $customerData = $customers->map(function ($customer) use ($statusMapping) {
+                    // Map numeric status back to status labels
+                    $customer->customer_status = array_search($customer->customer_status, $statusMapping);
+                    return $customer;
+                });
+
+                return response()->json(['success' => true, 'data' => ['customers' => $customerData]], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'No customers found!'], 404);
             }
@@ -813,14 +839,15 @@ class ApiController extends Controller
     //get user detail
 
     //update user detail
-    public function updateUserDetail(Request $request, $id){
+    public function updateUserDetail(Request $request, $id)
+    {
         try {
             $user = User::find($id);
-    
+
             if (!$user) {
                 return response()->json(['success' => false, 'message' => 'User not found'], 404);
             }
-    
+
             $validatedData = $request->validate([
                 'name' => 'nullable|string|max:255',
                 'phone' => 'nullable|regex:/^[0-9]+$/|max:20',
@@ -829,45 +856,44 @@ class ApiController extends Controller
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 'role' => 'required|in:1,2',
             ]);
-    
+
             $folder = ($request->role == 1) ? 'company_images' : 'staff_images';
-    
+
             if ($request->hasFile('upload_image')) {
-                
+
                 if ($user->user_image) {
                     Storage::delete($user->user_image);
-                }    
+                }
 
                 $imagePath = $request->file('upload_image')->store('public/' . $folder);
                 $user->user_image = $imagePath;
             }
-    
+
             // Conditionally update user attributes if they are not null
             if ($validatedData['name'] !== null) {
                 $user->name = $validatedData['name'];
             }
-    
+
             if ($validatedData['phone'] !== null) {
                 $user->phone = $validatedData['phone'];
             }
-    
+
             if ($validatedData['password'] !== null) {
                 $user->password = md5($validatedData['password']);
             }
-    
+
             if ($validatedData['address'] !== null) {
                 $user->address = $validatedData['address'];
             }
-    
+
             $user->update();
-    
+
             return response()->json(['success' => true, 'message' => 'Data updated successfully'], 200);
-    
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-    
+
     //update user detail
     //----------------------------------------------------User APIs------------------------------------------------------//
 

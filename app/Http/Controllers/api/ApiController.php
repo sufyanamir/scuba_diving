@@ -334,7 +334,7 @@ class ApiController extends Controller
                 $query->where('name', 'like', '%' . $search . '%');
             }
 
-            $staff = $query->select('name', 'category as role')->get();
+            $staff = $query->select('id', 'name', 'category as role', 'user_image')->get();
 
             if ($staff->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
@@ -542,7 +542,7 @@ class ApiController extends Controller
                 $query->where('customer_name', 'like', '%' . $search . '%');
             }
 
-            $customers = $query->select('customer_name', 'customer_email')->get();
+            $customers = $query->select('customer_id', 'customer_name', 'customer_email', 'customer_image')->get();
 
             if ($customers->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['customers' => $customers]], 200);

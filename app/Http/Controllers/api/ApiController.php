@@ -563,8 +563,11 @@ class ApiController extends Controller
             }
 
             if (!empty($statusFilter)) {
+                if($statusFilter === 'all'){
+
+                }
                 // Check if the provided status exists in the mapping
-                if (isset($statusMapping[$statusFilter])) {
+                elseif (isset($statusMapping[$statusFilter])) {
                     $numericStatus = $statusMapping[$statusFilter];
                     // Add status filtering to the query
                     $query->where('customer_status', $numericStatus);

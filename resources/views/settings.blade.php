@@ -81,7 +81,7 @@
                     <div class="row mb-3">
                         <div class="col-lg-12 text-center">
                             <div id="dropzone" class="dropzone">
-                                <img id="profileImage" src="{{ asset('storage/nav-user.svg') }}"
+                                <img id="profileImage" src="{{ 'assets/images/nav-user.svg' }}"
                                     style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;"
                                     alt="text">
                                 <div class="file-input-container">

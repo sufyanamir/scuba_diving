@@ -220,8 +220,10 @@
                 </a>
             @endif
             <a href="/settings" class="link">
-                    <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image">
-                    <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image">
+               <span class="white-image mb-1 " style="margin-right:10px;"><i class="fa fa-cog" aria-hidden="true"></i>
+               </span>
+                    {{-- <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image"> --}}
+                    {{-- <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image"> --}}
                     Settings
                 </a>
             <a href="/logout">
@@ -285,11 +287,15 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <h5 class="text-left px-2">Profile</h5>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">{{ session('user_details')['name'] }}</a>
+                                    <a class="dropdown-item" href="#">
+                                        <span class="mr-2"><i class="fa fa-user-circle " aria-hidden="true"></i>
+                                        </span>
+                                        {{ session('user_details')['name'] }}</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/logout">
-                                        <img src="{{ asset('assets/images/logout-btn.svg') }}"
-                                            style="width: 100%; height: 100%;" alt="button">
+                                    <a class="dropdown-item" href="/settings">
+                                        <span class="mr-2"><i class="fa fa-cog" aria-hidden="true"></i>
+                                        </span>
+                                        Settings
                                     </a>
                                 </div>
                             </div>

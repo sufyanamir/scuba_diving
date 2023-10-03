@@ -41,14 +41,14 @@ class SettingsController extends Controller
         $user = User::find($id);
          // Validate the form data
         $validatedData = $request->validate([
-            'user_name' => 'required|string|max:255',
-            'user_phone' => 'required|regex:/^[0-9]+$/|max:20',
-            'user_address' => 'required|string|max:500',
+            'user_name' => 'nullable|string|max:255',
+            'user_phone' => 'nullable|regex:/^[0-9]+$/|max:20',
+            'user_address' => 'nullable|string|max:500',
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-            'company_name' => 'required|string|max:255',
-            'company_phone' => 'required|regex:/^[0-9]+$/|max:20',
-            'company_address' => 'required|string|max:500',
-            'user_password' => 'required|string|max:500',
+            'company_name' => 'nullable|string|max:255',
+            'company_phone' => 'nullable|regex:/^[0-9]+$/|max:20',
+            'company_address' => 'nullable|string|max:500',
+            'user_password' => 'nullable|string|max:500',
 
             // Add more validation rules for other fields
         ]);

@@ -11,6 +11,7 @@
         }
         i{
             font-size: small;
+            /* color: #f5f5f5; */
         }
     </style>
 </head>
@@ -18,9 +19,9 @@
 <body>
     <div class="container">
         <img src="{{ $message->embed(public_path().'/assets/images/company-logo2.svg') }}">
-        <p><b>Congratulations!</b> {{ $emailData['name'] }}, You have been approved by the <b>Dive Monies</b>. Now, you can login to our application.</p>
+        <p><b>Dear</b> {{ $emailData['name'] }}! Your access to our services is denied because of some issue in your provided credentials.</p>
         <br>
-        <p>Your account email is: {{ $emailData['email'] }} and password is: {{ $emailData['password'] }}</p>
+        <p>We cannot provide you our service at this moment. <b>Thank You!</b></p>
         <i>Team Dive Monies</i>
     </div>
 </body>

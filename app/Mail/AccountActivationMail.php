@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AccountActivation extends Mailable
+class AccountActivationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,22 +18,11 @@ class AccountActivation extends Mailable
      *
      * @return void
      */
-
     public $emailData;
-
-    public function __construct(array $emailData)
+    public function __construct($emailData)
     {
         $this->emailData = $emailData;
     }
-
-    public function build()
-    {
-        return $this->to($this->emailData['email']) // Set the recipient's email address
-            ->subject('Account Activation') // Set the email subject
-            ->view('email.account_activation') // Set the email template
-            ->with(['name' => $this->emailData['name'], 'password' => $this->emailData['password']]); // Pass data to the email template
-    }
-
 
     /**
      * Get the message envelope.
@@ -43,7 +32,7 @@ class AccountActivation extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Account Activation',
+            subject: 'Account Activation Mail',
         );
     }
 
@@ -55,7 +44,7 @@ class AccountActivation extends Mailable
     public function content()
     {
         return new Content(
-            view: 'email.account_activation',
+            view: 'emails.account_activation',
         );
     }
 

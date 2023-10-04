@@ -307,7 +307,7 @@ class ApiController extends Controller
                 $query->where('id', $StaffId);
             }
 
-            $staff = $query->get();
+            $staff = $query->first();
 
             if ($staff->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
@@ -529,7 +529,7 @@ class ApiController extends Controller
                     // Map numeric status back to status labels
                     $customer->customer_status = array_search($customer->customer_status, $statusMapping);
                     return $customer;
-                });
+                })->first();
                 return response()->json(['success' => true, 'data' => ['customer' => $customerData]], 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'No customers found!'], 404);

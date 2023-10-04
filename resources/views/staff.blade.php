@@ -29,7 +29,7 @@
                 @foreach ($staff as $item)
                     <tr>
                         <td>
-                            <img class="img-size" src="{{'assets/images/nav-user.svg'}}" alt="image">
+                            <img class="img-size" src="{{ 'assets/images/nav-user.svg' }}" alt="image">
                         </td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->email }}</td>
@@ -37,7 +37,7 @@
                         <td>{{ $item->address }}</td>
                         <td>{{ $item->category }}</td>
                         <td>
-                            <button data-target="#editstaff{{$item->id}}" data-toggle="modal" class="btn p-0"
+                            <button data-target="#editstaff{{ $item->id }}" data-toggle="modal" class="btn p-0"
                                 style="background: none;">
                                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -62,13 +62,14 @@
                             </a>
                         </td>
                         <!-- Modal -->
-                        <div class="modal fade" id="editstaff{{$item->id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
+                        <div class="modal fade" id="editstaff{{ $item->id }}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content" style="border-radius: 15px;">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="">Edit Staff</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModal{{$item->id}}">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                            id="closeModal{{ $item->id }}">
                                             <span aria-hidden="true">
                                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -76,11 +77,11 @@
                                                         stroke-linecap="round" stroke-linejoin="round" />
                                                 </svg>
                                             </span>
-                                        </button> 
+                                        </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{ url('staff/update/'.$item->id) }}" method="POST" id=""
-                                            enctype="multipart/form-data">
+                                        <form action="{{ url('staff/update/' . $item->id) }}" method="POST"
+                                            id="" enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" name="company_id"
                                                 value="{{ session('user_details')['company_id'] }}">
@@ -105,35 +106,43 @@
                                                                 :id="''"></x-input>
                                                         </div>
                                                         <div class="col-6 mb-3">
-                                                            <select name="category" id=""
-                                                                class="form-control"
+                                                            <select name="category" id="" class="form-control"
                                                                 style="height: 51px; border-radius: 0.5rem;">
-                                                                <option value="{{$item->category}}">{{$item->category}}</option>
+                                                                <option value="{{ $item->category }}">
+                                                                    {{ $item->category }}</option>
                                                                 <option value="Manager">Manager</option>
                                                                 <option value="Worker">Worker</option>
                                                                 <option value="Trainer">Trainer</option>
                                                             </select>
                                                         </div>
-                                                        
+
                                                         <div class="col-12 mb-3">
                                                             <x-text-area :name="'address'" :value="$item->address"
                                                                 :label="'Address'"></x-text-area>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="col-4">
-                                                     {{-- @if ($item->user_image) --}}
-                                                    <div  id="dropzone" class="dropzone">
-                                                        <img id="profileImage{{$item->id}}" src="{{ $item->user_image ? asset('storage/staff_images/' . $item->user_image) : 'assets/images/rectangle-image.svg' }}"  style="width: 100%; height: 237px; object-fit: fill;" alt="text">
+                                                    {{-- @if ($item->user_image) --}}
+                                                    <div id="dropzone" class="dropzone">
+                                                        <img id="profileImage{{ $item->id }}"
+                                                            src="{{ $item->user_image ? asset('storage/staff_images/' . $item->user_image) : 'assets/images/rectangle-image.svg' }}"
+                                                            style="width: 100%; height: 237px; object-fit: fill;"
+                                                            alt="text">
                                                         <div class="file-input-container">
-                                                            <input value="" class="file-input" type="file" name="upload_image" id="fileInput{{$item->id}}">
-                                                            <div class="upload-icon" onclick="document.getElementById('fileInput{{$item->id}}').click()">
-                                                                <img src="{{ asset('assets/images/upload-image.svg') }}" alt="Image">
+                                                            <input value="" class="file-input" type="file"
+                                                                name="upload_image"
+                                                                id="fileInput{{ $item->id }}">
+                                                            <div class="upload-icon"
+                                                                onclick="document.getElementById('fileInput{{ $item->id }}').click()">
+                                                                <img src="{{ asset('assets/images/upload-image.svg') }}"
+                                                                    alt="Image">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <p class="error-image text-danger d-none" style="font-size: smaller;"></P>
+                                                    <p class="error-image text-danger d-none"
+                                                        style="font-size: smaller;"></P>
                                                     {{-- <img src="{{asset('storage/staff_images/' . $item->user_image)}}" alt="image">
                                                     @endif --}}
                                                 </div>
@@ -143,24 +152,26 @@
                                                     <h5 class="text-left" id="">Social Links</h5>
                                                 </div>
                                                 <div class="col-8 mb-3">
-                                                    @php 
-                                                    $socialLinks = $item->social_links; // Replace $user with your actual user or model variable
+                                                    @php
+                                                        $socialLinks = $item->social_links; // Replace $user with your actual user or model variable
                                                         $socialLinksArray = explode(',', $socialLinks);
-
+                                                        
                                                         // Now $socialLinksArray contains individual values
-                                                        $fbAcc = $socialLinksArray[0]; 
-                                                        $igAcc = $socialLinksArray[1]; 
-                                                        $ttAcc = $socialLinksArray[2]; 
+                                                        $fbAcc = $socialLinksArray[0];
+                                                        $igAcc = $socialLinksArray[1];
+                                                        $ttAcc = $socialLinksArray[2];
                                                     @endphp
-                                                    <x-social-input :socialLogo="'assets/images/fb-logo.svg'" :value="$fbAcc"  :name="'fb_acc'"
-                                                        :qrId="''" :qrName="''"></x-social-input>
-                                                    <x-social-input :socialLogo="'assets/images/ig-logo.svg'" :value="$igAcc" :name="'ig_acc'"
-                                                        :qrId="''" :qrName="''"></x-social-input>
-                                                    <x-social-input :socialLogo="'assets/images/tt-logo.svg'" :value="$ttAcc" :name="'tt_acc'"
-                                                        :qrId="''" :qrName="''"></x-social-input>
+                                                    <x-social-input :socialLogo="'assets/images/fb-logo.svg'" :value="$fbAcc"
+                                                        :name="'fb_acc'" :qrId="''"
+                                                        :qrName="''"></x-social-input>
+                                                    <x-social-input :socialLogo="'assets/images/ig-logo.svg'" :value="$igAcc"
+                                                        :name="'ig_acc'" :qrId="''"
+                                                        :qrName="''"></x-social-input>
+                                                    <x-social-input :socialLogo="'assets/images/tt-logo.svg'" :value="$ttAcc"
+                                                        :name="'tt_acc'" :qrId="''"
+                                                        :qrName="''"></x-social-input>
                                                 </div>
-                                                <div
-                                                    class="my-auto text-right">
+                                                <div class="my-auto text-right">
                                                     <x-submit-button :name="'submit'"
                                                         :value="'Update'"></x-submit-button>
                                                 </div>
@@ -173,47 +184,47 @@
                     </tr>
                     <script>
                         // Get references to the necessary elements
-                        const fileInput{{$item->id}} = document.getElementById('fileInput{{$item->id}}');
-                        const profileImage{{$item->id}} = document.getElementById('profileImage{{$item->id}}');
-                        const form{{$item->id}} = document.getElementById('myForm{{$item->id}}');
+                        const fileInput{{ $item->id }} = document.getElementById('fileInput{{ $item->id }}');
+                        const profileImage{{ $item->id }} = document.getElementById('profileImage{{ $item->id }}');
+                        const form{{ $item->id }} = document.getElementById('myForm{{ $item->id }}');
 
-                      
+
                         // Handle file input change
-                        fileInput{{$item->id}}.addEventListener('change', function(event) {
-                          const file = event.target.files[0];
-                          const reader = new FileReader();
-                          if (!$('.error-image').hasClass('d-none')) {
-                            $('.error-image').addClass('d-none');
-                          }
-                      
-                          // Check the file size and type of file
-                          if (file.type.startsWith('image/')) {
-                            if (file.size <= 1048576) {
-                              reader.readAsDataURL(file);
-                      
-                              reader.onload = function(e) {
-                                profileImage{{$item->id}}.src = e.target.result;
-                                form.action = "";
-                              };
-                            } else {
-                              $('.error-image').removeClass('d-none').text('The user pic should be less than or equal to 1024KB');
-                              console.log("Image size exceeds the limit of 1 MB.");
-                              fileInput{{$item->id}}.value = "";
+                        fileInput{{ $item->id }}.addEventListener('change', function(event) {
+                            const file = event.target.files[0];
+                            const reader = new FileReader();
+                            if (!$('.error-image').hasClass('d-none')) {
+                                $('.error-image').addClass('d-none');
                             }
-                          } else {
-                            $('.error-image').removeClass('d-none').text('Please select an image file.');
-                            console.log("Please select an image file.");
-                            fileInput{{$item->id}}.value = "";
-                          }
-                      
-                      
+
+                            // Check the file size and type of file
+                            if (file.type.startsWith('image/')) {
+                                if (file.size <= 1048576) {
+                                    reader.readAsDataURL(file);
+
+                                    reader.onload = function(e) {
+                                        profileImage{{ $item->id }}.src = e.target.result;
+                                        form.action = "";
+                                    };
+                                } else {
+                                    $('.error-image').removeClass('d-none').text(
+                                        'The user pic should be less than or equal to 1024KB');
+                                    console.log("Image size exceeds the limit of 1 MB.");
+                                    fileInput{{ $item->id }}.value = "";
+                                }
+                            } else {
+                                $('.error-image').removeClass('d-none').text('Please select an image file.');
+                                console.log("Please select an image file.");
+                                fileInput{{ $item->id }}.value = "";
+                            }
+
+
                         });
-                        
-                      </script>
+                    </script>
                 @endforeach
             </tbody>
         </table>
-        <br/>
+        <br />
     </div>
 </div>
 <script src="{{ asset('assets/js/jquery.js') }}"></script>
@@ -221,19 +232,19 @@
     $('.confirm-button').click(function(event) {
         event.preventDefault();
         var deleteLink = $(this).attr('href');
-        
+
         swal({
-            title: `Are you sure you want to delete this row?`,
-            text: "It will be gone forever",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-            if (willDelete) {
-                window.location.href = deleteLink; // Redirect to the delete action
-            }
-        });
+                title: `Are you sure you want to delete this row?`,
+                text: "It will be gone forever",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    window.location.href = deleteLink; // Redirect to the delete action
+                }
+            });
     });
 </script>
 

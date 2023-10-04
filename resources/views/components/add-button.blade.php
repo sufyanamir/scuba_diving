@@ -9,5 +9,5 @@
     }
 </style>
 <button class="btn btn-md btn-bg text-white" data-toggle="modal" data-target="{{ $dataTarget }}">
-    {{$value}}
+    @lang($value)
 </button>

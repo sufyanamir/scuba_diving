@@ -75,7 +75,9 @@ class SettingsController extends Controller
         $user->name = $validatedData['user_name'];
         $user->phone = $validatedData['user_phone'];
         $user->address = $validatedData['user_address'];
+        if($request->user_password){
         $user->password = md5($validatedData['user_password']);
+        }
         $user->update();
 
 

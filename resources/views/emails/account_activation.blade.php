@@ -21,7 +21,7 @@
         <p><b>Congratulations!</b> {{ $emailData['name'] }}, You have been approved by the <b>Dive Monies</b>. Now, you can login to our application.</p>
         <br>
         <p>Your account email is: {{ $emailData['email'] }} and password is: {{ $emailData['password'] }}</p>
-        <i>Team Dive Monies</i>
+        <i>Team <a href="https://scubadiving.thewebconcept.tech/">Dive Monies</a></i>
     </div>
 </body>
 

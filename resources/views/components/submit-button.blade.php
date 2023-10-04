@@ -9,5 +9,5 @@
     }
 </style>
 <button class="btn btn-md btn-bg px-5 text-white" type="submit" name="{{ $name }}">
-    {{$value}}
+    @lang($value)
 </button>

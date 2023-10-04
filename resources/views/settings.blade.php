@@ -105,24 +105,32 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6 col-sm-12 mt-3" style="width: 100%;">
-                            <x-input :name="'user_name'" :value="$userDetails->name" :label="'Your Name'" :inputType="'text'"
+                            <x-input :name="'user_name'" :value="$userDetails->name" :label="'lang.enter_your_name'" :inputType="'text'"
                                 :id="''"></x-input>
                         </div>
                         <div class="col-lg-6 col-sm-12 mt-3">
-                            <x-input :name="'user_phone'" :value="$userDetails->phone" :label="'Personal Phone Number'" :inputType="'tel'"
+                            <x-input :name="'user_phone'" :value="$userDetails->phone" :label="'lang.phone_number'" :inputType="'tel'"
                                 :id="''"></x-input>
                         </div>
                         <div class="col-lg-4 col-sm-6 mt-3">
-                            <x-input :name="'user_address'" :value="$userDetails->address" :label="'Your Address'" :inputType="'text'"
+                            <x-input :name="'user_address'" :value="$userDetails->address" :label="'lang.address'" :inputType="'text'"
                                 :id="''"></x-input>
                         </div>
                         <div class="col-lg-4 col-sm-6 mt-3">
-                            <x-input :name="'user_password'" :value="''" :label="'New Password'" :inputType="'password'"
-                                :id="'password'"></x-input>
+                            <div class="input-group">
+                                <input id="password"  type="password" name="user_password" value="" autocomplete="off" class="input">
+                                <label class="user-label">@lang('lang.new_password')</label>
+                            </div>
+                            {{-- <x-input :name="'user_password'" :value="''" :label="'New Password'" :inputType="'password'"
+                                :id="'password'"></x-input> --}}
                         </div>
                         <div class="col-lg-4 col-sm-6 mt-3">
-                            <x-input :name="'confrim_user_password'" :value="''" :label="'Confirm Password'" :inputType="'password'"
-                                :id="'confirm_password'"></x-input>
+                            <div class="input-group">
+                                <input id="confirm_password" type="password" name="confirm_user_password" value="" autocomplete="off" class="input">
+                                <label class="user-label">@lang('lang.confirm_password')</label>
+                            </div>
+                            {{-- <x-input :name="'confrim_user_password'" :value="''" :label="'Confirm Password'" :inputType="'password'"
+                                :id="'confirm_password'"></x-input> --}}
                             <small id="passwordError" style="color: red;"></small> <!-- Error message element -->
                             <small id="passwordSuccess" style="color: green;"></small> <!-- Success message element -->
                         </div>
@@ -132,18 +140,18 @@
                     <div class="row">
                         @if (session('user_details')['role'] == '1')
                             <div class="col-12 mb-2 mt-4">
-                                <h5 class="text-left"> Company Details</h5>
+                                <h5 class="text-left">@lang('lang.company_details')</h5>
                             </div>
                             <div class="col-lg-6 col-sm-12 mt-3" style="width: 100%;">
-                                <x-input :name="'company_name'" :value="$company->company_name" :label="'Company Name'" :inputType="'text'"
+                                <x-input :name="'company_name'" :value="$company->company_name" :label="'lang.company_name'" :inputType="'text'"
                                     :id="''"></x-input>
                             </div>
                             <div class="col-lg-6 col-sm-12 mt-3">
-                                <x-input :name="'company_phone'" :value="$company->company_phone" :label="'Company Phone Number'" :inputType="'tel'"
+                                <x-input :name="'company_phone'" :value="$company->company_phone" :label="'lang.phone_number'" :inputType="'tel'"
                                     :id="''"></x-input>
                             </div>
                             <div class="col-lg-6 col-sm-6 mt-3">
-                                <x-input :name="'company_address'" :value="$company->company_address" :label="'Company Address'" :inputType="'text'"
+                                <x-input :name="'company_address'" :value="$company->company_address" :label="'lang.address'" :inputType="'text'"
                                     :id="''"></x-input>
                             </div>
                         @endif

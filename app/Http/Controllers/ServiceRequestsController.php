@@ -9,8 +9,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\CustomMail;
+use App\Mail\AccountActivationMail;
+use App\Mail\AccountActivationDeniedMail;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AccountActivation;
 
 class ServiceRequestsController extends Controller
 {
@@ -64,7 +66,7 @@ class ServiceRequestsController extends Controller
                 'company_address' => $requestedCompany->req_address,
             ]);
 
-            $password = '12345'; // Set the default password
+            $password = rand(); // Set the default password
 
             DB::table('users')->insert([
                 'name' => $requestedCompany->req_name,
@@ -83,7 +85,7 @@ class ServiceRequestsController extends Controller
                 'password' => $password,
             ];
             
-            $mail = new AccountActivation($emailData);
+            $mail = new AccountActivationMail($emailData);
 // dd($mail);
             try {
                 Mail::to($requestedCompany->req_email)->send($mail);
@@ -102,6 +104,17 @@ class ServiceRequestsController extends Controller
     public function destroy($id)
     {
         $request = ServiceRequests::find($id);
+        $requestedCompany = ServiceRequests::where('req_id', $id)->first();
+
+        $emailData = [
+            'name' => $requestedCompany->req_name,
+        ];
+        $mail = new AccountActivationDeniedMail($emailData);
+        try {
+            Mail::to($requestedCompany->req_email)->send($mail);
+        } catch (\Exception $e) {
+            return redirect('/requests')->with('error', $e->getMessage());
+        }
 
         $request->delete();
 

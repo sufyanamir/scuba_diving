@@ -334,4 +334,5 @@ return [
   "no_trip_available_yet" => "No trip available yet",
   "you_dont_have_any_trips_yet" => "You don't have any trips yet",
   "client_email" => "Client Email",
+  "duration" => "Duration",
 ];

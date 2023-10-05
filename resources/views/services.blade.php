@@ -21,6 +21,7 @@
                     <th>@lang('lang.subtitle')</th>
                     <th>@lang('lang.description')</th>
                     <th>@lang('lang.charges')</th>
+                    <th>@lang('lang.duration')</th>
                     <th>@lang('lang.cost')</th>
                     <th>@lang('lang.action')</th>
                 </tr>
@@ -35,6 +36,7 @@
                     <td>{{ $item->service_subtitle }}</td>
                     <td>{{ $item->service_desc }}</td>
                     <td>{{ $item->service_charges }}</td>
+                    <td>{{ $item->service_duration }}</td>
                     <td>{{ $totalOverheadCosts[$item->service_id]->total_cost ?? 0 }}</td>
                     <td>
                         <button class="btn p-0" style="background: none;" data-target="#editservice{{$item->service_id}}" data-toggle="modal">
@@ -80,8 +82,11 @@
                                                     <div class="col-6 mb-3">
                                                         <x-input :name="'subtitle'" :value="$item->service_subtitle" :label="'lang.subtitle'" :inputType="'text'" :id="''"></x-input>
                                                     </div>
-                                                    <div class="col-12 mb-3">
+                                                    <div class="col-6 mb-3">
                                                         <x-input :name="'charges'" :value="$item->service_charges" :label="'lang.charges'" :inputType="'number'" :id="''"></x-input>
+                                                    </div>
+                                                    <div class="col-6 mb-3">
+                                                        <x-input :name="'service_duration'" :value="$item->service_duration" :label="'lang.duration'" :inputType="'number'" :id="''"></x-input>
                                                     </div>
                                                     <div class="col-12 mb-3">
                                                         <x-text-area :name="'description'" :value="$item->service_desc" :label="'lang.description'"></x-text-area>

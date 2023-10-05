@@ -241,9 +241,11 @@ class ApiController extends Controller
                 'charges' => 'required|numeric',
                 'description' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'cost_name' => 'array',
+                'cost' => 'array',
                 // 'added_user_id' => 'required',
                 // 'company_id' => 'required',
-                'overheads' => 'array', // Define 'overheads' as an array
+                // 'overheads' => 'array', // Define 'overheads' as an array
             ]);
 
             $user = Auth::user();
@@ -268,15 +270,15 @@ class ApiController extends Controller
             $service->save();
 
             // Insert overhead data into the 'services_overheads' table for the service
-            if (!empty($request['cost_name'])) {
-                $overheads = $request['cost_name'];
+            if (!empty($validatedData['cost_name'])) {
+                $overheads = $validatedData['cost_name'];
                 $count = count($overheads);
-
+            
                 for ($i = 0; $i < $count; $i++) {
                     ServiceOverheads::create([
                         'service_id' => $service->service_id,
-                        'overhead_name' => $_REQUEST['cost_name'][$i],
-                        'overhead_cost' => $_REQUEST['cost'][$i],
+                        'overhead_name' => $overheads[$i],
+                        'overhead_cost' => $validatedData['cost'][$i],
                     ]);
                 }
             }
@@ -539,7 +541,7 @@ class ApiController extends Controller
         }
     }
     //get customer detail
-    
+
     //get customer
     public function getCustomer(Request $request)
     {
@@ -563,8 +565,7 @@ class ApiController extends Controller
             }
 
             if (!empty($statusFilter)) {
-                if($statusFilter === 'all'){
-
+                if ($statusFilter === 'all') {
                 }
                 // Check if the provided status exists in the mapping
                 elseif (isset($statusMapping[$statusFilter])) {

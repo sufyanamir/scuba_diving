@@ -65,6 +65,7 @@ class ServicesController extends Controller
 
     public function addService(Request $request)
     {
+        // dd($request);
         // Validate the form data
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -74,7 +75,9 @@ class ServicesController extends Controller
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             'added_user_id' => 'required',
             'company_id' => 'required',
-            'overheads' => 'array', // Define 'overheads' as an array
+            'cost_name' => 'array',
+            'cost' => 'array',
+            // 'overheads' => 'array', // Define 'overheads' as an array
         ]);
 
         // Insert data into the 'services' table
@@ -98,8 +101,8 @@ class ServicesController extends Controller
         $service->save();
 
         // Insert overhead data into the 'services_overheads' table for the service
-        if (!empty($request['cost_name'])) {
-            $overheads = $request['cost_name'];
+        if (!empty($request->input('cost_name'))) {
+            $overheads = $request->input('cost_name');
             $count = count($overheads);
 
             for ($i = 0; $i < $count; $i++) {

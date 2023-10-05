@@ -18,6 +18,31 @@
     <title>Dive Monies</title>
 
     <style>
+        ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar:horizontal {
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 163, 255, 1);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background-color: #F5F5F5;
+    }
+
+    ::-webkit-scrollbar-track:horizontal {
+      display: none;
+    }
+
+    ::-webkit-scrollbar-horizontal {
+      display: none;
+    }
+
         body {
             font-family: "Lato", sans-serif;
             margin: 0;

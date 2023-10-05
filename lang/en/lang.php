@@ -10,6 +10,7 @@ return [
   'enter_new_email'=>'Enter new email',
   "admin_name" => "Admin Name",
   "assign_password" => "Assign Password",
+  "password" => "Password",
   "un_assigned" => "Un ssigned ",
   "add_admin_details" => "Add Admin Details",
   "view_admin_details" => "View Admin Details",

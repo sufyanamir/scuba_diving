@@ -10,6 +10,7 @@ return [
   'enter_new_email'=>'กรอกอีเมลใหม่',
   'new'=>'ใหม่',
   "assign_password" => "กำหนดรหัสผ่าน",
+  'password'=>'รหัสผ่าน',
   "un_assigned" => "ไม่ได้กำหนด",
   "add_admin_details" => "เพิ่มรายละเอียดผู้ดูแลระบบ",
   "admin_details" => "รายละเอียดผู้ดูแลระบบ",

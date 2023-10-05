@@ -100,17 +100,17 @@
                         <div class="row">
                             <div class="w-100" style="padding-left: 15px;">
                                 <p style="font-style: normal;font-weight: 500;font-size: 30px;line-height: 45px;color: #000000 !important;">
-                                    Request For a Service
+                                    @lang('lang.request_for_a_service')
                                 </p>
                             </div>
                             <!-- Email Address -->
                             <div class="w-100" style="padding-left: 15px;">
                                 <p style=" font-style: normal;font-weight: 400;font-size: 16px;line-height: 24px;color: #000000;margin-bottom: 0px !important; ">
-                                    If you already have an account register
+                                    @lang('lang.if_you_already_have_an_account_register')
                                 </p>
                                 <p>
-                                    You can
-                                    <a href="/" style="color: #023D5F">Login here!</a>
+                                    @lang('lang.you_can')
+                                    <a href="/" style="color: #023D5F">@lang('lang.login_here')</a>
                                 </p>
                             </div>
                             {{-- full name --}}
@@ -125,7 +125,7 @@
                                     </span>
                                 </div>
 
-                                <input id="full-name" type="text" name="req_name" placeholder="Enter your Full Name" class="border-top-0 border-right-0 border-dark form-control bg-white border-left-0 border-md" style="border-radius: 0px !important;" />
+                                <input id="full-name" type="text" name="req_name" placeholder="@lang('lang.enter_your_full_name')" class="border-top-0 border-right-0 border-dark form-control bg-white border-left-0 border-md" style="border-radius: 0px !important;" />
                                 <div class="col-lg-12">
                                     <div class="validation-error-email"></div>
                                 </div>
@@ -144,7 +144,7 @@
 
                                     </span>
                                 </div>
-                                <input id="company-name" type="text" name="req_company_name" placeholder="Enter your Company Name" class="border-top-0 border-right-0 border-dark form-control bg-white border-left-0 border-md" style="border-radius: 0px !important;" />
+                                <input id="company-name" type="text" name="req_company_name" placeholder="@lang('lang.enter_your_company_name')" class="border-top-0 border-right-0 border-dark form-control bg-white border-left-0 border-md" style="border-radius: 0px !important;" />
                                 <div class="col-lg-12">
                                     <div class="validation-error-email"></div>
                                 </div>
@@ -159,7 +159,7 @@
 
                                     </span>
                                 </div>
-                                <input id="email" type="email" name="req_email" placeholder="Enter your email address" class="border-top-0 border-right-0 form-control bg-white border-left-0 border-md border-dark" style="border-radius: 0px !important;" />
+                                <input id="email" type="email" name="req_email" placeholder="@lang('lang.enter_your_email_address')" class="border-top-0 border-right-0 form-control bg-white border-left-0 border-md border-dark" style="border-radius: 0px !important;" />
                                 <div class="input-group-append">
                                     <span class="input-group-text bg-white border-md border-top-0 border-right-0 border-left-0 border-dark" style="border-radius: 0px !important;">
                                         <button style="border: none; background: none; cursor: pointer;" type="button" id="eye">
@@ -184,7 +184,7 @@
 
                                     </span>
                                 </div>
-                                <input id="address" type="text" name="req_address" placeholder="Enter your Address" class="border-top-0 border-right-0 form-control bg-white border-left-0 border-md border-dark" style="border-radius: 0px !important;" />
+                                <input id="address" type="text" name="req_address" placeholder="@lang('enter_your_address')" class="border-top-0 border-right-0 form-control bg-white border-left-0 border-md border-dark" style="border-radius: 0px !important;" />
                                 <div class="input-group-append">
                                     <span class="input-group-text bg-white border-md border-top-0 border-right-0 border-left-0 border-dark" style="border-radius: 0px !important;">
                                         <button style="border: none; background: none; cursor: pointer;" type="button" id="eye">
@@ -227,7 +227,7 @@
                                 <button type="submit" id="btn_user_login" class="font-weight-bold sign_up btn btn-block py-2 text-white" style=" border:none; background-image: linear-gradient(#00A3FF, #023D5F); " name="submit">
                                     <div class="spinner-border spinner-border-sm text-white d-none" id="spinner">
                                     </div>
-                                    <span id="text">Request For a Service</span>
+                                    <span id="text">@lang('lang.request_for_a_service')</span>
                                 </button>
                             </div>
                         </div>

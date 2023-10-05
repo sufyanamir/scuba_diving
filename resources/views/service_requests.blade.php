@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12 col-xl-10">
             <div class="mx-3 my-3">
-                <h4>Request List</h4>
+                <h4>@lang('lang.request_list')</h4>
             </div>
         </div>
         <div class="col-12 col-xl-2 my-3 text-right pr-5">
@@ -15,11 +15,11 @@
             <thead class="thead-color ">
                 <tr>
                     <th></th>
-                    <th>Requested Name</th>
-                    <th>Company Name</th>
-                    <th>E-mail</th>
-                    <th>Address</th>
-                    <th>Action</th>
+                    <th>@lang('lang.requested_name')</th>
+                    <th>@lang('lang.company_name')</th>
+                    <th>@lang('lang.email')</th>
+                    <th>@lang('lang.address')</th>
+                    <th>@lang('lang.action')</th>
                 </tr>
             </thead>
             <tbody>

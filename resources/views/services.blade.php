@@ -4,11 +4,11 @@
     <div class="row">
         <div class="col-12 col-xl-10">
             <div class="mx-3 my-3">
-                <h4>Services List</h4>
+                <h4>@lang('lang.service_list')</h4>
             </div>
         </div>
         <div class="col-12 col-xl-2 my-3 text-right pr-5">
-            <x-add-button :value="'+ Add Service'" :dataTarget="'#add-service'"></x-add-button>
+            <x-add-button :value="'lang.+add_service'" :dataTarget="'#add-service'"></x-add-button>
             <x-modal :modalId="'add-service'" :formAction="'services/store'" :editData="''"></x-modal>
         </div>
     </div>
@@ -16,13 +16,13 @@
         <table class="table " id="myTable">
             <thead class="thead-color ">
                 <tr>
-                    <th>Photo</th>
-                    <th>Name</th>
-                    <th>Subtitle</th>
-                    <th>Description</th>
-                    <th>charges</th>
-                    <th>Cost</th>
-                    <th>Action</th>
+                    <th>@lang('lang.photo')</th>
+                    <th>@lang('lang.name')</th>
+                    <th>@lang('lang.subtitle')</th>
+                    <th>@lang('lang.description')</th>
+                    <th>@lang('lang.charges')</th>
+                    <th>@lang('lang.cost')</th>
+                    <th>@lang('lang.action')</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,7 +57,7 @@
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content" style="border-radius: 15px;">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="">Edit Service</h5>
+                                    <h5 class="modal-title" id="">@lang('lang.edit_service')</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModal{{$item->service_id}}">
                                         <span aria-hidden="true">
                                             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,16 +75,16 @@
                                             <div class="col-8">
                                                 <div class="row">
                                                     <div class="col-6 mb-3">
-                                                        <x-input :name="'name'" :value="$item->service_name" :label="'Name'" :inputType="'text'" :id="''"></x-input>
+                                                        <x-input :name="'name'" :value="$item->service_name" :label="'lang.name'" :inputType="'text'" :id="''"></x-input>
                                                     </div>
                                                     <div class="col-6 mb-3">
-                                                        <x-input :name="'subtitle'" :value="$item->service_subtitle" :label="'Subtitle'" :inputType="'text'" :id="''"></x-input>
+                                                        <x-input :name="'subtitle'" :value="$item->service_subtitle" :label="'lang.subtitle'" :inputType="'text'" :id="''"></x-input>
                                                     </div>
                                                     <div class="col-12 mb-3">
-                                                        <x-input :name="'charges'" :value="$item->service_charges" :label="'Charges'" :inputType="'number'" :id="''"></x-input>
+                                                        <x-input :name="'charges'" :value="$item->service_charges" :label="'lang.charges'" :inputType="'number'" :id="''"></x-input>
                                                     </div>
                                                     <div class="col-12 mb-3">
-                                                        <x-text-area :name="'description'" :value="$item->service_desc" :label="'Description'"></x-text-area>
+                                                        <x-text-area :name="'description'" :value="$item->service_desc" :label="'lang.description'"></x-text-area>
                                                     </div>
                                                 </div>
                                             </div>
@@ -105,15 +105,15 @@
                                                 @endif --}}
                                             </div>
                                             <div class="col-12 mb-3">
-                                                <h5 class="text-left" id="">Overheads & Costs</h5>
+                                                <h5 class="text-left" id="">@lang('lang.overhead_and_costs')</h5>
                                             </div>
                                             @foreach($item->serviceOverheads as $overhead)
                                             <div class="row ml-1 col-12" style="position: relative;" id="readroot">
                                                 <div class="col-5 mb-3">
-                                                    <x-input :name="'cost_name[]'" :value="$overhead->overhead_name" :label="'Name'" :inputType="'text'" :id="'costName'"></x-input>
+                                                    <x-input :name="'cost_name[]'" :value="$overhead->overhead_name" :label="'lang.name'" :inputType="'text'" :id="'costName'"></x-input>
                                                 </div>
                                                 <div class="col-5 mb-3">
-                                                    <x-input :name="'cost[]'" :value="$overhead->overhead_cost" :label="'Cost'" :inputType="'number'" :id="'cost'"></x-input>
+                                                    <x-input :name="'cost[]'" :value="$overhead->overhead_cost" :label="'lang.cost'" :inputType="'number'" :id="'cost'"></x-input>
                                                 </div>
                                                 <div class="col-2 my-2 text-left">
                                                     <x-plus-button :name="'add_row'" :addRow="'moreFields'" :class="'moreFields'" :label="'+'" :onclick="''"></x-plus-button>
@@ -127,7 +127,7 @@
                                             </div>
                                             @endforeach
                                             <div class="col-12 my-auto text-right">
-                                                <x-submit-button :name="'submit'" :value="'Update'"></x-submit-button>
+                                                <x-submit-button :name="'submit'" :value="'lang.update'"></x-submit-button>
                                             </div>
                                         </div>
                                     </form>

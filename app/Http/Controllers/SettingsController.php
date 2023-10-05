@@ -85,7 +85,7 @@ class SettingsController extends Controller
 
 
         if (!$company) {
-            return redirect()->back()->with('status', 'Company Not Exists.');
+            return redirect()->back()->with('status', 'Settings updated Successfully.');
         }
         $company->company_name = $validatedData['company_name'];
         $company->company_phone = $validatedData['company_phone'];

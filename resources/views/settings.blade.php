@@ -142,15 +142,15 @@
                             <div class="col-12 mb-2 mt-4">
                                 <h5 class="text-left">@lang('lang.company_details')</h5>
                             </div>
-                            <div class="col-lg-6 col-sm-12 mt-3" style="width: 100%;">
+                            <div class="col-lg-4 col-sm-12 mt-3" style="width: 100%;">
                                 <x-input :name="'company_name'" :value="$company->company_name" :label="'lang.company_name'" :inputType="'text'"
                                     :id="''"></x-input>
                             </div>
-                            <div class="col-lg-6 col-sm-12 mt-3">
+                            <div class="col-lg-4 col-sm-12 mt-3">
                                 <x-input :name="'company_phone'" :value="$company->company_phone" :label="'lang.phone_number'" :inputType="'tel'"
                                     :id="''"></x-input>
                             </div>
-                            <div class="col-lg-6 col-sm-6 mt-3">
+                            <div class="col-lg-4 col-sm-6 mt-3">
                                 <x-input :name="'company_address'" :value="$company->company_address" :label="'lang.address'" :inputType="'text'"
                                     :id="''"></x-input>
                             </div>

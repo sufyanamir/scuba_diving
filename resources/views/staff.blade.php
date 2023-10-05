@@ -4,11 +4,13 @@
     <div class="row">
         <div class="col-12 col-xl-10">
             <div class="mx-3 my-3">
-                <h4>Staff List</h4>
+                <h4>
+                @lang('lang.staff_list')
+                </h4>
             </div>
         </div>
         <div class="col-12 col-xl-2 my-3 text-right pr-5">
-            <x-add-button :value="'+ Add Staff'" :dataTarget="'#add-staff'"></x-add-button>
+            <x-add-button :value="'lang.+add_staff'" :dataTarget="'#add-staff'"></x-add-button>
             <x-modal :modalId="'add-staff'" :formAction="'staff/store'" :editData="''"></x-modal>
         </div>
     </div>
@@ -16,13 +18,13 @@
         <table class="table " id="myTable">
             <thead class="thead-color ">
                 <tr>
-                    <th>Photo</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Address</th>
-                    <th>Role</th>
-                    <th>Action</th>
+                    <th>@lang('lang.photo')</th>
+                    <th>@lang('lang.full_name')</th>
+                    <th>@lang('lang.email')</th>
+                    <th>@lang('lang.phone_number')</th>
+                    <th>@lang('lang.address')</th>
+                    <th>@lang('lang.role')</th>
+                    <th>@lang('lang.action')</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +69,7 @@
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content" style="border-radius: 15px;">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="">Edit Staff</h5>
+                                        <h5 class="modal-title" id="">@lang('lang.edit_staff')</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                                             id="closeModal{{ $item->id }}">
                                             <span aria-hidden="true">
@@ -92,17 +94,17 @@
                                                     <div class="row">
                                                         <div class="col-6 mb-3">
                                                             <x-input :name="'name'" :value="$item->name"
-                                                                :label="'Name'" :inputType="'text'"
+                                                                :label="'lang.name'" :inputType="'text'"
                                                                 :id="''"></x-input>
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <x-input :name="'email'" :value="$item->email"
-                                                                :label="'Email'" :inputType="'email'"
+                                                                :label="'lang.email'" :inputType="'email'"
                                                                 :id="''"></x-input>
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <x-input :name="'phone'" :value="$item->phone"
-                                                                :label="'Phone Number'" :inputType="'tel'"
+                                                                :label="'lang.phone_number'" :inputType="'tel'"
                                                                 :id="''"></x-input>
                                                         </div>
                                                         <div class="col-6 mb-3">
@@ -110,15 +112,15 @@
                                                                 style="height: 51px; border-radius: 0.5rem;">
                                                                 <option value="{{ $item->category }}">
                                                                     {{ $item->category }}</option>
-                                                                <option value="Manager">Manager</option>
-                                                                <option value="Worker">Worker</option>
-                                                                <option value="Trainer">Trainer</option>
+                                                                <option value="Manager">@lang('lang.manager')</option>
+                                                                <option value="Worker">@lang('lang.worker')</option>
+                                                                <option value="Trainer">@lang('lang.trainer')</option>
                                                             </select>
                                                         </div>
 
                                                         <div class="col-12 mb-3">
                                                             <x-text-area :name="'address'" :value="$item->address"
-                                                                :label="'Address'"></x-text-area>
+                                                                :label="'lang.address'"></x-text-area>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -149,7 +151,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-12 mb-3">
-                                                    <h5 class="text-left" id="">Social Links</h5>
+                                                    <h5 class="text-left" id="">@lang('lang.social_links')</h5>
                                                 </div>
                                                 <div class="col-8 mb-3">
                                                     @php
@@ -173,7 +175,7 @@
                                                 </div>
                                                 <div class="my-auto text-right">
                                                     <x-submit-button :name="'submit'"
-                                                        :value="'Update'"></x-submit-button>
+                                                        :value="'lang.update'"></x-submit-button>
                                                 </div>
                                             </div>
                                         </form>

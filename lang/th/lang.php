@@ -332,4 +332,5 @@ return [
   "no_trip_available_yet" => "ยังไม่มีการเดินทางใช้งาน",
   "you_dont_have_any_trips_yet" => "คุณยังไม่มีการเดินทาง",
   "client_email" => "อีเมลลูกค้า",
+  "duration" => "ระยะเวลา",
 ];

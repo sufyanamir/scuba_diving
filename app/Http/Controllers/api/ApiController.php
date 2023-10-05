@@ -170,6 +170,7 @@ class ApiController extends Controller
                 'charges' => 'required|numeric',
                 'description' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'service_duration' => 'required|numeric',
                 // 'added_user_id' => 'required',
                 // 'company_id' => 'required',
                 'overheads' => 'array', // Define 'overheads' as an array
@@ -189,6 +190,7 @@ class ApiController extends Controller
             $service->service_subtitle = $validatedData['subtitle'];
             $service->service_charges = $validatedData['charges'];
             $service->service_desc = $validatedData['description'];
+            $service->service_duration = $validatedData['service_duration'];
             $service->added_user_id = $user->id;
             $service->company_id = $user->company_id;
 
@@ -241,6 +243,7 @@ class ApiController extends Controller
                 'charges' => 'required|numeric',
                 'description' => 'required|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'service_duration' => 'required|numeric',
                 'cost_name' => 'array',
                 'cost' => 'array',
                 // 'added_user_id' => 'required',
@@ -255,6 +258,7 @@ class ApiController extends Controller
                 'service_subtitle' => $validatedData['subtitle'],
                 'service_charges' => $validatedData['charges'],
                 'service_desc' => $validatedData['description'],
+                'service_duration' => $validatedData['service_duration'],
                 'added_user_id' => $user->id,
                 'company_id' => $user->company_id,
             ]);

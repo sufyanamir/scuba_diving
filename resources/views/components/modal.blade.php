@@ -51,8 +51,11 @@
                   </select>
                 </div>
                 @elseif($modalId == 'add-service')
-                <div class="col-12 mb-3">
+                <div class="col-6 mb-3">
                   <x-input :name="'charges'" :value="''" :label="'lang.charges'" :inputType="'number'" :id="''"></x-input>
+                </div>
+                <div class="col-6 mb-3">
+                  <x-input :name="'service_duration'" :value="''" :label="'lang.duration'" :inputType="'number'" :id="''"></x-input>
                 </div>
                 <div class="col-12 mb-3">
                   <x-text-area :name="'description'" :value="''" :label="'lang.description'"></x-text-area>

@@ -77,6 +77,7 @@ class ServicesController extends Controller
             'company_id' => 'required',
             'cost_name' => 'array',
             'cost' => 'array',
+            'service_duration' => 'required|numeric',
             // 'overheads' => 'array', // Define 'overheads' as an array
         ]);
 
@@ -88,6 +89,7 @@ class ServicesController extends Controller
             'service_desc' => $validatedData['description'],
             'added_user_id' => $validatedData['added_user_id'],
             'company_id' => $validatedData['company_id'],
+            'service_duration' => $validatedData['service_duration'],
         ]);
 
         // Upload and store the service image if it exists
@@ -130,6 +132,7 @@ class ServicesController extends Controller
             'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             'added_user_id' => 'required',
             'company_id' => 'required',
+            'service_duration' => 'required|numeric',
             'overheads' => 'array', // Define 'overheads' as an array
             // 'overheads.*.cost_name' => 'required|string|max:255',
             // 'overheads.*.cost' => 'required|numeric',
@@ -149,6 +152,7 @@ class ServicesController extends Controller
         $service->service_desc = $validatedData['description'];
         $service->added_user_id = $validatedData['added_user_id'];
         $service->company_id = $validatedData['company_id'];
+        $service->service_duration = $validatedData['service_duration'];
 
         // Upload and store the updated service image
         if ($request->hasFile('upload_image')) {

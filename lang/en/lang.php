@@ -233,6 +233,7 @@ return [
   "enter_your_full_name" => "Enter your Full Name",
   "enter_your_email" => "Enter your E-mail",
   "enter_your_email_address" => "Enter your Email Address",
+  "enter_your_address" => "Enter your Address",
   "enter_your_password" => "Enter your Password",
   "confirm_your_password" => "Confirm your password",
   "create_your_account" => "Create your account",

@@ -16,9 +16,161 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
+use App\Models\Orders;
+use App\Models\OrderItems;
+use App\Models\AdditionalItems;
 
 class ApiController extends Controller
 {
+
+    //----------------------------------------------------Order APIs------------------------------------------------------//
+
+    public function getOrderDetails(Request $request)
+    {
+        try {
+            $order_id = $request->input('orderId');
+
+            // Find the order by order_id and eager load its relationships including the customer
+            $order = Orders::with('orderItems', 'orderAdditionalItems', 'customer')->find($order_id);
+
+            if (!$order) {
+                return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+            }
+
+            return response()->json(['success' => true, 'data' => $order], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+
+    //get orders
+    public function getOrders(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $search = $request->input('search');
+
+            $query = Orders::select('orders.order_id', 'orders.order_total', 'customers.customer_name', 'customers.customer_image')
+                ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
+                ->where('orders.company_id', $user->company_id);
+
+            if (!empty($search)) {
+                $query->where('customers.customer_name', 'like', '%' . $search . '%');
+            }
+            $orders = $query->get();
+
+            $responseData = $orders;
+
+            if (!empty($responseData)) {
+                return response()->json(['success' => true, 'data' => ['orders' => $responseData]], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'No record found'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //get orders
+
+    //create order
+    public function createOrder(Request $request)
+    {
+        try {
+            $statusMapping = [
+                'new' => 0,
+                'active' => 1,
+                'pending' => 2,
+                'completed' => 3,
+            ];
+            $user = Auth::user();
+            // Validate the incoming JSON data
+            $validatedData = $request->validate([
+                'customer_id' => 'required|integer',
+                'services' => 'required|array',
+                'services.*.service_id' => 'required|integer',
+                'services.*.qty' => 'required|integer',
+                'start_Date' => 'required',
+                'end_Date' => 'required',
+                'additional_cost_list' => 'required|array',
+                'additional_cost_list.*.serviceName' => 'required|string',
+                'additional_cost_list.*.serviceCost' => 'required|numeric',
+                'discount' => 'required|numeric',
+                'remarks' => 'nullable|string',
+                'total' => 'required|numeric',
+                'invoice_status' => 'required|in:pending,paid',
+                'additional_cost_total' => 'required|numeric',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,pdf|max:1024',
+            ]);
+
+            $status = $statusMapping[$validatedData['invoice_status']];
+
+            $customer = Customers::find($validatedData['customer_id']);
+
+            if (!$customer) {
+                return response()->json(['success' => false, 'message' => 'Customer not found'], 404);
+            }
+
+            // Upload and save the image if provided
+            $uploadedImage = $request->file('upload_image');
+            $imagePath = null; // Initialize the image path
+
+            if ($uploadedImage) {
+                $imageName = Str::random(20) . '.' . $uploadedImage->getClientOriginalExtension();
+
+                // Generate the full URL of the uploaded image
+                $imageUrl = url('storage/payment_receipts/' . $imageName);
+
+                // Store the image URL in the database
+                $imagePath = $imageUrl;
+            }
+
+            // Create an order record
+            $order = Orders::create([
+                'customer_id' => $validatedData['customer_id'],
+                'start_date' => date($validatedData['start_Date']),
+                'end_date' => date($validatedData['end_Date']),
+                'order_additional_items_total' => $validatedData['additional_cost_total'],
+                'order_discount' => $validatedData['discount'],
+                'order_remarks' => $validatedData['remarks'],
+                'order_total' => $validatedData['total'],
+                'order_status' => $status,
+                'payment_receipt_path' => $imagePath,
+                'company_id' => $user->company_id,
+            ]);
+
+
+            // Create order items
+            foreach ($validatedData['services'] as $service) {
+                OrderItems::create([
+                    'order_id' => $order->order_id,
+                    'service_id' => $service['service_id'],
+                    'order_item_qty' => $service['qty'],
+                ]);
+            }
+
+            // Create additional items
+            foreach ($validatedData['additional_cost_list'] as $additionalItem) {
+                AdditionalItems::create([
+                    'order_id' => $order->order_id,
+                    'additional_item_name' => $additionalItem['serviceName'],
+                    'additional_item_cost' => $additionalItem['serviceCost'],
+                ]);
+            }
+
+            if ($customer) {
+                $customer->customer_status = $status;
+
+                $customer->save();
+            }
+
+            return response()->json(['success' => true, 'message' => 'Order created successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //create order
+    //----------------------------------------------------Order APIs------------------------------------------------------//
 
     //----------------------------------------------------Service APIs------------------------------------------------------//
     //get service detail
@@ -234,25 +386,23 @@ class ApiController extends Controller
     //add service
     public function addService(Request $request)
     {
-
         try {
-            // Validate the form data
+            $user = Auth::user();
+
+            // Validate the incoming JSON data
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'subtitle' => 'required|string|max:255',
                 'charges' => 'required|numeric',
                 'description' => 'required|string|max:400',
-                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 'service_duration' => 'required|numeric',
-                'cost_name' => 'array',
-                'cost' => 'array',
-                // 'added_user_id' => 'required',
-                // 'company_id' => 'required',
-                // 'overheads' => 'array', // Define 'overheads' as an array
+                'servicesOverheads' => 'required|array',
+                'servicesOverheads.*.cost_name' => 'required|string',
+                'servicesOverheads.*.cost' => 'required|numeric',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
 
-            $user = Auth::user();
-            // Insert data into the 'services' table
+            // Create a new service
             $service = new Services([
                 'service_name' => $validatedData['name'],
                 'service_subtitle' => $validatedData['subtitle'],
@@ -274,24 +424,20 @@ class ApiController extends Controller
             $service->save();
 
             // Insert overhead data into the 'services_overheads' table for the service
-            if (!empty($validatedData['cost_name'])) {
-                $overheads = $validatedData['cost_name'];
-                $count = count($overheads);
-            
-                for ($i = 0; $i < $count; $i++) {
+            if (!empty($validatedData['servicesOverheads'])) {
+                foreach ($validatedData['servicesOverheads'] as $overhead) {
                     ServiceOverheads::create([
                         'service_id' => $service->service_id,
-                        'overhead_name' => $overheads[$i],
-                        'overhead_cost' => $validatedData['cost'][$i],
+                        'overhead_name' => $overhead['cost_name'],
+                        'overhead_cost' => $overhead['cost'],
                     ]);
                 }
             }
 
-            // Optionally, you can redirect back with a success message
+            // Return a success response
             return response()->json(['success' => true, 'message' => 'Service added successfully!']);
         } catch (\Exception $e) {
-
-            return response()->json(['success' => true, 'message' => $e->getMessage()], 400);
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //add service

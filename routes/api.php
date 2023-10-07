@@ -21,7 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->group(function () {
-
+//Order
+Route::post('/createOrder', [ApiController::class, 'createOrder']);
+Route::get('/getOrders', [ApiController::class, 'getOrders']);
+Route::get('/getOrder', [ApiController::class, 'getOrderDetails']);
+//Order
     // Your authenticated routes here
     Route::get('/getUser', [ApiController::class, 'getUserDetails']);
     // Add other authenticated routes here

@@ -31,11 +31,40 @@ class ApiController extends Controller
             $order_id = $request->input('orderId');
 
             // Find the order by order_id and eager load its relationships including the customer
-            $order = Orders::with('orderItems', 'orderAdditionalItems', 'customer')->find($order_id);
+            $order = Orders::with('customer')->find($order_id);
 
             if (!$order) {
                 return response()->json(['success' => false, 'message' => 'Order not found'], 404);
             }
+
+            // Get the order items for the order
+            $orderItems = OrderItems::where('order_id', $order->order_id)->get();
+
+            // Create a new array to hold the modified data
+            $modifiedOrderItems = [];
+
+            foreach ($orderItems as $orderItem) {
+                $service = Services::find($orderItem->service_id);
+                if ($service) {
+                    $serviceData = [
+                        'service_id' => $service->service_id,
+                        'service_name' => $service->service_name,
+                        'service_subtitle' => $service->service_subtitle,
+                        'service_charges' => $service->service_charges,
+                        'service_desc' => $service->service_desc,
+                        'service_image' => $service->service_image,
+                        'added_user_id' => $service->added_user_id,
+                        'company_id' => $service->company_id,
+                        'service_duration' => $service->service_duration,
+                        'order_item_qty' => $orderItem->order_item_qty,
+                    ];
+
+                    $modifiedOrderItems[] = $serviceData;
+                }
+            }
+
+            // Assign the modified data to the order_items property
+            $order->setAttribute('order_items', $modifiedOrderItems);
 
             return response()->json(['success' => true, 'data' => $order], 200);
         } catch (\Exception $e) {

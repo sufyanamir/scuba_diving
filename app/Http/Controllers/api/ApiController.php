@@ -19,6 +19,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\Orders;
 use App\Models\OrderItems;
 use App\Models\AdditionalItems;
+use Illuminate\Validation\Rules\Unique;
 
 class ApiController extends Controller
 {
@@ -29,7 +30,13 @@ class ApiController extends Controller
     {
         try {
             $order_id = $request->input('orderId');
-
+            $statusMapping = [
+                'new' => 0,
+                'active' => 1,
+                'pending' => 2,
+                'completed' => 3,
+                'paid' => 4,
+            ];
             // Find the order by order_id and eager load its relationships including the customer
             $order = Orders::with('customer')->find($order_id);
 
@@ -63,6 +70,10 @@ class ApiController extends Controller
                 }
             }
 
+            // Convert order_status and customer_status to strings based on the $statusMapping
+            $order->setAttribute('order_status', array_search($order->order_status, $statusMapping));
+            $order->customer->setAttribute('customer_status', array_search($order->customer->customer_status, $statusMapping));
+
             // Assign the modified data to the order_items property
             $order->setAttribute('order_items', $modifiedOrderItems);
 
@@ -87,7 +98,7 @@ class ApiController extends Controller
             if (!empty($search)) {
                 $query->where('customers.customer_name', 'like', '%' . $search . '%');
             }
-            $orders = $query->get();
+            $orders = $query->orderBy('order_id', 'desc')->get();
 
             $responseData = $orders;
 
@@ -109,9 +120,9 @@ class ApiController extends Controller
             $statusMapping = [
                 'new' => 0,
                 'active' => 1,
-                'paid' => 1,
                 'pending' => 2,
                 'completed' => 3,
+                'paid' => 4,
             ];
             $user = Auth::user();
             // Validate the incoming JSON data
@@ -189,7 +200,11 @@ class ApiController extends Controller
             }
 
             if ($customer) {
-                $customer->customer_status = $status;
+                if ($status == 4) {
+                    $customer->customer_status = 1;
+                } else {
+                    $customer->customer_status = 2;
+                }
 
                 $customer->save();
             }
@@ -271,7 +286,7 @@ class ApiController extends Controller
             if (!empty($search)) {
                 $query->where('service_name', 'like', '%' . $search . '%');
             }
-
+            $query->orderBy('service_id', 'desc');
             // Retrieve the filtered services
             $services = $query->get();
 
@@ -431,7 +446,13 @@ class ApiController extends Controller
                 'servicesOverheads.*.cost' => 'required|numeric',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
+            $existingService = Services::where('service_name', $validatedData['name'])
+                ->where('company_id', $user->company_id)
+                ->first();
 
+            if ($existingService) {
+                return response()->json(['success' => false, 'message' => 'Service with the same name already exists'], 400);
+            }
             // Create a new service
             $service = new Services([
                 'service_name' => $validatedData['name'],
@@ -515,6 +536,7 @@ class ApiController extends Controller
             if (!empty($search)) {
                 $query->where('name', 'like', '%' . $search . '%');
             }
+            $query->orderBy('id', 'desc');
 
             $staff = $query->select('id', 'name', 'category as role', 'user_image')->get();
 
@@ -743,7 +765,7 @@ class ApiController extends Controller
             if (!empty($search)) {
                 $query->where('customer_name', 'like', '%' . $search . '%');
             }
-
+            $query->orderBy('customer_id', 'desc');
             if (!empty($statusFilter)) {
                 if ($statusFilter === 'all') {
                 }

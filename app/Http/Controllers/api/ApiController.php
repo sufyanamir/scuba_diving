@@ -109,6 +109,7 @@ class ApiController extends Controller
             $statusMapping = [
                 'new' => 0,
                 'active' => 1,
+                'paid' => 1,
                 'pending' => 2,
                 'completed' => 3,
             ];

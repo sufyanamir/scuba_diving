@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('services', function(Blueprint $table){
            $table->id('service_id');
-           $table->string('service_name');
+           $table->string('service_name')->unique();
            $table->string('service_subtitle');
            $table->integer('service_charges');
            $table->text('service_desc');

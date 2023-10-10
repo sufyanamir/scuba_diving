@@ -142,6 +142,8 @@ class ApiController extends Controller
                 'invoice_status' => 'required|in:pending,paid',
                 'additional_cost_total' => 'required|numeric',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,pdf|max:1024',
+                'total_duration' => 'required|numeric',
+                'sub_total' => 'required|numeric',
             ]);
 
             $status = $statusMapping[$validatedData['invoice_status']];
@@ -178,6 +180,8 @@ class ApiController extends Controller
                 'order_status' => $status,
                 'payment_receipt_path' => $imagePath,
                 'company_id' => $user->company_id,
+                'total_duration' => $validatedData['total_duration'],
+                'sub_total' => $validatedData['sub_total'],
             ]);
 
 
@@ -711,7 +715,9 @@ class ApiController extends Controller
     public function getCustomerDetail(Request $request)
     {
         $user = Auth::user();
-        $customerId = $request->input('customerId'); // Get the 'name' parameter from the request
+        $customerId = $request->input('customerId');
+        $includeOrders = $request->input('includeOrders', false); // Add a new parameter for including orders
+
         // Define a mapping of status labels to their numeric values
         $statusMapping = [
             'new' => 0,
@@ -719,6 +725,7 @@ class ApiController extends Controller
             'pending' => 2,
             'completed' => 3,
         ];
+
         try {
             $query = Customers::where('company_id', $user->company_id);
 
@@ -726,18 +733,24 @@ class ApiController extends Controller
                 $query->where('customer_id', $customerId);
             }
 
-            $customers = $query->get();
+            $customer = $query->first();
 
-            if ($customers->count() > 0) {
-                $customerData = $customers->map(function ($customer) use ($statusMapping) {
-                    // Map numeric status back to status labels
-                    $customer->customer_status = array_search($customer->customer_status, $statusMapping);
-                    return $customer;
-                })->first();
-                return response()->json(['success' => true, 'data' => ['customer' => $customerData]], 200);
-            } else {
-                return response()->json(['success' => false, 'message' => 'No customers found!'], 404);
+            if (!$customer) {
+                return response()->json(['success' => false, 'message' => 'Customer not found'], 404);
             }
+
+            // Map numeric status back to status labels
+            $customer->customer_status = array_search($customer->customer_status, $statusMapping);
+
+            $response = ['success' => true, 'data' => ['customer' => $customer]];
+
+            if ($includeOrders) {
+                // Retrieve and include the customer's orders
+                $orders = Orders::where('customer_id', $customer->customer_id)->orderBy('order_id', 'desc')->get();
+                $response['data']['orders'] = $orders;
+            }
+
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }

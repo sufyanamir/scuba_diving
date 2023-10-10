@@ -505,19 +505,27 @@ class ApiController extends Controller
     {
         try {
             $user = Auth::user();
-            $StaffId = $request->input('staffId'); // Get the 'search' parameter from the request
+            $staffId = $request->input('staffId');
+            $includeCustomers = $request->input('includeCustomers', false);
 
             $query = User::where('user_role', '2')->where('company_id', $user->company_id);
 
             // If a 'search' parameter is provided, filter staff by user name
-            if (!empty($StaffId)) {
-                $query->where('id', $StaffId);
+            if (!empty($staffId)) {
+                $query->where('id', $staffId);
             }
 
             $staff = $query->first();
 
+            $response = ['success' => true, 'data' => ['staff' => $staff]];
+
+            if ($includeCustomers) {
+                $customers = Customers::where('staff_id', $staffId)->get();
+                $response['data']['customers'] = $customers;
+            }
+
             if ($staff->count() > 0) {
-                return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
+                return response()->json($response, 200);
             } else {
                 return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
             }
@@ -711,6 +719,38 @@ class ApiController extends Controller
     //----------------------------------------------------Staff APIs------------------------------------------------------//
 
     //----------------------------------------------------Customer APIs------------------------------------------------------//
+    //assign customer
+    public function assignCustomer(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $validatedData = $request->validate([
+                'staff_id' => 'required|numeric',
+                'customer_id' => 'required|numeric',
+            ]);
+
+            $staffId = $validatedData['staff_id'];
+            $customerId = $validatedData['customer_id'];
+
+            $customer = Customers::where('customer_id', $customerId)->where('company_id', $user->company_id)->where('customer_status', [1, 2])->first();
+            $staff = User::where('id', $staffId)->where('user_role', '2')->where('company_id', $user->company_id)->first();
+
+            if (!$staff) {
+                return response()->json(['success' => false, 'message' => 'staff not found!'], 404);
+            } elseif (!$customer) {
+                return response()->json(['success' => false, 'message' => 'customer not found!'], 404);
+            }
+
+            $customer->staff_id = $staffId;
+            $customer->save();
+
+            return response()->json(['success' => true, 'message' => 'The customer has assigned to the staff'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //assign customer
+
     //get customer detail
     public function getCustomerDetail(Request $request)
     {
@@ -758,11 +798,13 @@ class ApiController extends Controller
     //get customer detail
 
     //get customer
+    //get customer
     public function getCustomer(Request $request)
     {
         $user = Auth::user();
         $search = $request->input('search'); // Get the 'name' parameter from the request
         $statusFilter = $request->input('status'); // Get the 'status' parameter from the request
+        $assignCustomers = $request->input('assignCustomers'); // Get the 'assignCustomers' parameter from the request
 
         // Define a mapping of status labels to their numeric values
         $statusMapping = [
@@ -779,16 +821,22 @@ class ApiController extends Controller
                 $query->where('customer_name', 'like', '%' . $search . '%');
             }
             $query->orderBy('customer_id', 'desc');
-            if (!empty($statusFilter)) {
-                if ($statusFilter === 'all') {
-                }
-                // Check if the provided status exists in the mapping
-                elseif (isset($statusMapping[$statusFilter])) {
-                    $numericStatus = $statusMapping[$statusFilter];
-                    // Add status filtering to the query
-                    $query->where('customer_status', $numericStatus);
-                } else {
-                    return response()->json(['success' => false, 'message' => 'Invalid status filter.'], 400);
+
+            // Add status filtering if assignCustomers is true
+            if ($assignCustomers === 'true') {
+                $query->whereIn('customer_status', [1, 2]); // Filter for 'active' and 'pending' statuses
+            } else {
+                if (!empty($statusFilter)) {
+                    if ($statusFilter === 'all') {
+                    }
+                    // Check if the provided status exists in the mapping
+                    elseif (isset($statusMapping[$statusFilter])) {
+                        $numericStatus = $statusMapping[$statusFilter];
+                        // Add status filtering to the query
+                        $query->where('customer_status', $numericStatus);
+                    } else {
+                        return response()->json(['success' => false, 'message' => 'Invalid status filter.'], 400);
+                    }
                 }
             }
 

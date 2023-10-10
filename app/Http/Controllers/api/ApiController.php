@@ -19,6 +19,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\Orders;
 use App\Models\OrderItems;
 use App\Models\AdditionalItems;
+use Carbon\Carbon;
 use Illuminate\Validation\Rules\Unique;
 
 class ApiController extends Controller
@@ -43,7 +44,8 @@ class ApiController extends Controller
             if (!$order) {
                 return response()->json(['success' => false, 'message' => 'Order not found'], 404);
             }
-
+            $order->start_date = Carbon::parse($order->start_date)->format('d M Y');
+            $order->end_date = Carbon::parse($order->end_date)->format('d M Y');
             // Get the order items for the order
             $orderItems = OrderItems::where('order_id', $order->order_id)->get();
 

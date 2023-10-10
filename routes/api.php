@@ -21,11 +21,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->group(function () {
-//Order
-Route::post('/createOrder', [ApiController::class, 'createOrder']);
-Route::get('/getOrders', [ApiController::class, 'getOrders']);
-Route::get('/getOrder', [ApiController::class, 'getOrderDetails']);
-//Order
+    //Order
+    Route::post('/createOrder', [ApiController::class, 'createOrder']);
+    Route::get('/getOrders', [ApiController::class, 'getOrders']);
+    Route::get('/getOrder', [ApiController::class, 'getOrderDetails']);
+    //Order
+
     // Your authenticated routes here
     Route::get('/getUser', [ApiController::class, 'getUserDetails']);
     // Add other authenticated routes here
@@ -36,8 +37,9 @@ Route::get('/getOrder', [ApiController::class, 'getOrderDetails']);
     Route::match(['post', 'get'], '/service/delete/{id}', [ApiController::class, 'deleteService']);
     Route::get('/getServices', [ApiController::class, 'getService']);
     Route::get('/getService', [ApiController::class, 'getServiceDetail']);
+    Route::post('/assignCustomer', [ApiController::class, 'assignCustomer']);
     //service APIs
-    
+
     //customer APIs
     Route::post('/addCustomer', [ApiController::class, 'addCustomer']);
     Route::post('/customer/update/{id}', [ApiController::class, 'updateCustomer']);
@@ -45,7 +47,7 @@ Route::get('/getOrder', [ApiController::class, 'getOrderDetails']);
     Route::get('/getCustomers', [ApiController::class, 'getCustomer']);
     Route::get('/getCustomer', [ApiController::class, 'getCustomerDetail']);
     //customer APIs
-    
+
     //staff APIs
     Route::post('/addStaff', [ApiController::class, 'addStaff']);
     Route::post('/staff/update/{id}', [ApiController::class, 'updateStaff']);
@@ -53,7 +55,7 @@ Route::get('/getOrder', [ApiController::class, 'getOrderDetails']);
     Route::get('/getStaffs', [ApiController::class, 'getStaff']);
     Route::get('/getStaff', [ApiController::class, 'getStaffDetail']);
     //staff APIs
-    
+
     Route::get('/adminDashboard', [ApiController::class, 'adminDashboard']);
 
     Route::post('/user/update/{id}', [ApiController::class, 'updateUserDetail']);

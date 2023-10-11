@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'customauth' => \App\Http\Middleware\CustomAuthMiddleware::class,
         'api.auth' => \App\Http\Middleware\ApiAuthMiddleware::class,
+        'LanguageManager' => \App\Http\Middleware\LanguageManager::class,
     ];
 }

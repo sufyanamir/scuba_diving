@@ -110,14 +110,19 @@
         .openbtn {
             font-size: 20px;
             cursor: pointer;
-            background-color: #00A3FF;
-            color: white;
+            color: #00A3FF;
+            background-color: transparent;
             padding: 10px 15px;
             border: none;
+            outline:none; 
         }
-
+.openbtn:focus{
+    border: none !important;
+    outline: none !important;
+}
         .openbtn:hover {
-            background-color: #00A3F2;
+            color: #00A3F2;
+           background-color: transparent;
         }
 
         #main {
@@ -173,6 +178,9 @@
                 margin-left:150px 
 
             }
+            .closeBtn:focus{
+                outline: none
+            }
         }
 
         .main-panel {
@@ -195,7 +203,7 @@
         <div align="center">
             <img src="{{ asset('assets/images/company-logo.svg') }}" alt="Image">
         </div>
-        <button class="closeBtn" id="closeBtn" style="display:none ;" onclick="closeNav()">☰</button>
+        <button class="closeBtn" id="closeBtn" style="display:none ;" onclick="closeNav()"><i class="fa fa-close"></i></button>
         @if (session()->has('user_details'))
             <a href="/dashboard" class="link">
                 <img src="{{ asset('assets/images/d-white.svg') }}" class="white-img mb-1" alt="Image">
@@ -269,7 +277,8 @@
             <nav>
                 <div class="row p-2">
                     <div class="col-lg-9 col-6 col-xl-9">
-                        <button class="openbtn" id="closebtn" onclick="closeNav()">☰</button>
+                        <button class="openbtn" id="closebtn" onclick="closeNav()">
+                        <i class="fa fa-close"></i></button>
                         <button class="openbtn" id="openbtn" style="display: none;" onclick="openNav()">☰</button>
                     </div>
                     <div class="col-lg-3 col-6 col-xl-3 d-flex justify-content-evenly">

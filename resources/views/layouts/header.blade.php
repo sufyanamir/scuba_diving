@@ -79,6 +79,10 @@
             background-color: #FFFF;
             color: black;
         }
+        .sidebar a.linkk {
+            background-color: #FFFF;
+            color: black;
+        }
 
         .sidebar a:hover .white-img {
 
@@ -205,54 +209,54 @@
         </div>
         <button class="closeBtn" id="closeBtn" style="display:none ;" onclick="closeNav()"><i class="fa fa-close"></i></button>
         @if (session()->has('user_details'))
-            <a href="/dashboard" class="link">
+            <a href="/dashboard" class="link {{Request::is('dashboard') ? 'linkk ':''}}">
                 <img src="{{ asset('assets/images/d-white.svg') }}" class="white-img mb-1" alt="Image">
                 <img src="{{ asset('assets/images/d-dark.svg') }}" class="dark-img mb-1" alt="Image">
                 @lang('lang.dashboard')
             </a>
             @if (session('user_details')['role'] == '0')
-                <a href="/company" class="link">
+                <a href="/company" class="link {{Request::is('compnay') ? 'linkk ':''}}">
                     <img src="{{ asset('assets/images/c-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img mb-1" alt="Image">
                     @lang('lang.company')
                 </a>
             @endif
             @if (session('user_details')['role'] == '0')
-                <a href="/requests" class="link">
+                <a href="/requests" class="link {{Request::is('requests') ? 'linkk ':''}}">
                     <img src="{{ asset('assets/images/c-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img mb-1" alt="Image">
                     @lang('lang.requests')
                 </a>
             @endif
             @if (session('user_details')['role'] == '1')
-                <a href="/staff" class="link">
+                <a href="/staff" class="link {{Request::is('staff') ? 'linkk ':''}}">
                     <img src="{{ asset('assets/images/c-white.svg') }}" class="white-img mb-1" alt="Image">
-                    <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img mb-1" alt="Image">
+                    <img src="{{ asset('assets/images/c-dark.svg') }}" class="dark-img  mb-1" alt="Image">
                     @lang('lang.staff')
                 </a>
             @endif
             @if (session('user_details')['role'] == '1')
-                <a href="/services" class="link">
+                <a href="/services" class="link {{Request::is('services') ? 'linkk ':''}}">
                     <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image">
                     @lang('lang.services')
                 </a>
             @endif
             @if (session('user_details')['role'] == '1')
-                <a href="/customers" class="link">
+                <a href="/customers" class="link {{Request::is('customers') ? 'linkk ':''}}">
                     <img src="{{ asset('assets/images/u-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/u-dark.svg') }}" class="dark-img mb-1" alt="Image">
                     @lang('lang.customers')
                 </a>
             @endif
             @if (session('user_details')['role'] == '1')
-                <a href="/gallery" class="link">
+                <a href="/gallery" class="link {{Request::is('gallery') ? 'linkk ':''}}">
                     <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image">
                     <img src="{{ asset('assets/images/p-dark.svg') }}" class="dark-img mb-1" alt="Image">
                     @lang('lang.gallery')
                 </a>
             @endif
-            <a href="/settings" class="link">
+            <a href="/settings" class="link {{Request::is('settings') ? 'linkk ':''}}">
                <span class="white-image mb-1 " style="margin-right:10px;"><i class="fa fa-cog" aria-hidden="true"></i>
                </span>
                     {{-- <img src="{{ asset('assets/images/p-white.svg') }}" class="white-img mb-1" alt="Image"> --}}

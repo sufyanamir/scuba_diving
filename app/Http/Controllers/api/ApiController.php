@@ -744,6 +744,7 @@ class ApiController extends Controller
             }
 
             $customer->staff_id = $staffId;
+            $customer->customer_assigned = true;
             $customer->save();
 
             return response()->json(['success' => true, 'message' => 'The customer has assigned to the staff'], 200);
@@ -842,7 +843,7 @@ class ApiController extends Controller
                 }
             }
 
-            $customers = $query->select('customer_id', 'customer_name', 'customer_email', 'customer_image', 'customer_status')->get();
+            $customers = $query->select('customer_id', 'customer_name', 'customer_email', 'customer_image', 'customer_status', 'customer_assigned')->get();
 
             if ($customers->count() > 0) {
                 $customerData = $customers->map(function ($customer) use ($statusMapping) {

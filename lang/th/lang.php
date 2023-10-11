@@ -179,6 +179,7 @@ return [
   "customers" => "ลูกค้า",
   "total_customers" => "ลูกค้าทั้งหมด",
   "add_customer" => "เพิ่มลูกค้า",
+  "+add_customer" => "+เพิ่มลูกค้า",
   "staff" => "พนักงาน",
   "total_staff" => "พนักงานทั้งหมด",
   "add_staff" => "เพิ่มพนักงาน",

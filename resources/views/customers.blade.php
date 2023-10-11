@@ -68,7 +68,7 @@
                                     $iconSrc = isset($icons[$link]) ? $icons[$link] : 'default-icon.png'; // Use a default icon if not found
                                     $iconAlt = ucfirst(str_replace('.com', '', $link)); // Generate alt text
                                 
-                                    echo "<a href='$link' target='_blank'><img src='$iconSrc' alt='$iconAlt' /></a>";
+                                    echo "<a href='$link' target='_blank'><img style='width: 33%' src='$iconSrc' alt='$iconAlt' /></a>";
                                 }
                                 ?>
                             </td>

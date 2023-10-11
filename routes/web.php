@@ -12,6 +12,7 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\ServiceRequestsController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Middleware\LanguageManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ use App\Http\Controllers\SettingsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(['customauth'])->group(function () {
+Route::middleware(['customauth','LanguageManager'])->group(function () {
 
 Route::get('/settings',[SettingsController::class,'index']);
 Route::post('/settings/update/{id}',[SettingsController::class,'update']);

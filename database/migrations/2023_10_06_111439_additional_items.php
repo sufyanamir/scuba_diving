@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('order_additional_items', function(Blueprint $table){
             $table->id('additional_item_id');
-            $table->integer('order_id');
-            $table->string('additional_item_name');
-            $table->string('additional_item_cost');
+            $table->integer('order_id')->nullable();
+            $table->string('additional_item_name')->nullable();
+            $table->string('additional_item_cost')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });

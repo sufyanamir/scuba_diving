@@ -734,13 +734,17 @@ class ApiController extends Controller
             $staffId = $validatedData['staff_id'];
             $customerId = $validatedData['customer_id'];
 
-            $customer = Customers::where('customer_id', $customerId)->where('company_id', $user->company_id)->where('customer_status', [1, 2])->first();
+            $customer = Customers::where('customer_id', $customerId)->where('company_id', $user->company_id)->whereIn('customer_status', [1, 2])->first();
             $staff = User::where('id', $staffId)->where('user_role', '2')->where('company_id', $user->company_id)->first();
 
             if (!$staff) {
                 return response()->json(['success' => false, 'message' => 'staff not found!'], 404);
             } elseif (!$customer) {
                 return response()->json(['success' => false, 'message' => 'customer not found!'], 404);
+            }
+
+            if ($customer->customer_assigned !== 0) {
+                return response()->json(['success' => false, 'message' => 'Customer is already assigned to a staff.'], 400);
             }
 
             $customer->staff_id = $staffId;

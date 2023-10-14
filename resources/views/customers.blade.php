@@ -44,7 +44,7 @@
                     @foreach ($customers as $customer)
                         <tr>
                             <td>
-                                <img class="img-size" src="{{ 'assets/images/nav-user.svg' }}" alt="image">
+                                <img class="img-size" src="{{ (isset($customer->customer_image)) ? asset($customer->customer_image) : 'assets/images/nav-user.svg'}}" alt="image">
                             </td>
                             <td>{{ $customer->customer_name }}</td>
                             <td>{{ $customer->customer_email }}</td>

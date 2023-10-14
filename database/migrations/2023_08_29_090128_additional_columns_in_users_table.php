@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('user_image')->nullable();
             $table->text('social_links')->nullable();
             $table->integer('user_role')->nullable();
+            $table->text('app_url')->nullable();
         });
     }
 

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('customer_social_links');
             $table->text('customer_image')->nullable();
             $table->integer('customer_status')->default(0);
+            $table->text('app_url')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
 

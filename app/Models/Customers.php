@@ -28,6 +28,7 @@ class Customers extends Model
         'customer_image',
         'staff_id',
         'customer_assigned',
+        'app_url'
     ];
 
     public $timestamps = true;

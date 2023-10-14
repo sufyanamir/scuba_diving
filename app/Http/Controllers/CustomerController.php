@@ -66,6 +66,7 @@ class CustomerController extends Controller
             'added_user_id' => $validatedData['added_user_id'],
             'customer_social_links' => $socailLinks,
             'customer_status' => $status,
+            'app_url' => 'https://scubadiving.thewebconcept.tech/',
             // Add other fields as needed
         ];
 
@@ -91,7 +92,7 @@ class CustomerController extends Controller
             // Update the 'upload_image' field for the inserted record
             DB::table('customers')
                 ->where('customer_id', $lastInsertedId)
-                ->update(['customer_image' => $imageName]);
+                ->update(['customer_image' => 'storage/customer_images/' . $imageName]);
         }
         
         // Optionally, you can redirect back with a success message
@@ -124,7 +125,7 @@ class CustomerController extends Controller
                 $ext = $image->getClientOriginalExtension();
                 $imageName = time().".".$ext;
                 $image->storeAs('public/customer_images', $imageName);
-                $user->customer_image = $imageName; 
+                $user->customer_image = 'storage/customer_images' . $imageName; 
 
 
         }   

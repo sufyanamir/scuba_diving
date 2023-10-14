@@ -90,6 +90,7 @@ class ServicesController extends Controller
             'added_user_id' => $validatedData['added_user_id'],
             'company_id' => $validatedData['company_id'],
             'service_duration' => $validatedData['service_duration'],
+            'app_url' => 'https://scubadiving.thewebconcept.tech/',
         ]);
 
         // Upload and store the service image if it exists
@@ -97,7 +98,7 @@ class ServicesController extends Controller
             $image = $request->file('upload_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->storeAs('public/service_images', $imageName); // Adjust storage path as needed
-            $service->service_image = $imageName;
+            $service->service_image = 'storage/service_images/' . $imageName;
         }
 
         $service->save();
@@ -159,7 +160,7 @@ class ServicesController extends Controller
             $image = $request->file('upload_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->storeAs('public/service_images', $imageName); // Adjust storage path as needed
-            $service->service_image = $imageName;
+            $service->service_image = 'storage/service_images/' . $imageName;
         }
 
         $service->save();

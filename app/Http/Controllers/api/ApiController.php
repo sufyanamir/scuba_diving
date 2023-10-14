@@ -19,11 +19,73 @@ use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\Orders;
 use App\Models\OrderItems;
 use App\Models\AdditionalItems;
+use App\Models\imageGallery;
 use Carbon\Carbon;
 use Illuminate\Validation\Rules\Unique;
 
 class ApiController extends Controller
 {
+    protected $appUrl = 'https://scubadiving.thewebconcept.tech/';
+    //----------------------------------------------------Image APIs------------------------------------------------------//
+    //post image
+    public function getImages(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $companyId = $user->company_id;
+    
+            $customerId = $request->input('customerId');
+            $images = imageGallery::where(['customer_id' => $customerId, 'company_id' => $companyId])->get();
+
+            if ($images->count() === 0 ) {
+                return response()->json(['success' => false, 'message' => 'Images not found of this customer'], 404);
+            }
+    
+            return response()->json(['success' => true, 'data' => $images], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //post image
+    
+    //post image
+    public function postImage(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $validatedData = $request->validate([
+                'added_user_id' => 'nullable|numeric',
+                'staff_id' => 'nullable|numeric',
+                'customer_id' => 'required|numeric',
+                'order_id' => 'nullable|numeric',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            ]);
+
+            $postImage = new imageGallery([
+                'customer_id' => $validatedData['customer_id'],
+                'company_id' => $user->company_id,
+                'order_id' => $validatedData['order_id'],
+                'staff_id' => $validatedData['staff_id'],
+                'added_user_id' => $validatedData['added_user_id'],
+                'app_url' => $this->appUrl,
+            ]);
+
+            if ($request->hasFile('upload_image')) {
+                $image = $request->file('upload_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/image_gallery', $imageName); // Adjust storage path as needed
+                $postImage->stored_image = 'storage/image_gallery/' . $imageName;
+            }
+
+            $postImage->save();
+            
+            return response()->json(['success' => true, 'message' => 'Image uploaded successfully!'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //post image
+    //----------------------------------------------------Image APIs------------------------------------------------------//
 
     //----------------------------------------------------Order APIs------------------------------------------------------//
 
@@ -396,7 +458,7 @@ class ApiController extends Controller
             $service->service_duration = $validatedData['service_duration'];
             $service->added_user_id = $user->id;
             $service->company_id = $user->company_id;
-            $service->app_url = 'https://scubadiving.thewebconcept.tech/';
+            $service->app_url = $this->appUrl;
 
             // Upload and store the updated service image
             if ($request->hasFile('upload_image')) {
@@ -469,7 +531,7 @@ class ApiController extends Controller
                 'service_duration' => $validatedData['service_duration'],
                 'added_user_id' => $user->id,
                 'company_id' => $user->company_id,
-                'app_url' => 'https://scubadiving.thewebconcept.tech/',
+                'app_url' => $this->appUrl,
             ]);
 
             // Upload and store the service image if it exists
@@ -644,7 +706,7 @@ class ApiController extends Controller
             $user->category = $validatedData['category'];
             $user->company_id = $user->company_id;
             $user->social_links = $socailLinks;
-            $user->app_url = 'https://scubadiving.thewebconcept.tech/';
+            $user->app_url = $this->appUrl;
             $user->update();
 
             return response()->json(['success' => true, 'message' => 'Staff updated successfully!'], 200);
@@ -684,7 +746,7 @@ class ApiController extends Controller
                 'company_id' => $user->company_id,
                 'social_links' => $socailLinks,
                 'user_role' => '2',
-                'app_url' => 'https://scubadiving.thewebconcept.tech/',
+                'app_url' => $this->appUrl,
                 // Add other fields as needed
             ];
 
@@ -925,7 +987,7 @@ class ApiController extends Controller
                 'added_user_id' => $user->id,
                 'customer_social_links' => $socailLinks,
                 'customer_status' => $status,
-                'app_url' => 'https://scubadiving.thewebconcept.tech/',
+                'app_url' => $this->appUrl,
                 // Add other fields as needed
             ];
 
@@ -1008,7 +1070,7 @@ class ApiController extends Controller
             $user->customer_phone = $validatedData['phone'];
             $user->customer_address = $validatedData['address'];
             $user->customer_social_links = $socailLinks;
-            $user->app_url = 'https://scubadiving.thewebconcept.tech/';
+            $user->app_url = $this->appUrl;
             $user->update();
 
             return response()->json(['success' => true, 'message' => 'Customer updated successfully'], 200);

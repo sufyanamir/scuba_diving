@@ -396,13 +396,14 @@ class ApiController extends Controller
             $service->service_duration = $validatedData['service_duration'];
             $service->added_user_id = $user->id;
             $service->company_id = $user->company_id;
+            $service->app_url = 'https://scubadiving.thewebconcept.tech/';
 
             // Upload and store the updated service image
             if ($request->hasFile('upload_image')) {
                 $image = $request->file('upload_image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/service_images', $imageName); // Adjust storage path as needed
-                $service->service_image = $imageName;
+                $service->service_image = 'storage/service_images/' . $imageName;
             }
 
             $service->save();
@@ -468,6 +469,7 @@ class ApiController extends Controller
                 'service_duration' => $validatedData['service_duration'],
                 'added_user_id' => $user->id,
                 'company_id' => $user->company_id,
+                'app_url' => 'https://scubadiving.thewebconcept.tech/',
             ]);
 
             // Upload and store the service image if it exists
@@ -475,7 +477,7 @@ class ApiController extends Controller
                 $image = $request->file('upload_image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/service_images', $imageName); // Adjust storage path as needed
-                $service->service_image = $imageName;
+                $service->service_image = 'storage/service_images/' . $imageName;
             }
 
             $service->save();
@@ -624,7 +626,7 @@ class ApiController extends Controller
                 $ext = $image->getClientOriginalExtension();
                 $imageName = time() . "." . $ext;
                 $image->storeAs('public/staff_images', $imageName);
-                $user->user_image = $imageName;
+                $user->user_image = 'storage/staff_images/' . $imageName;
             }
 
 
@@ -642,6 +644,7 @@ class ApiController extends Controller
             $user->category = $validatedData['category'];
             $user->company_id = $user->company_id;
             $user->social_links = $socailLinks;
+            $user->app_url = 'https://scubadiving.thewebconcept.tech/';
             $user->update();
 
             return response()->json(['success' => true, 'message' => 'Staff updated successfully!'], 200);
@@ -681,6 +684,7 @@ class ApiController extends Controller
                 'company_id' => $user->company_id,
                 'social_links' => $socailLinks,
                 'user_role' => '2',
+                'app_url' => 'https://scubadiving.thewebconcept.tech/',
                 // Add other fields as needed
             ];
 
@@ -707,7 +711,7 @@ class ApiController extends Controller
                 // Update the 'upload_image' field for the inserted record
                 DB::table('users')
                     ->where('id', $lastInsertedId)
-                    ->update(['user_image' => $imageName]);
+                    ->update(['user_image' => 'storage/staff_images/' . $imageName]);
             }
 
             // Optionally, you can redirect back with a success message
@@ -921,6 +925,7 @@ class ApiController extends Controller
                 'added_user_id' => $user->id,
                 'customer_social_links' => $socailLinks,
                 'customer_status' => $status,
+                'app_url' => 'https://scubadiving.thewebconcept.tech/',
                 // Add other fields as needed
             ];
 
@@ -946,7 +951,7 @@ class ApiController extends Controller
                 // Update the 'upload_image' field for the inserted record
                 DB::table('customers')
                     ->where('customer_id', $lastInsertedId)
-                    ->update(['customer_image' => $imageName]);
+                    ->update(['customer_image' => 'storage/customer_images/' . $imageName]);
             }
 
             // Optionally, you can redirect back with a success message
@@ -1003,6 +1008,7 @@ class ApiController extends Controller
             $user->customer_phone = $validatedData['phone'];
             $user->customer_address = $validatedData['address'];
             $user->customer_social_links = $socailLinks;
+            $user->app_url = 'https://scubadiving.thewebconcept.tech/';
             $user->update();
 
             return response()->json(['success' => true, 'message' => 'Customer updated successfully'], 200);

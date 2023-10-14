@@ -30,7 +30,7 @@
                 @foreach($services as $item)
                 <tr>
                     <td>
-                    <img class="img-size" src="{{'assets/images/nav-user.svg'}}" alt="image">
+                    <img class="img-size" src="{{ (isset($item->service_image)) ? asset($item->service_image) : 'assets/images/nav-user.svg'}}" alt="image">
                     </td>
                     <td>{{ $item->service_name }}</td>
                     <td>{{ $item->service_subtitle }}</td>

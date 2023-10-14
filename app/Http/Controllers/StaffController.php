@@ -56,6 +56,7 @@ class StaffController extends Controller
             'company_id' => $validatedData['company_id'],
             'social_links' => $socailLinks,
             'user_role' => '2',
+            'app_url' => 'https://scubadiving.thewebconcept.tech/',
             // Add other fields as needed
         ];
 
@@ -82,7 +83,7 @@ class StaffController extends Controller
             // Update the 'upload_image' field for the inserted record
             DB::table('users')
                 ->where('id', $lastInsertedId)
-                ->update(['user_image' => $imageName]);
+                ->update(['user_image' => 'storge/staff_images/' . $imageName]);
         }
 
         // Optionally, you can redirect back with a success message
@@ -117,7 +118,7 @@ class StaffController extends Controller
             $ext = $image->getClientOriginalExtension();
             $imageName = time() . "." . $ext;
             $image->storeAs('public/staff_images', $imageName);
-            $user->user_image = $imageName;
+            $user->user_image = 'storage/staff_images/' . $imageName;
         }
 
 

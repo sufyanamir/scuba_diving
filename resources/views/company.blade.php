@@ -28,7 +28,7 @@
                 @foreach($company as $item)
                 <tr>
                     <td>
-                    <img class="img-size" src="{{'assets/images/nav-user.svg'}}" alt="image">
+                    <img class="img-size" src="{{ (isset($item->company_image)) ? asset($item->company_image) : 'assets/images/nav-user.svg'}}" alt="image">
                     </td>
                     <td>{{ $item->company_name }}</td>
                     <td>{{ $item->company_email }}</td>

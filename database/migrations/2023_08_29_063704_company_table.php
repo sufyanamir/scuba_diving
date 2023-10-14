@@ -20,6 +20,7 @@ return new class extends Migration
             $table->bigInteger('company_phone')->nullable();
             $table->text('company_address')->nullable();
             $table->text('company_image')->nullable();
+            $table->text('app_url')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
 

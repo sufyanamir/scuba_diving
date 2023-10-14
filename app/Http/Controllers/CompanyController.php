@@ -53,6 +53,7 @@ class CompanyController extends Controller
                 'company_email' => $validatedData['email'],
                 'company_phone' => $validatedData['phone'],
                 'company_address' => $validatedData['address'],
+                'app_url' => 'https://scubadiving.thewebconcept.tech/',
             ];
 
             // Upload and store the company image if it exists
@@ -60,7 +61,7 @@ class CompanyController extends Controller
                 $image = $request->file('upload_image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->storeAs('public/company_images', $imageName); // Adjust storage path as needed
-                $companyData['company_image'] = $imageName;
+                $companyData['company_image'] = 'storage/company_images/' . $imageName;
             }
 
             // Insert data into the 'company' table using DB facade
@@ -75,6 +76,7 @@ class CompanyController extends Controller
                 'password' => md5($validatedData['password']),
                 'company_id' => $companyID,
                 'user_role' => '1',
+                'app_url' => 'https://scubadiving.thewebconcept.tech/',
                 // Add other fields as needed
             ]);
 
@@ -146,7 +148,7 @@ class CompanyController extends Controller
             $ext = $image->getClientOriginalExtension();
             $imageName = time() . "." . $ext;
             $image->storeAs('public/company_images', $imageName);
-            $company->company_image = $imageName;
+            $company->company_image = 'storage/company_images/' . $imageName;
         }
 
         $company->company_name = $validatedData['name'];

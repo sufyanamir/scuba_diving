@@ -69,7 +69,7 @@ class SettingsController extends Controller
             $image->storeAs('public/admins_images', $imageName);
     
             // Update the user's profile image
-            $user->user_image = $imageName;
+            $user->user_image = 'storage/admins_images/' . $imageName;
         }
 
         $user->name = $validatedData['user_name'];

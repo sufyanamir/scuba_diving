@@ -44,6 +44,7 @@ public function customers()
         'company_phone',
         'company_address',
         'company_image',
+        'app_url'
     ];
 
     public $timestamps = true;

@@ -54,7 +54,6 @@ class ApiController extends Controller
         $user = Auth::user();
         try {
             $validatedData = $request->validate([
-                'added_user_id' => 'nullable|numeric',
                 'staff_id' => 'nullable|numeric',
                 'customer_id' => 'required|numeric',
                 'order_id' => 'nullable|numeric',
@@ -66,7 +65,7 @@ class ApiController extends Controller
                 'company_id' => $user->company_id,
                 'order_id' => $validatedData['order_id'],
                 'staff_id' => $validatedData['staff_id'],
-                'added_user_id' => $validatedData['added_user_id'],
+                'added_user_id' => $user->id,
                 'app_url' => $this->appUrl,
             ]);
 

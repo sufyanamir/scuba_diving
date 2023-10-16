@@ -28,57 +28,66 @@ class ApiController extends Controller
     protected $appUrl = 'https://scubadiving.thewebconcept.tech/';
     //----------------------------------------------------Image APIs------------------------------------------------------//
     //post image
-    public function getImages(Request $request)
+    public function getMedia(Request $request)
     {
         $user = Auth::user();
         try {
             $companyId = $user->company_id;
-    
+
             $customerId = $request->input('customerId');
             $images = imageGallery::where(['customer_id' => $customerId, 'company_id' => $companyId])->get();
 
-            if ($images->count() === 0 ) {
+            if ($images->count() === 0) {
                 return response()->json(['success' => false, 'message' => 'Images not found of this customer'], 404);
             }
-    
+
             return response()->json(['success' => true, 'data' => $images], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
     //post image
-    
+
     //post image
-    public function postImage(Request $request)
+    public function postMedia(Request $request)
     {
         $user = Auth::user();
+
         try {
             $validatedData = $request->validate([
                 'staff_id' => 'nullable|numeric',
                 'customer_id' => 'required|numeric',
                 'order_id' => 'nullable|numeric',
-                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+                'media_type' => 'required|string',
+                'upload_media' => 'required|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi', // Allow any size for videos
             ]);
 
-            $postImage = new imageGallery([
+            $postMedia = new imageGallery([
                 'customer_id' => $validatedData['customer_id'],
                 'company_id' => $user->company_id,
                 'order_id' => $validatedData['order_id'],
                 'staff_id' => $validatedData['staff_id'],
+                'media_type' => $validatedData['media_type'],
                 'added_user_id' => $user->id,
                 'app_url' => $this->appUrl,
             ]);
 
-            if ($request->hasFile('upload_image')) {
-                $image = $request->file('upload_image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/image_gallery', $imageName); // Adjust storage path as needed
-                $postImage->stored_image = 'storage/image_gallery/' . $imageName;
+            if ($request->hasFile('upload_media')) {
+                $media = $request->file('upload_media');
+                $mediaExtension = $media->getClientOriginalExtension();
+                $mediaName = time() . '.' . $mediaExtension;
+                $storagePath = $mediaExtension === 'mp4' || $mediaExtension === 'mov' || $mediaExtension === 'avi' ?
+                    'public/video_gallery' : 'public/image_gallery';
+
+                $media->storeAs($storagePath, $mediaName);
+
+                $postMedia->stored_media = 'storage/' . ($mediaExtension === 'mp4' || $mediaExtension === 'mov' || $mediaExtension === 'avi' ?
+                    'video_gallery' : 'image_gallery') . '/' . $mediaName;
             }
 
-            $postImage->save();
-            
-            return response()->json(['success' => true, 'message' => 'Image uploaded successfully!'], 200);
+            $postMedia->save();
+
+            return response()->json(['success' => true, 'message' => 'Media uploaded successfully!'], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -615,7 +624,7 @@ class ApiController extends Controller
             }
             $query->orderBy('id', 'desc');
 
-            $staff = $query->select('id', 'name', 'category as role', 'user_image')->get();
+            $staff = $query->select('id', 'name', 'category as role', 'user_image', 'app_url')->get();
 
             if ($staff->count() > 0) {
                 return response()->json(['success' => true, 'data' => ['staff' => $staff]], 200);
@@ -912,7 +921,7 @@ class ApiController extends Controller
                 }
             }
 
-            $customers = $query->select('customer_id', 'customer_name', 'customer_email', 'customer_image', 'customer_status', 'customer_assigned')->get();
+            $customers = $query->select('customer_id', 'customer_name', 'customer_email', 'customer_image', 'app_url', 'customer_status', 'customer_assigned')->get();
 
             if ($customers->count() > 0) {
                 $customerData = $customers->map(function ($customer) use ($statusMapping) {

@@ -21,8 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/postImage', [ApiController::class, 'postImage']);
-    Route::get('/getImages', [ApiController::class, 'getImages']);
+    Route::post('/postMedia', [ApiController::class, 'postMedia']);
+    Route::get('/getMedia', [ApiController::class, 'getMedia']);
     //Order
     Route::post('/createOrder', [ApiController::class, 'createOrder']);
     Route::get('/getOrders', [ApiController::class, 'getOrders']);

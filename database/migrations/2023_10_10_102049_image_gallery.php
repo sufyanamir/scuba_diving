@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('company_id');
             $table->integer('customer_id');
             $table->integer('order_id')->nullable();
-            $table->text('stored_image');
+            $table->text('stored_media');
             $table->text('app_url')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();

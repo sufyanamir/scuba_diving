@@ -19,8 +19,9 @@ class imageGallery extends Model
         'company_id',
         'customer_id',
         'order_id',
-        'stored_image',
-        'app_url'
+        'stored_media',
+        'app_url',
+        'media_type'
     ];
 
     public $timestamps = true;

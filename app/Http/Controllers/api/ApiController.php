@@ -519,8 +519,8 @@ class ApiController extends Controller
                 'description' => 'required|string|max:400',
                 'service_duration' => 'required|numeric',
                 'servicesOverheads' => 'required|array',
-                'servicesOverheads.*.cost_name' => 'required|string',
-                'servicesOverheads.*.cost' => 'required|numeric',
+                'servicesOverheads.*.cost_name' => 'nullable|string',
+                'servicesOverheads.*.cost' => 'nullable|numeric',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
             $existingService = Services::where('service_name', $validatedData['name'])

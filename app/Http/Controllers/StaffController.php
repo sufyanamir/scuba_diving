@@ -83,7 +83,7 @@ class StaffController extends Controller
             // Update the 'upload_image' field for the inserted record
             DB::table('users')
                 ->where('id', $lastInsertedId)
-                ->update(['user_image' => 'storge/staff_images/' . $imageName]);
+                ->update(['user_image' => 'storage/staff_images/' . $imageName]);
         }
 
         // Optionally, you can redirect back with a success message

@@ -41,7 +41,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'Images not found of this customer'], 404);
             }
 
-            return response()->json(['success' => true, 'data' => $images], 200);
+            return response()->json(['success' => true, 'data' => ['media' => $images]], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }

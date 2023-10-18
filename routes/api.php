@@ -21,8 +21,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    //feed
+    Route::get('/getFeed', [ApiController::class, 'getFeed']);
+    //feed
+
+    //image gallery
     Route::post('/postMedia', [ApiController::class, 'postMedia']);
     Route::get('/getMedia', [ApiController::class, 'getMedia']);
+    //image gallery
+
     //Order
     Route::post('/createOrder', [ApiController::class, 'createOrder']);
     Route::get('/getOrders', [ApiController::class, 'getOrders']);
@@ -68,4 +75,7 @@ Route::middleware('auth:sanctum')->post('/logout', [ApiController::class, 'logou
 //authentication
 Route::match(['post'], '/login', [ApiController::class, 'login']);
 Route::match(['post'], '/register', [ApiController::class, 'makeRequest']);
+Route::post('/forgotPassword', [ApiController::class, 'forgotPassword']);
+Route::post('/validateOtp', [ApiController::class, 'validateOtp']);
+Route::post('/resetPassword', [ApiController::class, 'resetPassword']);
 //authenticationl

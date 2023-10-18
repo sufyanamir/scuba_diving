@@ -913,7 +913,6 @@ class ApiController extends Controller
         $search = $request->input('search');
         $statusFilter = $request->input('status');
         $assignCustomers = $request->input('assignCustomers');
-        $staffId = $request->input('staffId');
 
         // Define a mapping of status labels to their numeric values
         $statusMapping = [
@@ -930,12 +929,18 @@ class ApiController extends Controller
                 $query->where('customer_name', 'like', '%' . $search . '%');
             }
 
-            // Add filtering by staff_id if staffId is provided
-            if (!empty($staffId)) {
-                $query->where('staff_id', $staffId);
-            }
-
             $query->orderBy('customer_id', 'desc');
+
+            // Map the user_role string to its numeric value (1 for admin, 2 for staff)
+            $userRoleMapping = [
+                'admin' => 1,
+                'staff' => 2,
+            ];
+
+            if (isset($userRoleMapping[$user->user_role]) && $userRoleMapping[$user->user_role] === 2) {
+                // If the user has 'staff' role (user_role 2), filter by staff_id
+                $query->where('staff_id', $user->id);
+            }
 
             if ($assignCustomers === 'true') {
                 $query->whereIn('customer_status', [1, 2]);
@@ -1339,19 +1344,21 @@ class ApiController extends Controller
                 'password' => 'nullable',
                 'address' => 'nullable|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-                'role' => 'required|in:1,2',
             ]);
 
-            $folder = ($request->role == 1) ? 'company_images' : 'staff_images';
+            $folder = ($user->user_role == 1) ? 'company_images' : 'staff_images';
 
             if ($request->hasFile('upload_image')) {
 
                 if ($user->user_image) {
+                    // Remove the 'public/' prefix to store only the relative path
                     Storage::delete($user->user_image);
                 }
 
-                $imagePath = $request->file('upload_image')->store('public/' . $folder);
-                $user->user_image = $imagePath;
+                $imagePath = $request->file('upload_image')->store("public/$folder");
+
+                // Update the user_image field with the completse path
+                $user->user_image = str_replace('public/', 'storage/' . $folder . '/', $imagePath);
             }
 
             // Conditionally update user attributes if they are not null
@@ -1371,7 +1378,8 @@ class ApiController extends Controller
                 $user->address = $validatedData['address'];
             }
 
-            $user->update();
+            // Save the updated user data to the database
+            $user->save();
 
             return response()->json(['success' => true, 'message' => 'Data updated successfully'], 200);
         } catch (\Exception $e) {

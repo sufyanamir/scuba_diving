@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('services_overheads', function(Blueprint $table){
             $table->id('overhead_id');
-            $table->integer('service_id');
-            $table->string('overhead_name');
-            $table->string('overhead_cost');
+            $table->integer('service_id')->nullable();
+            $table->string('overhead_name')->nullable();
+            $table->string('overhead_cost')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();
         });

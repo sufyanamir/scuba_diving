@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\forgotPasswordMail;
 use App\Models\Customers;
 use App\Models\ServiceOverheads;
 use App\Models\ServiceRequests;
@@ -21,12 +22,38 @@ use App\Models\OrderItems;
 use App\Models\AdditionalItems;
 use App\Models\imageGallery;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Unique;
 
 class ApiController extends Controller
 {
     protected $appUrl = 'https://scubadiving.thewebconcept.tech/';
     //----------------------------------------------------Image APIs------------------------------------------------------//
+    //post image
+    public function getFeed(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $companyId = $user->company_id;
+
+            $feed = imageGallery::where('company_id', $companyId)->inRandomOrder()->take(20)->get();
+
+            $feed = $feed->map(function ($item) {
+                $item['customer_name'] = Customers::where('customer_id', $item->customer_id)->value('customer_name');
+                $item['staff_name'] = User::where('id', $item->staff_id)->value('name');
+                return $item;
+            });
+            if (!$feed) {
+                return response()->json(['success' => false, 'message' => 'No data found in the feed!'], 404);
+            }
+
+            return response()->json(['success' => true, 'data' => ['feed' => $feed]], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //post image
+
     //post image
     public function getMedia(Request $request)
     {
@@ -38,7 +65,7 @@ class ApiController extends Controller
             $images = imageGallery::where(['customer_id' => $customerId, 'company_id' => $companyId])->get();
 
             if ($images->count() === 0) {
-                return response()->json(['success' => false, 'message' => 'Images not found of this customer'], 404);
+                return response()->json(['success' => false, 'message' => 'No media found of this customer'], 404);
             }
 
             return response()->json(['success' => true, 'data' => ['media' => $images]], 200);
@@ -883,9 +910,10 @@ class ApiController extends Controller
     public function getCustomer(Request $request)
     {
         $user = Auth::user();
-        $search = $request->input('search'); // Get the 'name' parameter from the request
-        $statusFilter = $request->input('status'); // Get the 'status' parameter from the request
-        $assignCustomers = $request->input('assignCustomers'); // Get the 'assignCustomers' parameter from the request
+        $search = $request->input('search');
+        $statusFilter = $request->input('status');
+        $assignCustomers = $request->input('assignCustomers');
+        $staffId = $request->input('staffId');
 
         // Define a mapping of status labels to their numeric values
         $statusMapping = [
@@ -901,19 +929,21 @@ class ApiController extends Controller
             if (!empty($search)) {
                 $query->where('customer_name', 'like', '%' . $search . '%');
             }
+
+            // Add filtering by staff_id if staffId is provided
+            if (!empty($staffId)) {
+                $query->where('staff_id', $staffId);
+            }
+
             $query->orderBy('customer_id', 'desc');
 
-            // Add status filtering if assignCustomers is true
             if ($assignCustomers === 'true') {
-                $query->whereIn('customer_status', [1, 2]); // Filter for 'active' and 'pending' statuses
+                $query->whereIn('customer_status', [1, 2]);
             } else {
                 if (!empty($statusFilter)) {
                     if ($statusFilter === 'all') {
-                    }
-                    // Check if the provided status exists in the mapping
-                    elseif (isset($statusMapping[$statusFilter])) {
+                    } elseif (isset($statusMapping[$statusFilter])) {
                         $numericStatus = $statusMapping[$statusFilter];
-                        // Add status filtering to the query
                         $query->where('customer_status', $numericStatus);
                     } else {
                         return response()->json(['success' => false, 'message' => 'Invalid status filter.'], 400);
@@ -925,7 +955,6 @@ class ApiController extends Controller
 
             if ($customers->count() > 0) {
                 $customerData = $customers->map(function ($customer) use ($statusMapping) {
-                    // Map numeric status back to status labels
                     $customer->customer_status = array_search($customer->customer_status, $statusMapping);
                     return $customer;
                 });
@@ -1188,6 +1217,96 @@ class ApiController extends Controller
     }
     //request for a service
 
+    //forgot password
+    public function forgotPassword(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'email' => 'required|string',
+            ]);
+            $email = $validatedData['email'];
+
+            $user = User::where('email', $email)->first();
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'The user does not exist.'], 400);
+            }
+
+            $otp = str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
+
+            $emailData = [
+                'name' => $user->name,
+                'otp' => $otp,
+            ];
+
+            $mail = new forgotPasswordMail($emailData);
+            try {
+                Mail::to($email)->send($mail);
+                $user->otp = $otp;
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
+
+            $user->save();
+
+            return response()->json(['success' => true, 'message' => 'Please check your mail for the otp.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //forgot password
+
+    //validate otp
+    public function validateOtp(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'otp' => 'required|integer',
+            ]);
+            $otp = $validatedData['otp'];
+
+            $otpCheck = User::where('otp', $otp)->first();
+
+            if (!$otpCheck) {
+                return response()->json(['success' => false, 'message' => 'Provided otp is incorrect!'], 400);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Otp is correct! Now you can reset your password.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //validate otp
+
+    //reset password
+    public function resetPassword(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'otp' => 'required|integer',
+                'new_password' => 'required'
+            ]);
+
+            $otp = $validatedData['otp'];
+            $password = md5($validatedData['new_password']);
+
+            $user = User::where('otp', $otp)->first;
+
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'User did not found against the provided otp!'], 404);
+            }
+
+            $user->password = $password;
+            $user->otp = $otp->delete();
+
+            $user->save();
+
+            return response()->json(['success' => true, 'message' => 'Your password is successfully changed. Now! you can login with your new password'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //reset password
+
     //----------------------------------------------------Authentication APIs------------------------------------------------------//
 
     //----------------------------------------------------User APIs------------------------------------------------------//
@@ -1195,6 +1314,11 @@ class ApiController extends Controller
     public function getUserDetails(Request $request)
     {
         $user = $request->user(); // This will give you the authenticated user
+
+        $userRoleLabel = ($user->user_role == 1) ? 'admin' : ($user->user_role == 2 ? 'staff' : 'unknown');
+
+        // Update the user_role field with the label
+        $user->user_role = $userRoleLabel;
         return response()->json(['success' => true, 'data' => ['user_details' => $user]], 200);
     }
     //get user detail

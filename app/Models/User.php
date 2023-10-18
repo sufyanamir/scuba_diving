@@ -34,7 +34,8 @@ class User extends Authenticatable
         'category',
         'user_image',
         'social_links',
-        'app_url'
+        'app_url',
+        'otp'
     ];
 
     /**

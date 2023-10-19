@@ -29,7 +29,7 @@ class ApiController extends Controller
 {
     protected $appUrl = 'https://scubadiving.thewebconcept.tech/';
     //----------------------------------------------------Image APIs------------------------------------------------------//
-    //post image
+    //get feed
     public function getFeed(Request $request)
     {
         $user = Auth::user();
@@ -52,7 +52,7 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-    //post image
+    //get feed
 
     //post image
     public function getMedia(Request $request)
@@ -937,7 +937,7 @@ class ApiController extends Controller
                 'staff' => 2,
             ];
 
-            if (isset($userRoleMapping[$user->user_role]) && $userRoleMapping[$user->user_role] === 2) {
+            if ($user->user_role == 2) {
                 // If the user has 'staff' role (user_role 2), filter by staff_id
                 $query->where('staff_id', $user->id);
             }
@@ -1294,16 +1294,16 @@ class ApiController extends Controller
             $otp = $validatedData['otp'];
             $password = md5($validatedData['new_password']);
 
-            $user = User::where('otp', $otp)->first;
+            $user = User::where('otp', $otp)->first();
 
             if (!$user) {
                 return response()->json(['success' => false, 'message' => 'User did not found against the provided otp!'], 404);
             }
 
             $user->password = $password;
-            $user->otp = $otp->delete();
 
             $user->save();
+            $user->update(['otp' => null]);
 
             return response()->json(['success' => true, 'message' => 'Your password is successfully changed. Now! you can login with your new password'], 200);
         } catch (\Exception $e) {

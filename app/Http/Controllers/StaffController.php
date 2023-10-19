@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\StaffRegistrationMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class StaffController extends Controller
@@ -46,6 +48,7 @@ class StaffController extends Controller
         $ttAcc = $request->input('tt_acc');
 
         $socailLinks = "$fbAcc,$igAcc,$ttAcc";
+        $password = rand();
 
         $dataToInsert = [
             'name' => $validatedData['name'],
@@ -57,6 +60,7 @@ class StaffController extends Controller
             'social_links' => $socailLinks,
             'user_role' => '2',
             'app_url' => 'https://scubadiving.thewebconcept.tech/',
+            'password' => $password,
             // Add other fields as needed
         ];
 
@@ -84,6 +88,17 @@ class StaffController extends Controller
             DB::table('users')
                 ->where('id', $lastInsertedId)
                 ->update(['user_image' => 'storage/staff_images/' . $imageName]);
+        }
+        $emailData = [
+            'email' => $validatedData['email'],
+            'password' => $password,
+        ];
+        $mail = new StaffRegistrationMail($emailData);
+
+        try {
+            Mail::to($validatedData['email'])->send($mail);
+        } catch (\Exception $e) {
+            return redirect('/staff')->with('status', 'Something went wrong with the email');
         }
 
         // Optionally, you can redirect back with a success message

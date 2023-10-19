@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\forgotPasswordMail;
+use App\Mail\StaffRegistrationMail;
 use App\Models\Customers;
 use App\Models\ServiceOverheads;
 use App\Models\ServiceRequests;
@@ -770,7 +771,7 @@ class ApiController extends Controller
             $fbAcc = $request->input('fb_acc');
             $igAcc = $request->input('ig_acc');
             $ttAcc = $request->input('tt_acc');
-
+            $password = rand();
             $socailLinks = "$fbAcc,$igAcc,$ttAcc";
             $user = Auth::user();
             $dataToInsert = [
@@ -783,6 +784,7 @@ class ApiController extends Controller
                 'social_links' => $socailLinks,
                 'user_role' => '2',
                 'app_url' => $this->appUrl,
+                'password' => $password,
                 // Add other fields as needed
             ];
 
@@ -810,6 +812,24 @@ class ApiController extends Controller
                 DB::table('users')
                     ->where('id', $lastInsertedId)
                     ->update(['user_image' => 'storage/staff_images/' . $imageName]);
+            } else {
+                $lastInsertedId = DB::getPdo()->lastInsertId();
+
+                DB::table('users')
+                    ->where('id', $lastInsertedId)
+                    ->update(['user_image' => 'assets/images/nav-user.svg']);
+            }
+
+            $emailData = [
+                'email' => $validatedData['email'],
+                'password' => $password,
+            ];
+            $mail = new StaffRegistrationMail($emailData);
+    
+            try {
+                Mail::to($validatedData['email'])->send($mail);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
             }
 
             // Optionally, you can redirect back with a success message
@@ -1057,6 +1077,12 @@ class ApiController extends Controller
                 DB::table('customers')
                     ->where('customer_id', $lastInsertedId)
                     ->update(['customer_image' => 'storage/customer_images/' . $imageName]);
+            } else {
+                $lastInsertedId = DB::getPdo()->lastInsertId();
+
+                DB::table('customers')
+                    ->where('customer_id', $lastInsertedId)
+                    ->update(['customer_image' => 'assets/images/nav-user.svg']);
             }
 
             // Optionally, you can redirect back with a success message

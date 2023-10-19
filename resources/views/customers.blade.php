@@ -189,7 +189,7 @@
                                                         {{-- @if ($customer->user_image) --}}
                                                         <div id="dropzone" class="dropzone">
                                                             <img id="profileImage{{ $customer->customer_id }}"
-                                                                src="{{ $customer->customer_image ? asset('storage/customer_images/' . $customer->customer_image) : 'assets/images/rectangle-image.svg' }}"
+                                                                src="{{ $customer->customer_image ? asset($customer->customer_image) : 'assets/images/rectangle-image.svg' }}"
                                                                 style="width: 100%; height: 237px; object-fit: fill;"
                                                                 alt="text">
                                                             <div class="file-input-container">
@@ -205,7 +205,7 @@
                                                         </div>
                                                         <p class="error-image text-danger d-none"
                                                             style="font-size: smaller;"></P>
-                                                        {{-- <img src="{{asset('storage/customer_images/' . $customer->user_image)}}" alt="image">
+                                                        {{-- <img src="{{asset($customer->customer_image)}}" alt="image">
                                                     @endif --}}
                                                     </div>
                                                 </div>

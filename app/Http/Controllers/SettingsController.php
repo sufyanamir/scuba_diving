@@ -39,7 +39,7 @@ class SettingsController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-         // Validate the form data
+        // Validate the form data
         $validatedData = $request->validate([
             'user_name' => 'nullable|string|max:255',
             'user_phone' => 'nullable|regex:/^[0-9]+$/|max:20',
@@ -53,30 +53,12 @@ class SettingsController extends Controller
             // Add more validation rules for other fields
         ]);
 
-        if ($request->hasFile('upload_image')) {
-            // Get the current user's profile image path
-            $currentImage = $user->user_image;
-    
-            // Check if the current image exists and delete it
-            if ($currentImage && Storage::exists("public/admins_images/$currentImage")) {
-                Storage::delete("public/admins_images/$currentImage");
-            }
-    
-            // Upload the new image
-            $image = $request->file('upload_image');
-            $ext = $image->getClientOriginalExtension();
-            $imageName = time() . "." . $ext;
-            $image->storeAs('public/admins_images', $imageName);
-    
-            // Update the user's profile image
-            $user->user_image = 'storage/admins_images/' . $imageName;
-        }
 
         $user->name = $validatedData['user_name'];
         $user->phone = $validatedData['user_phone'];
         $user->address = $validatedData['user_address'];
-        if($request->user_password){
-        $user->password = md5($validatedData['user_password']);
+        if ($request->user_password) {
+            $user->password = md5($validatedData['user_password']);
         }
         $user->update();
 
@@ -90,6 +72,24 @@ class SettingsController extends Controller
         $company->company_name = $validatedData['company_name'];
         $company->company_phone = $validatedData['company_phone'];
         $company->company_address = $validatedData['company_address'];
+        if ($request->hasFile('upload_image')) {
+            // Get the current user's profile image path
+            $currentImage = $company->company_image;
+
+            // Check if the current image exists and delete it
+            if ($currentImage && Storage::exists("public/company_images/$currentImage")) {
+                Storage::delete("public/company_images/$currentImage");
+            }
+
+            // Upload the new image
+            $image = $request->file('upload_image');
+            $ext = $image->getClientOriginalExtension();
+            $imageName = time() . "." . $ext;
+            $image->storeAs('public/company_images', $imageName);
+
+            // Update the user's profile image
+            $company->company_image = 'storage/company_images/' . $imageName;
+        }
         $company->update();
         // DB::table('company')->update([
         //     'company_name' => $validatedData['name'],

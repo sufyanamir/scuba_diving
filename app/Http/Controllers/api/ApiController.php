@@ -1350,19 +1350,38 @@ class ApiController extends Controller
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
 
-            $folder = ($user->user_role == 1) ? 'company_images' : 'staff_images';
-
-            if ($request->hasFile('upload_image')) {
-
-                if ($user->user_image) {
-                    // Remove the 'public/' prefix to store only the relative path
-                    Storage::delete($user->user_image);
+            // Check the user_role and determine the appropriate folder for image storage
+            if ($user->user_role == 1) {
+                // For user_role 1, update the company image
+                $folder = 'company_images';
+                // You might want to fetch the company details here and update the image accordingly
+                $company = Company::find($user->company_id);
+                if ($company) {
+                    // Update the company image using the company details
+                    if ($request->hasFile('upload_image')) {
+                        if ($company->company_image) {
+                            // Remove the 'public/' prefix to store only the relative path
+                            Storage::delete($company->company_image);
+                        }
+                        $imagePath = $request->file('upload_image')->store("public/$folder");
+                        // Update the company_image field with the complete path
+                        $company->company_image = str_replace('public/', 'storage/' . $folder . '/', $imagePath);
+                        // Save the updated company data to the database
+                        $company->save();
+                    }
                 }
-
-                $imagePath = $request->file('upload_image')->store("public/$folder");
-
-                // Update the user_image field with the completse path
-                $user->user_image = str_replace('public/', 'storage/' . $folder . '/', $imagePath);
+            } else {
+                // For other user roles, update the staff image as before
+                $folder = 'staff_images';
+                if ($request->hasFile('upload_image')) {
+                    if ($user->user_image) {
+                        // Remove the 'public/' prefix to store only the relative path
+                        Storage::delete($user->user_image);
+                    }
+                    $imagePath = $request->file('upload_image')->store("public/$folder");
+                    // Update the user_image field with the complete path
+                    $user->user_image = str_replace('public/', 'storage/' . $folder . '/', $imagePath);
+                }
             }
 
             // Conditionally update user attributes if they are not null

@@ -20,6 +20,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use App\Models\Orders;
 use App\Models\OrderItems;
 use App\Models\AdditionalItems;
+use App\Models\Company;
 use App\Models\imageGallery;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -1324,6 +1325,9 @@ class ApiController extends Controller
 
         // Update the user_role field with the label
         $user->user_role = $userRoleLabel;
+
+        $company = Company::find($user->company_id);
+        $user->company_name = $company ? $company->company_name : 'Unknown company';
         return response()->json(['success' => true, 'data' => ['user_details' => $user]], 200);
     }
     //get user detail

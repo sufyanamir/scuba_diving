@@ -97,7 +97,7 @@
                                             <div class="col-4">
                                                 {{-- @if ($item->service_image) --}}
                                                 <div id="dropzone" class="dropzone">
-                                                    <img id="profileImage{{$item->service_id}}" src="{{ $item->service_image ? asset('storage/service_images/' . $item->service_image) : 'assets/images/rectangle-image.svg' }}" style="width: 100%; height: 237px; object-fit: fill;" alt="text">
+                                                    <img id="profileImage{{$item->service_id}}" src="{{ $item->service_image ? asset($item->service_image) : 'assets/images/rectangle-image.svg' }}" style="width: 100%; height: 237px; object-fit: fill;" alt="text">
                                                     <div class="file-input-container">
                                                         <input value="" class="file-input" type="file" name="upload_image" id="fileInput{{$item->service_id}}">
                                                         <div class="upload-icon" onclick="document.getElementById('fileInput{{$item->service_id}}').click()">
@@ -106,7 +106,7 @@
                                                     </div>
                                                 </div>
                                                 <p class="error-image text-danger d-none" style="font-size: smaller;"></P>
-                                                {{-- <img src="{{asset('storage/service_images/' . $item->service_image)}}" alt="image">
+                                                {{-- <img src="{{asset($item->service_image)}}" alt="image">
                                                 @endif --}}
                                             </div>
                                             <div class="col-12 mb-3">

@@ -91,7 +91,7 @@
                                         <div class="col-4">
                                             {{-- @if ($item->user_image) --}}
                                             <div id="dropzone" class="dropzone">
-                                                <img id="profileImage{{$item->company_id}}" src="{{ $item->company_image ? asset('storage/company_images/' . $item->company_image) : 'assets/images/rectangle-image.svg' }}" style="width: 100%; height: 237px; object-fit: fill;" alt="text">
+                                                <img id="profileImage{{$item->company_id}}" src="{{ $item->company_image ? asset($item->company_image) : 'assets/images/rectangle-image.svg' }}" style="width: 100%; height: 237px; object-fit: fill;" alt="text">
                                                 <div class="file-input-container">
                                                     <input value="" class="file-input" type="file" name="upload_image" id="fileInput{{$item->company_id}}">
                                                     <div class="upload-icon" onclick="document.getElementById('fileInput{{$item->company_id}}').click()">

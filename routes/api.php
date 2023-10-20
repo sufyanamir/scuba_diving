@@ -21,6 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    //add company social links
+    Route::post('/addCompanyLinks', [ApiController::class, 'addCompanyLinks']);
+    //add company social links
     //feed
     Route::get('/getFeed', [ApiController::class, 'getFeed']);
     //feed

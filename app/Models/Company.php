@@ -44,7 +44,10 @@ public function customers()
         'company_phone',
         'company_address',
         'company_image',
-        'app_url'
+        'app_url',
+        'fb_acc',
+        'ig_acc',
+        'tt_acc',
     ];
 
     public $timestamps = true;

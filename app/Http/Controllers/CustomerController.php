@@ -93,6 +93,13 @@ class CustomerController extends Controller
             DB::table('customers')
                 ->where('customer_id', $lastInsertedId)
                 ->update(['customer_image' => 'storage/customer_images/' . $imageName]);
+        }else {
+            $lastInsertedId = DB::getPdo()->lastInsertId();
+    
+            // Update the 'upload_image' field for the inserted record
+            DB::table('customers')
+                ->where('customer_id', $lastInsertedId)
+                ->update(['customer_image' => 'assets/images/user.png']);
         }
         
         // Optionally, you can redirect back with a success message

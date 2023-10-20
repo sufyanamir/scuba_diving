@@ -30,6 +30,36 @@ use Illuminate\Validation\Rules\Unique;
 class ApiController extends Controller
 {
     protected $appUrl = 'https://scubadiving.thewebconcept.tech/';
+    //----------------------------------------------------company APIs------------------------------------------------------//
+    //add company soial links
+    public function addCompanyLinks(Request $request)
+    {
+        $user = Auth::user();
+        $company = Company::find($user->company_id);
+        try {
+
+            if (!$company) {
+                return response()->json(['success' => false, 'message' => 'Company not found!'], 200);
+            }
+            $validatedData = $request->validate([
+                'fb_acc' => 'nullable|string',
+                'ig_acc' => 'nullable|string',
+                'tt_acc' => 'nullable|string',
+            ]);
+
+            $company->fb_acc = $validatedData['fb_acc'];
+            $company->ig_acc = $validatedData['ig_acc'];
+            $company->tt_acc = $validatedData['tt_acc'];
+
+            $company->save();
+
+            return response()->json(['success' => true, 'message' => "Social links added to your company's profile!"], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+    //add company soial links
+    //----------------------------------------------------company APIs------------------------------------------------------//
     //----------------------------------------------------Image APIs------------------------------------------------------//
     //get feed
     public function getFeed(Request $request)
@@ -613,25 +643,47 @@ class ApiController extends Controller
 
             $query = User::where('user_role', '2')->where('company_id', $user->company_id);
 
-            // If a 'search' parameter is provided, filter staff by user name
             if (!empty($staffId)) {
                 $query->where('id', $staffId);
             }
 
             $staff = $query->first();
 
-            $response = ['success' => true, 'data' => ['staff' => $staff]];
+            if (!$staff) {
+                return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
+            }
+
+            // Split social links into individual values
+            $socialLinks = explode(',', $staff->social_links);
+
+            $staffData = [
+                'id' => $staff->id,
+                'name' => $staff->name,
+                'email' => $staff->email,
+                'email_verified_at' => $staff->email_verified_at,
+                'created_at' => $staff->created_at,
+                'updated_at' => $staff->updated_at,
+                'company_id' => $staff->company_id,
+                'phone' => $staff->phone,
+                'address' => $staff->address,
+                'category' => $staff->category,
+                'user_image' => $staff->user_image,
+                'fb_acc' => isset($socialLinks[0]) ? $socialLinks[0] : null,
+                'ig_acc' => isset($socialLinks[1]) ? $socialLinks[1] : null,
+                'tt_acc' => isset($socialLinks[2]) ? $socialLinks[2] : null,
+                'user_role' => $staff->user_role,
+                'app_url' => $staff->app_url,
+                'otp' => $staff->otp,
+            ];
+
+            $response = ['success' => true, 'data' => ['staff' => $staffData]];
 
             if ($includeCustomers) {
                 $customers = Customers::where('staff_id', $staffId)->get();
                 $response['data']['customers'] = $customers;
             }
 
-            if ($staff->count() > 0) {
-                return response()->json($response, 200);
-            } else {
-                return response()->json(['success' => false, 'message' => 'No staff found!'], 404);
-            }
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -825,7 +877,7 @@ class ApiController extends Controller
                 'password' => $password,
             ];
             $mail = new StaffRegistrationMail($emailData);
-    
+
             try {
                 Mail::to($validatedData['email'])->send($mail);
             } catch (\Exception $e) {
@@ -885,9 +937,8 @@ class ApiController extends Controller
     {
         $user = Auth::user();
         $customerId = $request->input('customerId');
-        $includeOrders = $request->input('includeOrders', false); // Add a new parameter for including orders
+        $includeOrders = $request->input('includeOrders', false);
 
-        // Define a mapping of status labels to their numeric values
         $statusMapping = [
             'new' => 0,
             'active' => 1,
@@ -911,10 +962,31 @@ class ApiController extends Controller
             // Map numeric status back to status labels
             $customer->customer_status = array_search($customer->customer_status, $statusMapping);
 
-            $response = ['success' => true, 'data' => ['customer' => $customer]];
+            // Split social links into individual values
+            $socialLinks = explode(',', $customer->customer_social_links);
+            $customerData = [
+                'customer_id' => $customer->customer_id,
+                'company_id' => $customer->company_id,
+                'added_user_id' => $customer->added_user_id,
+                'customer_name' => $customer->customer_name,
+                'customer_email' => $customer->customer_email,
+                'customer_phone' => $customer->customer_phone,
+                'customer_address' => $customer->customer_address,
+                'fb_acc' => isset($socialLinks[0]) ? $socialLinks[0] : null,
+                'ig_acc' => isset($socialLinks[1]) ? $socialLinks[1] : null,
+                'tt_acc' => isset($socialLinks[2]) ? $socialLinks[2] : null,
+                'customer_image' => $customer->customer_image,
+                'customer_status' => $customer->customer_status,
+                'app_url' => $customer->app_url,
+                'created_at' => $customer->created_at,
+                'updated_at' => $customer->updated_at,
+                'staff_id' => $customer->staff_id,
+                'customer_assigned' => $customer->customer_assigned,
+            ];
+
+            $response = ['success' => true, 'data' => ['customer' => $customerData]];
 
             if ($includeOrders) {
-                // Retrieve and include the customer's orders
                 $orders = Orders::where('customer_id', $customer->customer_id)->orderBy('order_id', 'desc')->get();
                 $response['data']['orders'] = $orders;
             }

@@ -88,6 +88,13 @@ class StaffController extends Controller
             DB::table('users')
                 ->where('id', $lastInsertedId)
                 ->update(['user_image' => 'storage/staff_images/' . $imageName]);
+        }else {
+            $lastInsertedId = DB::getPdo()->lastInsertId();
+
+            // Update the 'upload_image' field for the inserted record
+            DB::table('users')
+                ->where('id', $lastInsertedId)
+                ->update(['user_image' => 'assets/images/user.png']);
         }
         $emailData = [
             'email' => $validatedData['email'],

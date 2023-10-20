@@ -817,7 +817,7 @@ class ApiController extends Controller
 
                 DB::table('users')
                     ->where('id', $lastInsertedId)
-                    ->update(['user_image' => 'assets/images/nav-user.svg']);
+                    ->update(['user_image' => 'assets/images/user.png']);
             }
 
             $emailData = [
@@ -1082,7 +1082,7 @@ class ApiController extends Controller
 
                 DB::table('customers')
                     ->where('customer_id', $lastInsertedId)
-                    ->update(['customer_image' => 'assets/images/nav-user.svg']);
+                    ->update(['customer_image' => 'assets/images/user.png']);
             }
 
             // Optionally, you can redirect back with a success message

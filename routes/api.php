@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     //add company social links
+    Route::get('/getCompanyExpenses', [ApiController::class, 'getCompanyExpenses']);
+    Route::post('/addExpense', [ApiController::class, 'addExpense']);
     Route::post('/addCompanyLinks', [ApiController::class, 'addCompanyLinks']);
     //add company social links
     //feed
@@ -37,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/createOrder', [ApiController::class, 'createOrder']);
     Route::get('/getOrders', [ApiController::class, 'getOrders']);
     Route::get('/getOrder', [ApiController::class, 'getOrderDetails']);
+    Route::post('/updateOrderStatus', [ApiController::class, 'updateOrderStatus']);
     //Order
 
     // Your authenticated routes here

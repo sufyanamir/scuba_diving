@@ -313,6 +313,8 @@ class ApiController extends Controller
                 'company_id' => $user->company_id,
                 'total_duration' => $validatedData['total_duration'],
                 'sub_total' => $validatedData['sub_total'],
+                'app_url' => $this->appUrl,
+                'payment_reciept' => $validatedData['upload_image'],
             ]);
 
 

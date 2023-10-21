@@ -45,7 +45,7 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'No expenses found for the company'], 404);
             }
 
-            return response()->json(['success' =>true, 'data' => $expenses], 200);
+            return response()->json(['success' => true, 'data' => $expenses], 200);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
@@ -1530,10 +1530,10 @@ class ApiController extends Controller
     //get user detail
 
     //update user detail
-    public function updateUserDetail(Request $request, $id)
+    public function updateUserDetail(Request $request)
     {
         try {
-            $user = User::find($id);
+            $user = Auth::user(); // Get the authenticated user
 
             if (!$user) {
                 return response()->json(['success' => false, 'message' => 'User not found'], 404);
@@ -1542,7 +1542,7 @@ class ApiController extends Controller
             $validatedData = $request->validate([
                 'name' => 'nullable|string|max:255',
                 'phone' => 'nullable|regex:/^[0-9]+$/|max:20',
-                'password' => 'nullable',
+                // 'password' => 'nullable',
                 'address' => 'nullable|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
@@ -1590,9 +1590,9 @@ class ApiController extends Controller
                 $user->phone = $validatedData['phone'];
             }
 
-            if ($validatedData['password'] !== null) {
-                $user->password = md5($validatedData['password']);
-            }
+            // if ($validatedData['password'] !== null) {
+            //     $user->password = md5($validatedData['password']);
+            // }
 
             if ($validatedData['address'] !== null) {
                 $user->address = $validatedData['address'];
@@ -1606,7 +1606,6 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         }
     }
-
     //update user detail
     //----------------------------------------------------User APIs------------------------------------------------------//
 

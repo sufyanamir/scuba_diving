@@ -73,7 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/adminDashboard', [ApiController::class, 'adminDashboard']);
 
-    Route::post('/user/update/{id}', [ApiController::class, 'updateUserDetail']);
+    Route::post('/user/update', [ApiController::class, 'updateUserDetail']);
 });
 
 Route::middleware('auth:sanctum')->post('/logout', [ApiController::class, 'logout']);

@@ -22,6 +22,7 @@ use App\Models\Orders;
 use App\Models\OrderItems;
 use App\Models\AdditionalItems;
 use App\Models\Company;
+use App\Models\CompanyExpense;
 use App\Models\imageGallery;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -31,6 +32,61 @@ class ApiController extends Controller
 {
     protected $appUrl = 'https://scubadiving.thewebconcept.tech/';
     //----------------------------------------------------company APIs------------------------------------------------------//
+    //get expenses
+    public function getCompanyExpenses()
+    {
+        $user = Auth::user();
+
+        try {
+            // Retrieve all expenses for the user's company
+            $expenses = CompanyExpense::where('company_id', $user->company_id)->get();
+
+            if ($expenses->isEmpty()) {
+                return response()->json(['success' => false, 'message' => 'No expenses found for the company'], 404);
+            }
+
+            return response()->json(['success' =>true, 'data' => $expenses], 200);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    //get expenses
+    //company expense
+    public function addExpense(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $validatedData = $request->validate([
+                'expenses' => 'required|array', // Expenses should be an array
+                'expenses.*.expense_date' => 'required|date',
+                'expenses.*.expense_name' => 'required|string',
+                'expenses.*.expense_cost' => 'required|numeric',
+            ]);
+
+            $expenses = $validatedData['expenses'];
+
+            // Create an array to store the newly created expenses
+            $createdExpenses = [];
+
+            foreach ($expenses as $expenseData) {
+                $expense = CompanyExpense::create([
+                    'company_id' => $user->company_id,
+                    'added_user_id' => $user->id,
+                    'expense_date' => $expenseData['expense_date'],
+                    'expense_name' => $expenseData['expense_name'],
+                    'expense_cost' => $expenseData['expense_cost'],
+                ]);
+
+                $createdExpenses[] = $expense;
+            }
+
+            return response()->json(['message' => 'Expenses added successfully'], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 400);
+        }
+    }
+    //company expense
     //add company soial links
     public function addCompanyLinks(Request $request)
     {
@@ -155,6 +211,48 @@ class ApiController extends Controller
     //----------------------------------------------------Image APIs------------------------------------------------------//
 
     //----------------------------------------------------Order APIs------------------------------------------------------//
+    //update orders
+    public function updateOrderStatus(Request $request)
+    {
+        $user = Auth::user();
+
+        try {
+            $validatedData = $request->validate([
+                'order_id' => 'required|numeric',
+            ]);
+
+            // Find the order by ID
+            $order = Orders::find($validatedData['order_id']);
+
+            if (!$order) {
+                return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+            }
+
+            // Check if the order is currently in the 'pending' status (status 2)
+            if ($order->order_status === 2) {
+                // Update the order status to 'paid' (status 4)
+                $order->order_status = 4;
+                $order->save();
+
+                // Find the associated customer
+                $customer = Customers::find($order->customer_id);
+
+                if ($customer) {
+                    // Update the customer status to 'completed' (status 3)
+                    $customer->customer_status = 3;
+                    $customer->save();
+                }
+
+                return response()->json(['success' => true, 'message' => 'Order status updated to paid, and customer status updated to completed.'], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Order status cannot be updated. It may not be in the pending status.'], 400);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 400);
+        }
+    }
+
+    //update orders
 
     public function getOrderDetails(Request $request)
     {
@@ -309,12 +407,11 @@ class ApiController extends Controller
                 'order_remarks' => $validatedData['remarks'],
                 'order_total' => $validatedData['total'],
                 'order_status' => $status,
-                'payment_receipt_path' => $imagePath,
                 'company_id' => $user->company_id,
                 'total_duration' => $validatedData['total_duration'],
                 'sub_total' => $validatedData['sub_total'],
                 'app_url' => $this->appUrl,
-                'payment_reciept' => $validatedData['upload_image'],
+                'payment_receipt' => $imagePath,
             ]);
 
 

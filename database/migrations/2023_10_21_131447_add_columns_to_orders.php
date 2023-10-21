@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->text('app_url')->nullable();
-            $table->text('payment_reciept')->nullable();
         });
     }
 

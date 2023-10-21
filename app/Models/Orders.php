@@ -41,6 +41,8 @@ class Orders extends Model
         'payment_receipt',
         'sub_total',
         'total_duration',
+        'app_url',
+        'payment_reciept',
     ];
 
     public $timestamps = true;

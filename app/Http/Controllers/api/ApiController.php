@@ -836,7 +836,7 @@ class ApiController extends Controller
                 'social_links' => $socailLinks,
                 'user_role' => '2',
                 'app_url' => $this->appUrl,
-                'password' => $password,
+                'password' => md5($password),
                 // Add other fields as needed
             ];
 

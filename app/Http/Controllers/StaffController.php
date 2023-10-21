@@ -60,7 +60,7 @@ class StaffController extends Controller
             'social_links' => $socailLinks,
             'user_role' => '2',
             'app_url' => 'https://scubadiving.thewebconcept.tech/',
-            'password' => $password,
+            'password' => md5($password),
             // Add other fields as needed
         ];
 

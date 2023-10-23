@@ -1525,6 +1525,7 @@ class ApiController extends Controller
 
         $company = Company::find($user->company_id);
         $user->company_name = $company ? $company->company_name : 'Unknown company';
+        $user->company_image = $company ? $company->company_image : 'No Image';
         return response()->json(['success' => true, 'data' => ['user_details' => $user]], 200);
     }
     //get user detail
@@ -1542,7 +1543,7 @@ class ApiController extends Controller
             $validatedData = $request->validate([
                 'name' => 'nullable|string|max:255',
                 'phone' => 'nullable|regex:/^[0-9]+$/|max:20',
-                // 'password' => 'nullable',
+                'password' => 'nullable',
                 'address' => 'nullable|string|max:400',
                 'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
             ]);
@@ -1562,7 +1563,7 @@ class ApiController extends Controller
                         }
                         $imagePath = $request->file('upload_image')->store("public/$folder");
                         // Update the company_image field with the complete path
-                        $company->company_image = str_replace('public/', 'storage/' . $folder . '/', $imagePath);
+                        $company->company_image = str_replace('public/', 'storage/', $imagePath);
                         // Save the updated company data to the database
                         $company->save();
                     }
@@ -1577,7 +1578,7 @@ class ApiController extends Controller
                     }
                     $imagePath = $request->file('upload_image')->store("public/$folder");
                     // Update the user_image field with the complete path
-                    $user->user_image = str_replace('public/', 'storage/' . $folder . '/', $imagePath);
+                    $user->user_image = str_replace('public/', 'storage/', $imagePath);
                 }
             }
 
@@ -1590,9 +1591,9 @@ class ApiController extends Controller
                 $user->phone = $validatedData['phone'];
             }
 
-            // if ($validatedData['password'] !== null) {
-            //     $user->password = md5($validatedData['password']);
-            // }
+            if ($validatedData['password'] !== null) {
+                $user->password = md5($validatedData['password']);
+            }
 
             if ($validatedData['address'] !== null) {
                 $user->address = $validatedData['address'];

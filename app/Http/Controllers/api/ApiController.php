@@ -713,13 +713,18 @@ class ApiController extends Controller
             // Insert overhead data into the 'services_overheads' table for the service
             if (!empty($validatedData['servicesOverheads'])) {
                 foreach ($validatedData['servicesOverheads'] as $overhead) {
-                    ServiceOverheads::create([
-                        'service_id' => $service->service_id,
-                        'overhead_name' => $overhead['cost_name'],
-                        'overhead_cost' => $overhead['cost'],
-                    ]);
+                    if ($overhead['cost_name'] !== null || $overhead['cost'] !== null) {
+                        $overheadData = [
+                            'service_id' => $service->service_id,
+                            'overhead_name' => $overhead['cost_name'] ?? 'Default Name',
+                            'overhead_cost' => $overhead['cost'] ?? 0.0,
+                        ];
+
+                        ServiceOverheads::create($overheadData);
+                    }
                 }
             }
+
 
             // Return a success response
             return response()->json(['success' => true, 'message' => 'Service added successfully!']);

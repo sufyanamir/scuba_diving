@@ -491,7 +491,7 @@ class ApiController extends Controller
                 // $service->total_overhead_cost = $totalCost;
 
                 // Add the service data to the response array
-                $responseData[] = $service;
+                $responseData = $service;
             }
 
             if (!empty($responseData)) {

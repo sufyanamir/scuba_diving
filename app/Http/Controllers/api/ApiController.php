@@ -33,23 +33,38 @@ class ApiController extends Controller
     protected $appUrl = 'https://scubadiving.thewebconcept.tech/';
     //----------------------------------------------------company APIs------------------------------------------------------//
     //get expenses
-    public function getCompanyExpenses()
-    {
-        $user = Auth::user();
+    public function getCompanyExpenses(Request $request)
+{
+    $user = Auth::user();
 
-        try {
-            // Retrieve all expenses for the user's company
-            $expenses = CompanyExpense::where('company_id', $user->company_id)->get();
+    try {
+        // Get the 'expenseDate' query parameter from the URL
+        $expenseDate = $request->query('expenseDate');
+
+        if ($expenseDate) {
+            // Validate the 'expenseDate' format (optional, based on your requirements)
+            // You can use Carbon or other date handling libraries for more advanced date validation.
+
+            // Retrieve expenses for the user's company filtered by 'expenseDate'
+            $expenses = CompanyExpense::where('company_id', $user->company_id)
+                ->whereDate('expense_date', $expenseDate)
+                ->orderBy('expense_id', 'desc')
+                ->get();
 
             if ($expenses->isEmpty()) {
-                return response()->json(['success' => false, 'message' => 'No expenses found for the company'], 404);
+                return response()->json(['success' => false, 'message' => 'No expenses found for the company on the specified date'], 404);
             }
-
-            return response()->json(['success' => true, 'data' => $expenses], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        } else {
+            // If 'expenseDate' is not provided, retrieve all expenses for the user's company
+            $expenses = CompanyExpense::where('company_id', $user->company_id)->orderBy('expense_id', 'desc')->get();
         }
+
+        return response()->json(['success' => true, 'data' => ['expenses' => $expenses]], 200);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
+}
+
 
     //get expenses
     //company expense
@@ -84,7 +99,7 @@ class ApiController extends Controller
                 $createdExpenses[] = $expense;
             }
 
-            return response()->json(['message' => 'Expenses added successfully'], 200);
+            return response()->json(['success' => true, 'message' => 'Expenses added successfully'], 200);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], 400);
         }

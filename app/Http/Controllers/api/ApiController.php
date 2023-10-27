@@ -320,7 +320,7 @@ class ApiController extends Controller
             $user = Auth::user();
             $search = $request->input('search');
 
-            $query = Orders::select('orders.order_id', 'orders.order_total', 'customers.customer_name', 'customers.customer_image')
+            $query = Orders::select('orders.order_id', 'orders.order_total', 'orders.order_status', 'customers.customer_name', 'customers.customer_image', 'customers.customer_email')
                 ->join('customers', 'orders.customer_id', '=', 'customers.customer_id')
                 ->where('orders.company_id', $user->company_id);
 
@@ -370,7 +370,7 @@ class ApiController extends Controller
                 'total' => 'required|numeric',
                 'invoice_status' => 'required|in:pending,paid',
                 'additional_cost_total' => 'required|numeric',
-                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,pdf|max:1024',
+                'upload_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
                 'total_duration' => 'required|numeric',
                 'sub_total' => 'required|numeric',
             ]);

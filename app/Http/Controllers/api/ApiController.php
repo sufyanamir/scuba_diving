@@ -383,37 +383,18 @@ class ApiController extends Controller
                 return response()->json(['success' => false, 'message' => 'Customer not found'], 404);
             }
 
-            // // Upload and save the image if provided
-            // $uploadedImage = $request->file('upload_image');
-            // $imagePath = null; // Initialize the image path
+            // Upload and save the image if provided
+            $uploadedImage = $request->file('upload_image');
+            $imagePath = null; // Initialize the image path
 
-            // if ($uploadedImage) {
-            //     $imageName = Str::random(20) . '.' . $uploadedImage->getClientOriginalExtension();
+            if ($uploadedImage) {
+                $imageName = Str::random(20) . '.' . $uploadedImage->getClientOriginalExtension();
 
-            //     // Generate the full URL of the uploaded image
-            //     $imageUrl = url('storage/payment_receipts/' . $imageName);
+                // Generate the full URL of the uploaded image
+                $imageUrl = url('storage/payment_receipts/' . $imageName);
 
-            //     // Store the image URL in the database
-            //     $imagePath = $imageUrl;
-            // }
-            if ($request->hasFile('upload_image')) {
-                // Get the uploaded file
-                $image = $request->file('upload_image');
-
-                // Generate a unique name for the image
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-
-                // Store the image in the specified storage location
-                $image->storeAs('public/payment_receipts', $imageName); // Adjust storage path as needed
-
-                // Now, if you want to associate the uploaded image filename with the inserted record, you would need to retrieve the last inserted ID.
-                $imagePath = $image;
-                // $lastInsertedId = DB::getPdo()->lastInsertId();
-
-                // // Update the 'upload_image' field for the inserted record
-                // DB::table('users')
-                //     ->where('id', $lastInsertedId)
-                //     ->update(['user_image' => 'storage/payment_receipts/' . $imageName]);
+                // Store the image URL in the database
+                $imagePath = $imageUrl;
             }
 
             // Create an order record

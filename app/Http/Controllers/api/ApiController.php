@@ -58,11 +58,14 @@ class ApiController extends Controller
         $user = Auth::user();
         try {
             $validatedData = $request->validate([
+                'expense_date' => 'required|date',
                 'expenses' => 'required|array', // Expenses should be an array
-                'expenses.*.expense_date' => 'required|date',
                 'expenses.*.expense_name' => 'required|string',
                 'expenses.*.expense_cost' => 'required|numeric',
             ]);
+
+            // Extract the expense date from the request
+            $expenseDate = $validatedData['expense_date'];
 
             $expenses = $validatedData['expenses'];
 
@@ -73,7 +76,7 @@ class ApiController extends Controller
                 $expense = CompanyExpense::create([
                     'company_id' => $user->company_id,
                     'added_user_id' => $user->id,
-                    'expense_date' => $expenseData['expense_date'],
+                    'expense_date' => $expenseDate, // Set the common expense date
                     'expense_name' => $expenseData['expense_name'],
                     'expense_cost' => $expenseData['expense_cost'],
                 ]);
@@ -435,7 +438,7 @@ class ApiController extends Controller
 
             if ($customer) {
                 $customer->staff_id = null;
-                $customer->customer_assigned = null;
+                $customer->customer_assigned = 0;
                 if ($status == 4) {
                     $customer->customer_status = 1;
                 } else {

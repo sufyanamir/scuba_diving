@@ -434,12 +434,13 @@ class ApiController extends Controller
             }
 
             if ($customer) {
+                $customer->staff_id = null;
+                $customer->customer_assigned = null;
                 if ($status == 4) {
                     $customer->customer_status = 1;
                 } else {
                     $customer->customer_status = 2;
                 }
-
                 $customer->save();
             }
 

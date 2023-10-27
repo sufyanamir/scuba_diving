@@ -34,36 +34,42 @@ class ApiController extends Controller
     //----------------------------------------------------company APIs------------------------------------------------------//
     //get expenses
     public function getCompanyExpenses(Request $request)
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        try {
-            // Get the 'expenseDate' query parameter from the URL
-            $expenseDate = $request->query('expenseDate');
+    try {
+        // Get the 'expenseDate' query parameter from the URL
+        $expenseDate = $request->query('expenseDate');
 
-            if ($expenseDate) {
-                // Parse the 'expenseDate' from the URL format to a format compatible with your database
-                $parsedDate = Carbon::createFromFormat('d M Y', $expenseDate)->format('Y-m-d');
+        if ($expenseDate) {
+            // Validate the 'expenseDate' format (optional, based on your requirements)
+            // You can use Carbon or other date handling libraries for more advanced date validation.
 
-                // Retrieve expenses for the user's company filtered by the parsed date
-                $expenses = CompanyExpense::where('company_id', $user->company_id)
-                    ->whereDate('expense_date', $parsedDate)
-                    ->orderBy('expense_id', 'desc')
-                    ->get();
+            // Retrieve expenses for the user's company filtered by 'expenseDate'
+            $expenses = CompanyExpense::where('company_id', $user->company_id)
+                ->whereDate('expense_date', $expenseDate)
+                ->orderBy('expense_id', 'desc')
+                ->get();
 
-                if ($expenses->isEmpty()) {
-                    return response()->json(['success' => false, 'message' => 'No expenses found for the company on the specified date'], 404);
-                }
-            } else {
-                // If 'expenseDate' is not provided, retrieve all expenses for the user's company
-                $expenses = CompanyExpense::where('company_id', $user->company_id)->orderBy('expense_id', 'desc')->get();
+            if ($expenses->isEmpty()) {
+                return response()->json(['success' => false, 'message' => 'No expenses found for the company on the specified date'], 404);
             }
-
-            return response()->json(['success' => true, 'data' => ['expenses' => $expenses]], 200);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        } else {
+            // If 'expenseDate' is not provided, retrieve all expenses for the user's company
+            $expenses = CompanyExpense::where('company_id', $user->company_id)->orderBy('expense_id', 'desc')->get();
         }
+
+        // Format 'expense_date' in the response
+        $formattedExpenses = $expenses->map(function ($expense) {
+            $expense->expense_date = Carbon::parse($expense->expense_date)->format('d M Y');
+            return $expense;
+        });
+
+        return response()->json(['success' => true, 'data' => ['expenses' => $formattedExpenses]], 200);
+    } catch (\Exception $e) {
+        return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
     }
+}
 
 
 

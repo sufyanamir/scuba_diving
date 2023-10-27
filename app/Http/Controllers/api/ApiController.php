@@ -84,7 +84,7 @@ class ApiController extends Controller
                 $createdExpenses[] = $expense;
             }
 
-            return response()->json(['message' => 'Expenses added successfully'], 201);
+            return response()->json(['message' => 'Expenses added successfully'], 200);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], 400);
         }

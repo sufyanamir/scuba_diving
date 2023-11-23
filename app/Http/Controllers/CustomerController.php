@@ -13,9 +13,11 @@ class CustomerController extends Controller
 {
 
     public function index(){
-        $customersCount=Customers::count();
-        $activeCount = Customers::where('customer_status',1)->count();
-        $pendingCount = Customers::where('customer_status',0)->count();
+        $user_details = session('user_details');
+        $userId = $user_details['user_id'];
+        $customersCount=Customers::where('added_user_id', $userId)->count();
+        $activeCount = Customers::where('added_user_id', $userId)->where('customer_status',1)->count();
+        $pendingCount = Customers::where('added_user_id', $userId)->where('customer_status',0)->count();
 
 
         

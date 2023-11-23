@@ -115,9 +115,8 @@ class StaffController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-
-
+        $staff = User::find($id);
+    
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -128,40 +127,41 @@ class StaffController extends Controller
             'company_id' => 'required',
             // Add more validation rules for other fields
         ]);
+    
         if ($request->hasFile('upload_image')) {
-
-            $path = 'public/staff_images/' . $user->user_image;
-            // dd($path);
-            if ($path) {
+            // Correctly build the old image path
+            $oldImage = str_replace('storage/staff_images/', '', $staff->user_image);
+            $path = 'public/staff_images/' . $oldImage;
+    
+            if (Storage::exists($path)) {
                 Storage::delete($path);
             }
-
+    
             $image = $request->file('upload_image');
             $ext = $image->getClientOriginalExtension();
             $imageName = time() . "." . $ext;
             $image->storeAs('public/staff_images', $imageName);
-            $user->user_image = 'storage/staff_images/' . $imageName;
+            $staff->user_image = 'storage/staff_images/' . $imageName; // Correctly assign the new image path
         }
-
-
+    
+        // Other data updates...
         $fbAcc = $request->input('fb_acc');
         $igAcc = $request->input('ig_acc');
         $ttAcc = $request->input('tt_acc');
-
         $socailLinks = "$fbAcc,$igAcc,$ttAcc";
-
-
-        $user->name = $validatedData['name'];
-        $user->email = $validatedData['email'];
-        $user->phone = $validatedData['phone'];
-        $user->address = $validatedData['address'];
-        $user->category = $validatedData['category'];
-        $user->company_id = $validatedData['company_id'];
-        $user->social_links = $socailLinks;
-        $user->update();
-
+    
+        $staff->name = $validatedData['name'];
+        $staff->email = $validatedData['email'];
+        $staff->phone = $validatedData['phone'];
+        $staff->address = $validatedData['address'];
+        $staff->category = $validatedData['category'];
+        $staff->company_id = $validatedData['company_id'];
+        $staff->social_links = $socailLinks;
+        $staff->update();
+    
         return redirect('staff')->with('status', 'Staff Updated Successfully');
     }
+    
 
 
 

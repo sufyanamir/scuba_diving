@@ -244,7 +244,7 @@
                                 </div>
                             </div>
                         </tr>
-                        <script>
+                        {{-- <script>
                             // Get references to the necessary elements
                             const fileInput {{$customer->customer_id}} = document.getElementById('fileInput{{ $customer->customer_id }}');
                             const profileImage {{$customer->customer_id}} = document.getElementById('profileImage{{ $customer->customer_id }}');
@@ -282,7 +282,7 @@
 
 
                             });
-                        </script>
+                        </script> --}}
                     @endforeach
                 </tbody>
             </table>
@@ -310,5 +310,43 @@
             });
     });
 </script>
-
+<script>
+    @foreach ($customers as $customer)
+        // Ensure this IIFE is executed for each customer instance to scope variables properly
+        (function() {
+            var fileInputId = 'fileInput{{ $customer->customer_id }}';
+            var profileImageId = 'profileImage{{ $customer->customer_id }}';
+            var fileInput = document.getElementById(fileInputId);
+            var profileImage = document.getElementById(profileImageId);
+            
+            if (fileInput && profileImage) {
+                fileInput.addEventListener('change', function(event) {
+                    var file = event.target.files[0];
+                    var reader = new FileReader();
+    
+                    // Reset any error messages
+                    var errorImage = document.querySelector('.error-image');
+                    if (errorImage && !errorImage.classList.contains('d-none')) {
+                        errorImage.classList.add('d-none');
+                    }
+    
+                    // Validate file type and size
+                    if (file.type.startsWith('image/') && file.size <= 1048576) {
+                        reader.readAsDataURL(file);
+                        reader.onload = function(e) {
+                            profileImage.src = e.target.result;
+                        };
+                    } else {
+                        if (errorImage) {
+                            errorImage.classList.remove('d-none');
+                            errorImage.textContent = 'Please select an image file with size less than or equal to 1024KB.';
+                        }
+                        fileInput.value = ""; // Clear the input if the file is not valid
+                    }
+                });
+            }
+        })();
+    @endforeach
+    </script>
+    
 @include('layouts.footer')

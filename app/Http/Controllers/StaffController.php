@@ -165,15 +165,34 @@ class StaffController extends Controller
 
 
 
-    public function destroy($id)
-    {
-        $user = User::find($id);
-        $path = 'storage/staff_images/' . $user->user_image;
-        if (File::exists($path)) {
+    // public function destroy($id)
+    // {
+    //     $user = User::find($id);
+    //     $path = 'storage/staff_images/' . $user->user_image;
+    //     if (File::exists($path)) {
 
-            File::delete($path);
-        }
-        $user->delete();
-        return redirect('/staff')->with('status', 'Staff Deleted successfully');
+    //         File::delete($path);
+    //     }
+    //     $user->delete();
+    //     return redirect('/staff')->with('status', 'Staff Deleted successfully');
+    // }
+    public function destroy($id)
+{
+    $user = User::find($id);
+
+    // Correctly build the path for the storage
+    $oldImage = str_replace('storage/staff_images/', '', $user->user_image);
+    $path = 'public/staff_images/' . $oldImage;
+
+    // Check if the image file exists in the storage and delete it
+    if (Storage::exists($path)) {
+        Storage::delete($path);
     }
+
+    // Delete the user record
+    $user->delete();
+
+    return redirect('/staff')->with('status', 'Staff Deleted successfully');
+}
+
 }

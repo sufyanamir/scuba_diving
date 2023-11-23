@@ -104,10 +104,13 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         $company = Company::find($id);
-        $path = 'storage/company_images/' . $company->company_image;
+        // Correctly build the old image path
+        $oldImage = str_replace('storage/company_images/', '', $company->company_image);
+        $path = 'public/company_images/' . $oldImage;
 
-        if (File::exists($path)) {
-            File::delete($path);
+        // Check if the old image file exists in storage and delete it
+        if (Storage::exists($path)) {
+            Storage::delete($path);
         }
 
         $company->delete();
@@ -138,9 +141,12 @@ class CompanyController extends Controller
 
         if ($request->hasFile('upload_image')) {
 
-            $path = 'public/company_images/' . $company->company_image;
-            // dd($path);
-            if ($path) {
+            // Build the old image path correctly
+            $oldImage = str_replace('storage/company_images/', '', $company->company_image);
+            $path = 'public/company_images/' . $oldImage;
+
+            // Check if the old image file exists and delete it
+            if (Storage::exists($path)) {
                 Storage::delete($path);
             }
 

@@ -13,9 +13,11 @@ class CustomerController extends Controller
 {
 
     public function index(){
-        $customersCount=Customers::count();
-        $activeCount = Customers::where('customer_status',1)->count();
-        $pendingCount = Customers::where('customer_status',0)->count();
+        $user_details = session('user_details');
+        $userId = $user_details['user_id'];
+        $customersCount=Customers::where('added_user_id', $userId)->count();
+        $activeCount = Customers::where('added_user_id', $userId)->where('customer_status',1)->count();
+        $pendingCount = Customers::where('added_user_id', $userId)->where('customer_status',0)->count();
 
 
         
@@ -159,17 +161,36 @@ class CustomerController extends Controller
 
     }
 
-    public function destroy($id)
-    {
-        $user = Customers::find($id);
-        $path = 'storage/customer_images/'.$user->customer_image;
-        if (File::exists($path)) {
+    // public function destroy($id)
+    // {
+    //     $user = Customers::find($id);
+    //     $path = 'storage/customer_images/'.$user->customer_image;
+    //     if (File::exists($path)) {
             
-            File::delete($path);
-        }
-        $user->delete();
-        return redirect('customers')->with('status','Customer Deleted successfully');
+    //         File::delete($path);
+    //     }
+    //     $user->delete();
+    //     return redirect('customers')->with('status','Customer Deleted successfully');
 
 
+    // }
+    public function destroy($id)
+{
+    $customer = Customers::find($id);
+
+    // Correctly build the path for the storage
+    $oldImage = str_replace('storage/customer_images/', '', $customer->customer_image);
+    $path = 'public/customer_images/' . $oldImage;
+
+    // Check if the image file exists in the storage and delete it
+    if (Storage::exists($path)) {
+        Storage::delete($path);
     }
+
+    // Delete the customer record
+    $customer->delete();
+
+    return redirect('customers')->with('status', 'Customer Deleted successfully');
+}
+
 }

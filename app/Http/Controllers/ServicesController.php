@@ -7,6 +7,7 @@ use App\Models\Services;
 use App\Models\ServiceOverheads;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ServicesController extends Controller
 {
@@ -21,11 +22,15 @@ class ServicesController extends Controller
         // Delete associated overheads.
         $service->overheads()->delete();
 
-        $path = 'storage/service_images/' . $service->service_image;
+        // Correctly build the path for the image file in storage.
+        $oldImage = str_replace('storage/service_images/', '', $service->service_image);
+        $path = 'public/service_images/' . $oldImage;
 
-        if (File::exists($path)) {
-            File::delete($path);
+        // Check if the image file exists and delete it.
+        if (Storage::exists($path)) {
+            Storage::delete($path);
         }
+
 
         $service->delete();
 
@@ -157,6 +162,14 @@ class ServicesController extends Controller
 
         // Upload and store the updated service image
         if ($request->hasFile('upload_image')) {
+            // Delete the old image
+            $oldImage = str_replace('storage/service_images/', '', $service->service_image);
+            $oldImagePath = 'public/service_images/' . $oldImage;
+            if (Storage::exists($oldImagePath)) {
+                Storage::delete($oldImagePath);
+            }
+
+            // Store the new image
             $image = $request->file('upload_image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->storeAs('public/service_images', $imageName); // Adjust storage path as needed
@@ -183,6 +196,6 @@ class ServicesController extends Controller
         }
 
         // Optionally, you can redirect back with a success message
-        return redirect()->back()->with('success', 'Service updated successfully.');
+        return redirect()->back()->with('status', 'Service updated successfully.');
     }
 }
